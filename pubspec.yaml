@@ -1,0 +1,79 @@
+name: digital_study_room
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Utility Packages
+  http: ^1.2.1
+  intl: ^0.19.0
+  logger: ^2.3.0
+  url_launcher: ^6.2.6
+  flutter_native_splash: ^2.4.0
+  smooth_page_indicator: ^1.1.0
+  rive: ^0.13.7
+
+  # Icons
+  iconsax: ^0.0.8
+  cupertino_icons: ^1.0.8
+#  cupertino_icons: ^1.0.6
+
+  # State Management
+#  get: ^4.6.6
+  get_storage: ^2.1.1
+  provider: ^6.1.2
+
+
+  # Product Specific
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^4.0.0
+  flutter_launcher_icons: "^0.13.1"
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  remove_alpha_ios: true
+  adaptive_icon_background: "#ffffff"
+  background_color_ios: "#ffffff"
+  image_path: "assets/icons/dsr_icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+
+  windows:
+    generate: true
+    image_path: "assets/icons/dsr_icon.png"
+    icon_size: 48 # min:48, max:256, default: 48
+
+
+flutter:
+  uses-material-design: true
+
+  # ---------- LOCAL ASSETS ----------#
+  assets:
+    - assets/logos/
+    - assets/icons/
+    - assets/images/
+    - assets/images/onboarding/
+    - assets/images/animations/
+    - assets/images/dashboard_images/
+
+  # ---------- LOCAL FONTS ----------#
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Poppins-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Poppins-Bold.ttf
+          weight: 800
