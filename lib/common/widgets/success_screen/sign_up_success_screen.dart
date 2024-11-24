@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../../../navigation_menu.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/constants/text_strings.dart';
@@ -58,6 +59,10 @@ class SignUpSuccessScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     // Get.offAll(() => Dashboard());
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const NavigationMenu()),
+                    );
                     onPressed!();
                   },
                   child: const Text(TTexts.tContinue),

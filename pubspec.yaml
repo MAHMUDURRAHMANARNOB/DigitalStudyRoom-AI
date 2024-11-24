@@ -19,6 +19,7 @@ dependencies:
   flutter_native_splash: ^2.4.0
   smooth_page_indicator: ^1.1.0
   rive: ^0.13.7
+  markdown_widget: ^2.3.2+6
 
   # Icons
   iconsax: ^0.0.8

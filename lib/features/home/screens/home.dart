@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
               backgroundColor: TColors.tertiaryColor.withOpacity(0.1),
             ),
           ),
-          Positioned(
+          /*Positioned(
             bottom: -150,
             left: -150,
             child: TCircularContainer(
@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: TCircularContainer(
               backgroundColor: TColors.secondaryColor.withOpacity(0.1),
             ),
-          ),
+          ),*/
           SafeArea(
             child: SingleChildScrollView(
               child: Padding(
@@ -71,18 +71,17 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             RichText(
-
-                              text:  TextSpan(
+                              text: TextSpan(
                                 text: 'Let\'s learn ',
                                 style: TextStyle(
                                     fontSize: 24,
-                                    color: dark?Colors.white:Colors.black,
+                                    color: dark ? Colors.white : Colors.black,
                                     fontFamily: "Poppins"),
                                 children: <TextSpan>[
                                   TextSpan(
                                       text: 'in a new way',
-                                      style:
-                                          TextStyle(fontWeight: FontWeight.bold)),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold)),
                                   // TextSpan(text: ' world!'),
                                 ],
                               ),
@@ -125,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       .textTheme
                                                       .headlineMedium
                                                       ?.copyWith(
-                                                          color: Colors.black),
+                                                          color: Colors.white),
                                                 ),
                                               ),
                                               Text(
@@ -136,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     .textTheme
                                                     .bodyLarge
                                                     ?.copyWith(
-                                                        color: Colors.black),
+                                                        color: Colors.white),
                                               ),
                                             ],
                                           ),
@@ -181,75 +180,91 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(
                       height: TSizes.sm,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: _buildToolCard(
-                              'গণিত \nসমাধান',
-                              "assets/images/dashboard_images/maths.png",
-                              TColors.tertiaryColor),
-                        ),
-                        Expanded(
-                          child: _buildToolCard(
-                              'নোট \nপ্রস্তুতি',
-                              "assets/images/dashboard_images/note_helper.png",
-                              TColors.secondaryColor),
-                        ),
-                        Expanded(
-                          child: _buildToolCard(
-                              'চিঠি\n ',
-                              "assets/images/dashboard_images/letter.png",
-                              TColors.primaryColor),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: _buildToolCard(
-                              'রচনা \n ',
-                              "assets/images/dashboard_images/essay.png",
-                              TColors.secondaryColor),
-                        ),
-                        Expanded(
-                          child: _buildToolCard(
-                              'পরীক্ষক \n ',
-                              "assets/images/dashboard_images/examiner.png",
-                              TColors.tertiaryColor),
-                        ),
-                        Expanded(
-                          child: _buildToolCard(
-                              'ছবি থেকে\nপড়া',
-                              "assets/images/dashboard_images/scanner.png",
-                              TColors.secondaryColor),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      // mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Expanded(
-                          child: _buildToolCard(
-                              'English\nGrammar',
-                              "assets/images/dashboard_images/grammar.png",
-                              TColors.tertiaryColor),
-                        ),
-                        Expanded(
-                          child: _buildToolCard(
-                              'Essay\n',
-                              "assets/images/dashboard_images/essay.png",
-                              TColors.secondaryColor),
-                        ),
-                        Expanded(
-                          child: _buildToolCard(
-                              'Letter\n',
-                              "assets/images/dashboard_images/letter.png",
-                              TColors.primaryColor),
-                        ),
-                      ],
+                    Container(
+                      padding: EdgeInsets.only(left: 8.0,right: 8.0,top: 8.0),
+                      /*decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12.0),
+                      ),*/
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: _buildToolCard(
+                                    'গণিত \nসমাধান',
+                                    "assets/images/dashboard_images/maths.png",
+                                    TColors.tertiaryColor),
+                              ),
+                              Expanded(
+                                child: _buildToolCard(
+                                    'নোট \nপ্রস্তুতি',
+                                    "assets/images/dashboard_images/note_helper.png",
+                                    TColors.secondaryColor),
+                              ),
+                              Expanded(
+                                child: _buildToolCard(
+                                    'চিঠি\n ',
+                                    "assets/images/dashboard_images/letter.png",
+                                    TColors.primaryColor),
+                              ),
+                              Expanded(
+                                child: _buildToolCard(
+                                    'রচনা \n ',
+                                    "assets/images/dashboard_images/essay.png",
+                                    TColors.secondaryColor),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: _buildToolCard(
+                                    'পরীক্ষক \n ',
+                                    "assets/images/dashboard_images/examiner.png",
+                                    TColors.tertiaryColor),
+                              ),
+                              Expanded(
+                                child: _buildToolCard(
+                                    'ছবি থেকে\nপড়া',
+                                    "assets/images/dashboard_images/scanner.png",
+                                    TColors.secondaryColor),
+                              ),
+                              Expanded(
+                                child: _buildToolCard(
+                                    'English\nGrammar',
+                                    "assets/images/dashboard_images/grammar.png",
+                                    TColors.tertiaryColor),
+                              ),
+                              Expanded(
+                                child: _buildToolCard(
+                                    'Essay\n',
+                                    "assets/images/dashboard_images/essay_eng.png",
+                                    TColors.secondaryColor),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                flex:1,
+                                child: _buildToolCard(
+                                    'Letter\n',
+                                    "assets/images/dashboard_images/letter_eng.png",
+                                    TColors.primaryColor),
+                              ),
+                              Flexible(flex:1,child: SizedBox(width: 20,)),
+                              Flexible(flex:1,child: SizedBox(width: 20,)),
+                              Flexible(flex:1,child: SizedBox(width: 20,)),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                     SizedBox(height: TSizes.sm),
                     Container(
@@ -292,20 +307,27 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildToolCard(String title, String image, Color color) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-      margin: EdgeInsets.all(5.0),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(8.0),
-      ),
+      // padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+      margin: const EdgeInsets.all(5.0),
+
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(
-            image,
-            height: 50,
-            width: 50,
+      Transform.rotate(
+        angle: 0,
+            child: Container(
+              padding: const EdgeInsets.all(5.0),
+              decoration: BoxDecoration(
+                color: TColors.primaryColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Image.asset(
+                image,
+                height: 40,
+                width: 40,
+              ),
+            ),
           ),
           SizedBox(
             height: TSizes.spaceBtwItems / 2,
@@ -314,7 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
             title,
             maxLines: 2,
             style: TextStyle(
-                color: Colors.grey.shade900, fontWeight: FontWeight.bold),
+                /*color: Colors.grey.shade900,*/ fontWeight: FontWeight.bold),
             textAlign: TextAlign.center,
           ),
         ],

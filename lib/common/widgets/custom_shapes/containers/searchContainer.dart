@@ -46,7 +46,7 @@ class TSearchContainer extends StatelessWidget {
             SizedBox(
               width: TSizes.spaceBtwItems,
             ),
-            Text(text, style: Theme.of(context).textTheme.bodySmall),
+            /*Text(text, style: Theme.of(context).textTheme.bodySmall),*/
           ],
         ),
       ),

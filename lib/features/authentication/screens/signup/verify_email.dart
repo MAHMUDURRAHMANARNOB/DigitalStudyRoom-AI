@@ -62,14 +62,34 @@ class VerifyEmailScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    Get.to(() => SignUpSuccessScreen(
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>  SignUpSuccessScreen(
+                        image: TImages.successEmailImage,
+                        title: TTexts.accountCreatedTitle,
+                        subTitle: TTexts.accountCreatedSubTitle,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const VerifyEmailScreen()),
+                          );
+                          // Get.offAll(() => LoginScreen());
+                        },
+                      )),
+                    );
+                    /*Navigator.push(context, route);
+                     SignUpSuccessScreen(
                           image: TImages.successEmailImage,
                           title: TTexts.accountCreatedTitle,
                           subTitle: TTexts.accountCreatedSubTitle,
                           onPressed: () {
-                            Get.offAll(() => LoginScreen());
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const VerifyEmailScreen()),
+                            );
+                            // Get.offAll(() => LoginScreen());
                           },
-                        ));
+                        );*/
                   },
                   child: const Text(TTexts.tContinue),
                 ),

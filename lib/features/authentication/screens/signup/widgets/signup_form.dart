@@ -134,7 +134,10 @@ class TSignupForm extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                Get.to(() => const VerifyEmailScreen());
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const VerifyEmailScreen()),
+                );
               },
               child: const Text(TTexts.createAccount),
             ),

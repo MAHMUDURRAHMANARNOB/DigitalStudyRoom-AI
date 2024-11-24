@@ -89,7 +89,10 @@ class TLoginForm extends StatelessWidget {
               width: double.infinity,
               child: OutlinedButton(
                 onPressed: () {
-                  Get.to(() => const SignupScreen());
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SignupScreen()),
+                  );
                 },
                 child: const Text(TTexts.createAccount),
               ),
