@@ -20,6 +20,7 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   rive: ^0.13.7
   markdown_widget: ^2.3.2+6
+  avatar_glow: ^3.0.1
 
   # Icons
   iconsax: ^0.0.8

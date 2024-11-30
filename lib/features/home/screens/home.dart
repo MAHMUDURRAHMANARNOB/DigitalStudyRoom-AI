@@ -1,3 +1,4 @@
+import 'package:digital_study_room/features/ToolsContent/screens/ToolsContentScreen.dart';
 import 'package:digital_study_room/features/home/screens/widgets/ai_helper_container.dart';
 import 'package:digital_study_room/features/home/screens/widgets/card_container_button.dart';
 import 'package:digital_study_room/features/home/screens/widgets/home_app_bar.dart';
@@ -62,12 +63,14 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
+
                       children: [
                         // Appbar
                         THomeAppBar(),
-                        Column(
+                        /*Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             RichText(
@@ -99,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         horizontal: TSizes.md),
                                     // height: 150,
                                     decoration: BoxDecoration(
-                                      color: /*dark ? TColors.dark : TColors.light*/
+                                      color: *//*dark ? TColors.dark : TColors.light*//*
                                           TColors.primaryColor.withOpacity(0.8),
                                       borderRadius: BorderRadius.circular(
                                           TSizes.borderRadiusLg),
@@ -163,12 +166,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               height: TSizes.spaceBtwItems / 2,
                             ),
                           ],
-                        ),
+                        ),*/
                       ],
                     ),
                     // SizedBox(height: TSizes.defaultSpace),
                     // TOOLS
-                    Container(
+                    /*Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: Text(
@@ -179,7 +182,27 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(
                       height: TSizes.sm,
+                    ),*/
+                    Container(
+                      padding: EdgeInsets.only(left: 8.0,right: 8.0,top: 8.0),
+                      child: RichText(
+                        text: TextSpan(
+                          text: 'Let\'s learn ',
+                          style: TextStyle(
+                              fontSize: 24,
+                              color: dark ? Colors.white : Colors.black,
+                              fontFamily: "Poppins"),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: 'in a new way',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            // TextSpan(text: ' world!'),
+                          ],
+                        ),
+                      ),
                     ),
+                    // SizedBox(height: TSizes.spaceBtwItems),
                     Container(
                       padding: EdgeInsets.only(left: 8.0,right: 8.0,top: 8.0),
                       /*decoration: BoxDecoration(
@@ -267,7 +290,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(height: TSizes.sm),
+                    // SizedBox(height: TSizes.sm),
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -309,87 +332,103 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildToolCard(String title, String image, Color color) {
-    return Container(
-      // padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-      margin: const EdgeInsets.all(5.0),
-
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-      Transform.rotate(
-        angle: 0,
-            child: Container(
-              padding: const EdgeInsets.all(5.0),
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: Image.asset(
-                image,
-                height: 40,
-                width: 40,
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ToolsContentScreen()),
+        );
+      },
+      child: Container(
+        // padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+        margin: const EdgeInsets.all(5.0),
+      
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+        Transform.rotate(
+          angle: 0,
+              child: Container(
+                padding: const EdgeInsets.all(5.0),
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: Image.asset(
+                  image,
+                  height: 40,
+                  width: 40,
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            height: TSizes.spaceBtwItems / 2,
-          ),
-          Text(
-            title,
-            maxLines: 2,
-            style: TextStyle(
-                /*color: Colors.grey.shade900,*/ fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-        ],
+            SizedBox(
+              height: TSizes.spaceBtwItems / 2,
+            ),
+            Text(
+              title,
+              maxLines: 2,
+              style: TextStyle(
+                  /*color: Colors.grey.shade900,*/ fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }
   Widget _buildToolLargeCard(String title, String subtitle, String image, Color color) {
-    return Container(
-      // width: constraints.maxWidth,
-      height: 160,
-      padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-      margin: const EdgeInsets.all(5.0),
-      decoration: BoxDecoration(
-        color: TColors.primaryColor.withOpacity(0),
-        borderRadius: BorderRadius.circular(8.0),
-        border: Border.all(color: color),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Transform.rotate(
-            angle: 0,
-            child: Container(
-              padding: const EdgeInsets.all(5.0),
-              child: Image.asset(
-                image,
-                height: 40,
-                width: 40,
+    return GestureDetector(
+      onTap: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ToolsContentScreen()),
+        );
+      },
+      child: Container(
+        // width: constraints.maxWidth,
+        height: 160,
+        padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+        margin: const EdgeInsets.all(5.0),
+        decoration: BoxDecoration(
+          color: TColors.primaryColor.withOpacity(0),
+          borderRadius: BorderRadius.circular(8.0),
+          border: Border.all(color: color),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Transform.rotate(
+              angle: 0,
+              child: Container(
+                padding: const EdgeInsets.all(5.0),
+                child: Image.asset(
+                  image,
+                  height: 40,
+                  width: 40,
+                ),
               ),
             ),
-          ),
-          SizedBox(
-            height: TSizes.spaceBtwItems / 2,
-          ),
-          Text(
-            title,
-            maxLines: 2,
-            style: TextStyle(
-              /*color: Colors.grey.shade900,*/ fontWeight: FontWeight.bold),
-            textAlign: TextAlign.left,
-          ),
-          Text(
-            subtitle,
-            // maxLines: 2,
-            style: TextStyle(
-              color: TColors.darkGrey, /*fontWeight: FontWeight.bold*/),
-            textAlign: TextAlign.left,
-          ),
-        ],
+            SizedBox(
+              height: TSizes.spaceBtwItems / 2,
+            ),
+            Text(
+              title,
+              maxLines: 2,
+              style: TextStyle(
+                /*color: Colors.grey.shade900,*/ fontWeight: FontWeight.bold),
+              textAlign: TextAlign.left,
+            ),
+            Text(
+              subtitle,
+              // maxLines: 2,
+              style: TextStyle(
+                color: TColors.darkGrey, /*fontWeight: FontWeight.bold*/),
+              textAlign: TextAlign.left,
+            ),
+          ],
+        ),
       ),
     );
   }
