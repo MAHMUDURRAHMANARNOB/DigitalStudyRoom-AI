@@ -1,14 +1,22 @@
 import 'dart:io';
 
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:digital_study_room/features/ToolsContent/provider/studyToolsProvider.dart';
 import 'package:digital_study_room/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
+import '../datamodel/studyToolsDataModel.dart';
+import '../provider/ToolsResponseProvider.dart';
+import '../provider/toolsDataByCodeProvider.dart';
+import '../provider/toolsReplyProvider.dart';
+
 class ToolsContentScreen extends StatefulWidget {
-  const ToolsContentScreen({super.key});
+  final String? staticToolsCode;
+
+  const ToolsContentScreen({super.key, this.staticToolsCode});
 
   @override
   State<ToolsContentScreen> createState() => _ToolsContentScreenState();
@@ -19,8 +27,19 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
   List<Widget> _lessonComponents = [];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  String dropdownClassValue = "";
+  String dropdownSubjectValue = "";
   TextEditingController questionTextFieldController = TextEditingController();
   ScrollController _scrollController = ScrollController();
+  late ToolsDataProvider toolsDataProvider;
+  late StudyToolsProvider toolsProvider;
+
+  late ToolsResponseProvider toolsResponseProvider =
+  Provider.of<ToolsResponseProvider>(context, listen: false);
+
+  late ToolsReplyProvider toolsReplyProvider =
+  Provider.of<ToolsReplyProvider>(context, listen: false);
+
 
 
   File? _selectedImage;
@@ -42,13 +61,108 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
   late String _maxLine = '';
   final String _isMobile = 'Y';
 
+  bool maxWordVisibility = false;
+  bool subjectSelectionVisibility = false;
+  bool mathKeyboardVisibility = false;
+
   // late SpeechToText _speech;
   bool _isListening = false;
+  bool toolsFetched = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize toolsProvider in initState
+    // final authProvider = context.read<AuthProvider>();
+    toolsProvider = StudyToolsProvider(userId: 2);
+
+    // Fetch tools here once during the widget lifecycle
+    fetchTools(toolsProvider);
+
+    // _speech = SpeechToText();
+  }
+
+  Future<void> fetchTools(StudyToolsProvider toolsProvider) async {
+    if (!toolsFetched) {
+      await toolsProvider.fetchTools();
+      setState(() {
+        isLoading = false;
+        toolsFetched = true; // Set the flag to true after fetching tools
+      });
+      selectToolByCode(widget.staticToolsCode!, toolsProvider);
+    }
+  }
+  Future<void> selectToolByCode(
+      String toolsCode, StudyToolsProvider toolsProvider) async {
+    // Find the corresponding tool in the toolsProvider
+    List<StudyToolsDataModel> matchingTools = toolsProvider.tools
+        .where((tool) => tool.toolsCode == toolsCode)
+        .toList();
+
+    print("matchingTool -> ${toolsProvider.tools.length}");
+    print("ppp: $userID,${matchingTools.first.toolName}");
+    if (matchingTools.isNotEmpty) {
+      isLoading = false;
+      StudyToolsDataModel selectedTool = matchingTools.first;
+
+      // resetSelectedClassAndSubject();
+      _scaffoldKey.currentState?.closeEndDrawer();
+
+      print("ppp: $userID,${selectedTool.toolID}");
+      // Perform the actions just like in the onPressed handler
+      toolsDataProvider.fetchToolsData(userID, selectedTool.toolID);
+
+      setState(() {
+        _selectedToolsCode = selectedTool.toolsCode;
+        _selectedToolName = selectedTool.toolName;
+      });
+
+      if (selectedTool.maxWord == "Y") {
+        setState(() {
+          maxWordVisibility = true;
+        });
+      } else {
+        setState(() {
+          maxWordVisibility = false;
+        });
+      }
+
+      if (selectedTool.mathKeyboard == "Y") {
+        setState(() {
+          mathKeyboardVisibility = true;
+        });
+      } else {
+        setState(() {
+          mathKeyboardVisibility = false;
+        });
+      }
+
+      if (selectedTool.subject == "Y") {
+        setState(() {
+          // subjectSelectionVisibility = true;
+        });
+      } else {
+        setState(() {
+          // subjectSelectionVisibility = false;
+        });
+      }
+    } else {
+      // Handle the case when the tool with toolsCode is not found
+      print("Tool with toolsCode $toolsCode not found");
+      isLoading = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    toolsDataProvider = Provider.of<ToolsDataProvider>(context, listen: false);
+
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text(_selectedToolName),
+        centerTitle: true,
+      ),
       floatingActionButton: Visibility(
         visible: !_isNewQuestion && !_isReply,
         child: _lessonComponents.isEmpty
@@ -93,10 +207,11 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Text(
-          "_selectedToolName",
-          style: TextStyle(color: Colors.white, fontSize: 12.0),
-        ),
+        /*Text(
+          _selectedToolName,
+          style: TextStyle(color: Colors.green, fontSize: 12.0),
+        ),*/
+        
         Expanded(
           flex: 2,
           child: Container(
@@ -201,7 +316,7 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
                   onPressed: () {
                     // Add your logic to send the message
                     setState(() {
-                      // _isNewQuestion = false;
+                      _isNewQuestion = false;
                     });
                   },
                   icon: const Icon(

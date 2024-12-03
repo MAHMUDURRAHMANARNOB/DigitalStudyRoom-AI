@@ -27,6 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     bool dark = THelperFunction.isDarkMode(context);
+    final userId = 2;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -44,20 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
               backgroundColor: TColors.tertiaryColor.withOpacity(0.1),
             ),
           ),
-          /*Positioned(
-            bottom: -150,
-            left: -150,
-            child: TCircularContainer(
-              backgroundColor: TColors.secondaryColor.withOpacity(0.1),
-            ),
-          ),
-          Positioned(
-            bottom: 100,
-            left: -250,
-            child: TCircularContainer(
-              backgroundColor: TColors.secondaryColor.withOpacity(0.1),
-            ),
-          ),*/
           SafeArea(
             child: SingleChildScrollView(
               child: Padding(
@@ -65,8 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Column(
-
+                    const Column(
                       children: [
                         // Appbar
                         THomeAppBar(),
@@ -102,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         horizontal: TSizes.md),
                                     // height: 150,
                                     decoration: BoxDecoration(
-                                      color: *//*dark ? TColors.dark : TColors.light*//*
+                                      color: */ /*dark ? TColors.dark : TColors.light*/ /*
                                           TColors.primaryColor.withOpacity(0.8),
                                       borderRadius: BorderRadius.circular(
                                           TSizes.borderRadiusLg),
@@ -184,7 +171,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       height: TSizes.sm,
                     ),*/
                     Container(
-                      padding: EdgeInsets.only(left: 8.0,right: 8.0,top: 8.0),
+                      padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                       child: RichText(
                         text: TextSpan(
                           text: 'Let\'s learn ',
@@ -195,8 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: <TextSpan>[
                             TextSpan(
                                 text: 'in a new way',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold)),
+                                style: TextStyle(fontWeight: FontWeight.bold)),
                             // TextSpan(text: ' world!'),
                           ],
                         ),
@@ -204,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     // SizedBox(height: TSizes.spaceBtwItems),
                     Container(
-                      padding: EdgeInsets.only(left: 8.0,right: 8.0,top: 8.0),
+                      padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                       /*decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(12.0),
@@ -220,27 +206,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: _buildToolCard(
                                     'গণিত \nসমাধান',
                                     "assets/images/dashboard_images/math.png",
-                                    TColors.primaryColor),
+                                    TColors.primaryColor,
+                                "MATH"),
                               ),
                               Expanded(
                                 child: _buildToolCard(
                                     'নোট \nপ্রস্তুতি',
                                     "assets/images/dashboard_images/note.png",
-                                    TColors.error),
+                                    TColors.error,"NOTE",),
                               ),
                               Expanded(
                                 child: _buildToolCard(
                                     'রচনা \n ',
                                     "assets/images/dashboard_images/essay_bn.png",
-                                    TColors.secondaryColor),
+                                    TColors.secondaryColor,"EASSY"),
                               ),
                               Expanded(
                                 child: _buildToolCard(
                                     'চিঠি\n ',
                                     "assets/images/dashboard_images/letter_bn.png",
-                                    TColors.tertiaryColor),
+                                    TColors.tertiaryColor,"LETTER"),
                               ),
-
                             ],
                           ),
                           Row(
@@ -250,25 +236,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: _buildToolCard(
                                     'পরীক্ষক \n ',
                                     "assets/images/dashboard_images/examiner.png",
-                                    TColors.error),
+                                    TColors.error,"SELF"),
                               ),
                               Expanded(
                                 child: _buildToolCard(
                                     'ছবি থেকে\nপড়া',
                                     "assets/images/dashboard_images/scan.png",
-                                    TColors.tertiaryColor),
+                                    TColors.tertiaryColor,"IMG"),
                               ),
                               Expanded(
                                 child: _buildToolCard(
                                     'English\nGrammar',
                                     "assets/images/dashboard_images/grammar.png",
-                                    TColors.primaryColor),
+                                    TColors.primaryColor,"GRAMMAR"),
                               ),
                               Expanded(
                                 child: _buildToolCard(
                                     'Essay\n',
                                     "assets/images/dashboard_images/essay.png",
-                                    TColors.secondaryColor),
+                                    TColors.secondaryColor,"EASSY"),
                               ),
                             ],
                           ),
@@ -276,15 +262,29 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
-                                flex:1,
+                                flex: 1,
                                 child: _buildToolCard(
                                     'Letter\n',
                                     "assets/images/dashboard_images/letter.png",
-                                    TColors.primaryColor),
+                                    TColors.primaryColor,"LETTER"),
                               ),
-                              Flexible(flex:1,child: SizedBox(width: 20,)),
-                              Flexible(flex:1,child: SizedBox(width: 20,)),
-                              Flexible(flex:1,child: SizedBox(width: 20,)),
+                              Expanded(
+                                flex: 1,
+                                child: _buildToolCard(
+                                    'Accounting',
+                                    "assets/images/dashboard_images/accounting.png",
+                                    TColors.secondaryColor,"ACC"),
+                              ),
+                              Expanded(
+                                  flex: 1,
+                                  child: SizedBox(
+                                    width: 20,
+                                  )),
+                              Expanded(
+                                  flex: 1,
+                                  child: SizedBox(
+                                    width: 20,
+                                  )),
                             ],
                           ),
                         ],
@@ -331,24 +331,31 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildToolCard(String title, String image, Color color) {
+  Widget _buildToolCard(
+    String title,
+    String image,
+    Color color,
+      String staticToolsCode,
+  ) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
+        print('$title pressed');
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const ToolsContentScreen()),
+          MaterialPageRoute(builder: (context) =>  ToolsContentScreen(staticToolsCode:
+          staticToolsCode)),
         );
       },
       child: Container(
         // padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
         margin: const EdgeInsets.all(5.0),
-      
+
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-        Transform.rotate(
-          angle: 0,
+            Transform.rotate(
+              angle: 0,
               child: Container(
                 padding: const EdgeInsets.all(5.0),
                 decoration: BoxDecoration(
@@ -369,7 +376,8 @@ class _HomeScreenState extends State<HomeScreen> {
               title,
               maxLines: 2,
               style: TextStyle(
-                  /*color: Colors.grey.shade900,*/ fontWeight: FontWeight.bold),
+                  /*color: Colors.grey.shade900,*/
+                  fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
           ],
@@ -377,9 +385,11 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-  Widget _buildToolLargeCard(String title, String subtitle, String image, Color color) {
+
+  Widget _buildToolLargeCard(
+      String title, String subtitle, String image, Color color) {
     return GestureDetector(
-      onTap: (){
+      onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const ToolsContentScreen()),
@@ -417,14 +427,16 @@ class _HomeScreenState extends State<HomeScreen> {
               title,
               maxLines: 2,
               style: TextStyle(
-                /*color: Colors.grey.shade900,*/ fontWeight: FontWeight.bold),
+                  /*color: Colors.grey.shade900,*/
+                  fontWeight: FontWeight.bold),
               textAlign: TextAlign.left,
             ),
             Text(
               subtitle,
               // maxLines: 2,
               style: TextStyle(
-                color: TColors.darkGrey, /*fontWeight: FontWeight.bold*/),
+                color: TColors.darkGrey, /*fontWeight: FontWeight.bold*/
+              ),
               textAlign: TextAlign.left,
             ),
           ],

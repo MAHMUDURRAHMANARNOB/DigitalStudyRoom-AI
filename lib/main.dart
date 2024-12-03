@@ -1,5 +1,11 @@
 import 'package:digital_study_room/app.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'features/ToolsContent/provider/ToolsResponseProvider.dart';
+import 'features/ToolsContent/provider/studyToolsProvider.dart';
+import 'features/ToolsContent/provider/toolsDataByCodeProvider.dart';
+import 'features/ToolsContent/provider/toolsReplyProvider.dart';
 
 /*void main() {
   runApp(const MyApp());
@@ -12,5 +18,21 @@ void main() {
   // TODO: Initialize FireBase
   // TODO: Initialize Authentication
 
-  runApp(const DigitalStudyRoom());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => StudyToolsProvider(userId: 0)),
+        ChangeNotifierProvider(
+          create: (context) => ToolsDataProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ToolsResponseProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ToolsReplyProvider(),
+        ),
+      ],
+      child: DigitalStudyRoom(),
+    ),
+  );
 }
