@@ -53,123 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Column(
-                      children: [
-                        // Appbar
-                        THomeAppBar(),
-                        /*Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            RichText(
-                              text: TextSpan(
-                                text: 'Let\'s learn ',
-                                style: TextStyle(
-                                    fontSize: 24,
-                                    color: dark ? Colors.white : Colors.black,
-                                    fontFamily: "Poppins"),
-                                children: <TextSpan>[
-                                  TextSpan(
-                                      text: 'in a new way',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold)),
-                                  // TextSpan(text: ' world!'),
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: TSizes.spaceBtwItems),
-                            //Classroom
-                            Container(
-                              width: double.infinity,
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: TSizes.md / 2,
-                                        horizontal: TSizes.md),
-                                    // height: 150,
-                                    decoration: BoxDecoration(
-                                      color: */ /*dark ? TColors.dark : TColors.light*/ /*
-                                          TColors.primaryColor.withOpacity(0.8),
-                                      borderRadius: BorderRadius.circular(
-                                          TSizes.borderRadiusLg),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        0.0, 0.0, 0.0, 5.0),
-                                                child: Text(
-                                                  textAlign: TextAlign.center,
-                                                  "Classroom",
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headlineMedium
-                                                      ?.copyWith(
-                                                          color: Colors.white),
-                                                ),
-                                              ),
-                                              Text(
-                                                textAlign: TextAlign.start,
-                                                "ইন্টারেক্টিভ লেসন এবং ভিডিও দেখে পড়া শুরু করুন",
-                                                softWrap: true,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge
-                                                    ?.copyWith(
-                                                        color: Colors.white),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Image.asset(
-                                          TImages.cvBuilderImage,
-                                          height: 100,
-                                          width: 150,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: -300,
-                                    right: -180,
-                                    child: TCircularContainer(
-                                      backgroundColor:
-                                          TColors.white.withOpacity(0.1),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              height: TSizes.spaceBtwItems / 2,
-                            ),
-                          ],
-                        ),*/
-                      ],
-                    ),
+                    const THomeAppBar(),
                     // SizedBox(height: TSizes.defaultSpace),
-                    // TOOLS
-                    /*Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Text(
-                        "Explore The AI Tools",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 24),
-                      ),
-                    ),
-                    SizedBox(
-                      height: TSizes.sm,
-                    ),*/
                     Container(
                       padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                       child: RichText(
@@ -207,25 +92,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                     'গণিত \nসমাধান',
                                     "assets/images/dashboard_images/math.png",
                                     TColors.primaryColor,
-                                "MATH"),
+                                    "MATH"),
                               ),
                               Expanded(
                                 child: _buildToolCard(
-                                    'নোট \nপ্রস্তুতি',
-                                    "assets/images/dashboard_images/note.png",
-                                    TColors.error,"NOTE",),
+                                  'নোট \nপ্রস্তুতি',
+                                  "assets/images/dashboard_images/note.png",
+                                  TColors.error,
+                                  "NOTE",
+                                ),
                               ),
                               Expanded(
                                 child: _buildToolCard(
                                     'রচনা \n ',
                                     "assets/images/dashboard_images/essay_bn.png",
-                                    TColors.secondaryColor,"EASSY"),
+                                    TColors.secondaryColor,
+                                    "EASSY"),
                               ),
                               Expanded(
                                 child: _buildToolCard(
                                     'চিঠি\n ',
                                     "assets/images/dashboard_images/letter_bn.png",
-                                    TColors.tertiaryColor,"LETTER"),
+                                    TColors.tertiaryColor,
+                                    "LETTER"),
                               ),
                             ],
                           ),
@@ -236,25 +125,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: _buildToolCard(
                                     'পরীক্ষক \n ',
                                     "assets/images/dashboard_images/examiner.png",
-                                    TColors.error,"SELF"),
+                                    TColors.error,
+                                    "SELF"),
                               ),
                               Expanded(
                                 child: _buildToolCard(
                                     'ছবি থেকে\nপড়া',
                                     "assets/images/dashboard_images/scan.png",
-                                    TColors.tertiaryColor,"IMG"),
+                                    TColors.tertiaryColor,
+                                    "IMG"),
                               ),
                               Expanded(
                                 child: _buildToolCard(
                                     'English\nGrammar',
                                     "assets/images/dashboard_images/grammar.png",
-                                    TColors.primaryColor,"GRAMMAR"),
+                                    TColors.primaryColor,
+                                    "GRAMMAR"),
                               ),
                               Expanded(
                                 child: _buildToolCard(
                                     'Essay\n',
                                     "assets/images/dashboard_images/essay.png",
-                                    TColors.secondaryColor,"EASSY"),
+                                    TColors.secondaryColor,
+                                    "EASSY"),
                               ),
                             ],
                           ),
@@ -262,29 +155,33 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
-                                flex: 1,
+                                // flex: 1,
                                 child: _buildToolCard(
-                                    'Letter\n',
+                                    'Letter',
                                     "assets/images/dashboard_images/letter.png",
-                                    TColors.primaryColor,"LETTER"),
+                                    TColors.primaryColor,
+                                    "LETTER"),
                               ),
                               Expanded(
-                                flex: 1,
+                                // flex: 1,
                                 child: _buildToolCard(
                                     'Accounting',
                                     "assets/images/dashboard_images/accounting.png",
-                                    TColors.secondaryColor,"ACC"),
+                                    TColors.secondaryColor,
+                                    "ACC"),
                               ),
                               Expanded(
-                                  flex: 1,
-                                  child: SizedBox(
-                                    width: 20,
-                                  )),
+                                // flex: 1,
+                                child: SizedBox(
+                                  width: 20,
+                                ),
+                              ),
                               Expanded(
-                                  flex: 1,
-                                  child: SizedBox(
-                                    width: 20,
-                                  )),
+                                // flex: 1,
+                                child: SizedBox(
+                                  width: 20,
+                                ),
+                              ),
                             ],
                           ),
                         ],
@@ -292,34 +189,138 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     // SizedBox(height: TSizes.sm),
                     Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Text(
-                        "Mental Health Support AI Tools",
-                        textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 20),
+                      padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Dive into classroom ",
+                            style: TextStyle(
+                                fontSize: 24,
+                                color: dark ? Colors.white : Colors.black,
+                                fontFamily: "Poppins"),
+                          ),
+                          SizedBox(
+                            height: TSizes.spaceBtwItems / 2,
+                          ),
+                          //Classroom
+                          Container(
+                            width: double.infinity,
+                            child: Stack(
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: TSizes.md / 2,
+                                      horizontal: TSizes.md),
+                                  // height: 150,
+                                  decoration: BoxDecoration(
+                                    color: /*dark ? TColors.dark : TColors.light,*/
+                                        TColors.primaryColor.withOpacity(0.8),
+                                    borderRadius: BorderRadius.circular(
+                                        TSizes.borderRadiusLg),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      0.0, 0.0, 0.0, 5.0),
+                                              child: Text(
+                                                textAlign: TextAlign.center,
+                                                "Classroom",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headlineMedium
+                                                    ?.copyWith(
+                                                        color: Colors.white),
+                                              ),
+                                            ),
+                                            Text(
+                                              textAlign: TextAlign.start,
+                                              "ইন্টারেক্টিভ লেসন এবং ভিডিও দেখে পড়া শুরু করুন",
+                                              softWrap: true,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge
+                                                  ?.copyWith(
+                                                      color: Colors.white),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Image.asset(
+                                        TImages.cvBuilderImage,
+                                        height: 100,
+                                        width: 150,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Positioned(
+                                  top: -300,
+                                  right: -180,
+                                  child: TCircularContainer(
+                                    backgroundColor:
+                                        TColors.white.withOpacity(0.1),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                            height: TSizes.spaceBtwItems / 2,
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(height: TSizes.sm),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      // mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Expanded(
-                          child: _buildToolLargeCard(
-                              'মানসিক স্বাস্থ্য পরামর্শক',
-                              'মানসিক স্বাস্থ্য সম্পর্কে জানুন এবং নিজেকে ভালোবাসুন',
-                              "assets/images/dashboard_images/psychology.png",
-                              TColors.primaryColor),
-                        ),
-                        Expanded(
-                          child: _buildToolLargeCard(
-                              'মনোবিজ্ঞানীর সাহায্য',
-                              'হতাশা কাটিয়ে উঠুন, নতুন করে শুরু করুন',
-                              "assets/images/dashboard_images/mental_health.png",
-                              TColors.primaryColor),
-                        ),
-                      ],
+                    // SizedBox(height: TSizes.sm),
+                    Container(
+                      padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                      child: Column(
+                        children: [
+                          Container(
+                            width: double.infinity,
+                            child: Text(
+                              "Mental Health Support AI Tools",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                          SizedBox(height: TSizes.sm),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            // mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Expanded(
+                                child: _buildToolLargeCard(
+                                  'মানসিক স্বাস্থ্য পরামর্শক',
+                                  'মানসিক স্বাস্থ্য সম্পর্কে জানুন এবং নিজেকে ভালোবাসুন',
+                                  "assets/images/dashboard_images/psychology.png",
+                                  TColors.primaryColor,
+                                  "",
+                                ),
+                              ),
+                              Expanded(
+                                child: _buildToolLargeCard(
+                                  'মনোবিজ্ঞানীর সাহায্য',
+                                  'হতাশা কাটিয়ে উঠুন, নতুন করে শুরু করুন',
+                                  "assets/images/dashboard_images/mental_health.png",
+                                  TColors.primaryColor,
+                                  "",
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -335,15 +336,16 @@ class _HomeScreenState extends State<HomeScreen> {
     String title,
     String image,
     Color color,
-      String staticToolsCode,
+    String staticToolsCode,
   ) {
     return GestureDetector(
       onTap: () {
         print('$title pressed');
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) =>  ToolsContentScreen(staticToolsCode:
-          staticToolsCode)),
+          MaterialPageRoute(
+              builder: (context) =>
+                  ToolsContentScreen(staticToolsCode: staticToolsCode)),
         );
       },
       child: Container(
@@ -374,10 +376,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Text(
               title,
-              maxLines: 2,
+              // maxLines: 2,
               style: TextStyle(
                   /*color: Colors.grey.shade900,*/
-                  fontWeight: FontWeight.bold),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12.0),
               textAlign: TextAlign.center,
             ),
           ],
@@ -387,12 +390,19 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildToolLargeCard(
-      String title, String subtitle, String image, Color color) {
+    String title,
+    String subtitle,
+    String image,
+    Color color,
+    String staticToolsCode,
+  ) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => const ToolsContentScreen()),
+          MaterialPageRoute(
+              builder: (context) =>
+                  ToolsContentScreen(staticToolsCode: staticToolsCode)),
         );
       },
       child: Container(
