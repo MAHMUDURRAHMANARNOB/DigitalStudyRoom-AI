@@ -17,7 +17,7 @@ class OnBoardingDotNavigation extends StatelessWidget {
     final controller = OnboardingController.instance;
     final dark = THelperFunction.isDarkMode(context);
     return Positioned(
-        bottom: TDeviceUtils.getBottomNavigationBarHeight() + 25,
+        top: TDeviceUtils.getBottomNavigationBarHeight() + 20,
         left: TSizes.defaultSpace,
         child: SmoothPageIndicator(
           effect: ExpandingDotsEffect(

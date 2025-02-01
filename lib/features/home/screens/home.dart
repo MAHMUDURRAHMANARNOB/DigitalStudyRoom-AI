@@ -204,7 +204,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: TSizes.spaceBtwItems / 2,
                           ),
                           //Classroom
-                          Container(
+                          /*Container(
                             width: double.infinity,
                             child: Stack(
                               children: [
@@ -215,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       horizontal: TSizes.md),
                                   // height: 150,
                                   decoration: BoxDecoration(
-                                    color: /*dark ? TColors.dark : TColors.light,*/
+                                    color: */ /*dark ? TColors.dark : TColors.light,*/ /*
                                         TColors.primaryColor.withOpacity(0.8),
                                     borderRadius: BorderRadius.circular(
                                         TSizes.borderRadiusLg),
@@ -277,7 +277,144 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           const SizedBox(
                             height: TSizes.spaceBtwItems / 2,
+                          ),*/
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Total Study time
+                              Expanded(
+                                child: Container(
+                                  margin: const EdgeInsets.all(5.0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                    color: TColors.secondaryColor,
+                                  ),
+                                  // margin: EdgeInsets.all(5),
+                                  padding: EdgeInsets.all(10),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Icon(
+                                        Icons.watch_later_outlined,
+                                        size: 30,
+                                        color: TColors.white,
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        "Total Study Time",
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        "24.5 hours",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 24),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+
+                              // Courses Enrolled
+                              Expanded(
+                                child: Container(
+                                  margin: const EdgeInsets.all(5.0),
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12.0),
+                                      color: TColors.tertiaryColor),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Icon(
+                                        Icons.menu_book_rounded,
+                                        size: 30,
+                                        color: TColors.white,
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text("Courses Enrolled"),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text(
+                                        "3",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 24),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
+                          SizedBox(height: TSizes.spaceBtwItems),
+                          Text("Upcoming Tasks",style: TextStyle(
+                              fontSize: 24,
+                              color: dark ? Colors.white : Colors.black,
+                              fontFamily: "Poppins"),),
+                          SizedBox(height: TSizes.sm),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: TColors.primaryColor),
+                            ),
+                            height: 100,
+                            width: double.infinity,
+                            padding: EdgeInsets.all(10.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(Icons.task_alt_outlined,color: TColors.tertiaryColor),
+                                        SizedBox(width: 5),
+                                        Text("Task 1"),
+                                      ],
+                                    ),
+                                    Text("Due date"),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(Icons.task_alt_outlined,color: TColors.tertiaryColor),
+                                        SizedBox(width: 5),
+                                        Text("Task 1"),
+                                      ],
+                                    ),
+                                    Text("Due date"),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(Icons.task_alt_outlined,color: TColors.tertiaryColor),
+                                        SizedBox(width: 5),
+                                        Text("Task 1"),
+                                      ],
+                                    ),
+                                    Text("Due date"),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: TSizes.sm),
                         ],
                       ),
                     ),

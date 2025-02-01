@@ -15,11 +15,11 @@ class TImages {
 
   //Onboarding Image
   static const String onBoardingImage1 =
-      "assets/images/onboarding/onboarding_img_1.png";
+      'assets/images/onboarding/os1.json';
   static const String onBoardingImage2 =
-      "assets/images/onboarding/onboarding_image_3.png";
+      "assets/images/onboarding/os2.json";
   static const String onBoardingImage3 =
-      "assets/images/onboarding/onboarding_image_2.png";
+      "assets/images/onboarding/os4.json";
 
   //   Signup Verification Images
   static const String verifyEmailImage =

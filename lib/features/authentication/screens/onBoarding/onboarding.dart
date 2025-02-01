@@ -1,3 +1,4 @@
+import 'package:concentric_transition/concentric_transition.dart';
 import 'package:digital_study_room/features/authentication/screens/onBoarding/widgets/onboarding_dot_navigation.dart';
 import 'package:digital_study_room/features/authentication/screens/onBoarding/widgets/onboarding_next_button.dart';
 import 'package:digital_study_room/features/authentication/screens/onBoarding/widgets/onboarding_page.dart';
@@ -29,6 +30,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           // Skip Button
           // const OnBoardingSkip(),
 
+          // Dot Navigation SmoothPageIndicator
+          const OnBoardingDotNavigation(),
+
           //Horizontal Scrollable Pages
           PageView(
             controller: controller.pageController,
@@ -51,9 +55,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               ),
             ],
           ),
-
-          // Dot Navigation SmoothPageIndicator
-          const OnBoardingDotNavigation(),
 
           //Circular Button
           const OnBoardingNextButton(),

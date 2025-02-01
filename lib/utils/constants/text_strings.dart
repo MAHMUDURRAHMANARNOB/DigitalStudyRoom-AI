@@ -2,18 +2,17 @@ class TTexts {
   // -- Global Texts
 
   // -- Onboarding Texts
-  static const String onBoardingTitle1 = "Welcome to Digital Study Room!";
-  static const String onBoardingTitle2 = "Learn Anything, Anytime";
-  static const String onBoardingTitle3 = "Achieve Your Goals";
+  static const String onBoardingTitle1 = "দেশের প্রথম শিক্ষা সহায়ক এ আই, ";
+  static const String onBoardingTitle2 = "স্কুল এখন হাতের মুঠোয়";
+  static const String onBoardingTitle3 = "ইন্টারেক্টিভ ভিডিও এবং পরীক্ষার সুযোগ";
 
-  static const String onBoardingSubTitle1 = "Your one-stop shop for online learning. Get instant help with our AI assistant.";
-  static const String onBoardingSubTitle2 = "Learn at your own pace, 24/7. Ask our AI assistant anything.";
+  static const String onBoardingSubTitle1 = "আমাদের বিশেষ এ আই কোর্স রিলেটেড যে কোনো প্রশ্নের উত্তর সুন্দরভাব্র বুঝিয়ে দিবে, অর্থাৎ আপনি পাচ্ছেন একজন টিউটর ২৪/৭";
+  static const String onBoardingSubTitle2 = "NCTB র পাঠ্যসূচির আলোকে তৈরী আমাদের সকল কোর্স, প্রত্যেকটি বইয়ের প্রত্যেকটি অধ্যায়ের উপর আলাদাভাবে ভিডিও করা আছে অর্থাৎ হাতের মোবাইল দিয়েই পুরো কোর্স কমপ্লিট করে ফেলতে পারবেন";
   static const String onBoardingSubTitle3 =
-      "Reach your full potential with our AI-powered learning platform. Sign up now!";
+      "তুলনামূলক কঠিন বিষয়গুলো বোঝার সুবিধার্তে ইন্টারেক্টিভ ভিডিওর মাধ্যমে উপস্থাপন করা হয়েছে এবং অগ্রগতি যাচাইয়ের জন্যে প্রত্যেক অধ্যায় শেষে পরীক্ষার ব্যবস্থা রয়েছ";
 
   // -- Authentication Form Texts
-  static const String firstName = "First Name";
-  static const String lastName = "Last Name";
+  static const String fullName = "Full Name";
   static const String email = "E-Mail";
   static const String password = "Password";
   static const String newPassword = "New Password";
@@ -34,7 +33,7 @@ class TTexts {
 
   // Authentication Heading Texts
   static const String loginTitle = "Welcome";
-  static const String loginSubTitle = "We are happy to see you back.";
+  static const String loginSubTitle = "We are happy to have you back.";
   static const String signupTitle = "Let's create your account.";
   static const String tContinue = "Continue";
 

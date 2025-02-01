@@ -21,38 +21,26 @@ class TSignupForm extends StatelessWidget {
       child: Column(
         children: [
           // First Name and Last Name
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  expands: false,
-                  decoration: const InputDecoration(
-                      labelText: TTexts.firstName,
-                      prefixIcon: Icon(Iconsax.user)),
-                ),
-              ),
-              const SizedBox(width: TSizes.spaceBtwInputFields),
-              Expanded(
-                child: TextFormField(
-                  expands: false,
-                  decoration: const InputDecoration(
-                      labelText: TTexts.lastName,
-                      prefixIcon: Icon(Iconsax.user)),
-                ),
-              ),
-            ],
+          TextFormField(
+            cursorColor: TColors.primaryColor,
+            expands: false,
+            decoration: const InputDecoration(
+                labelText: TTexts.fullName,
+                prefixIcon: Icon(Iconsax.user)),
           ),
           const SizedBox(height: TSizes.spaceBtwInputFields),
           //   UserName
           TextFormField(
+            cursorColor: TColors.primaryColor,
             expands: false,
             decoration: const InputDecoration(
                 labelText: TTexts.username,
-                prefixIcon: Icon(Iconsax.user_edit)),
+                prefixIcon: Icon(Iconsax.shield_tick)),
           ),
           const SizedBox(height: TSizes.spaceBtwInputFields),
           //   Email
           TextFormField(
+            cursorColor: TColors.primaryColor,
             expands: false,
             decoration: const InputDecoration(
               labelText: TTexts.email,
@@ -62,6 +50,7 @@ class TSignupForm extends StatelessWidget {
           const SizedBox(height: TSizes.spaceBtwInputFields),
           //   Phone No
           TextFormField(
+            cursorColor: TColors.primaryColor,
             expands: false,
             decoration: const InputDecoration(
               labelText: TTexts.phoneNo,
@@ -71,6 +60,7 @@ class TSignupForm extends StatelessWidget {
           const SizedBox(height: TSizes.spaceBtwInputFields),
           //   Password
           TextFormField(
+            cursorColor: TColors.primaryColor,
             expands: false,
             decoration: const InputDecoration(
               labelText: TTexts.password,

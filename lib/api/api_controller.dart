@@ -7,7 +7,8 @@ import 'package:http/http.dart' as http;
 import '../features/ToolsContent/datamodel/studyToolsDataModel.dart';
 
 class ApiController{
-  static const String baseUrl = 'https://api.risho.guru';
+  // static const String baseUrl = 'https://api.risho.guru';
+  static const String baseUrl = 'https://studyroom.risho.guru/';
 
   static Future<List<StudyToolsDataModel>> fetchTools(int userId) async {
     const apiUrl = '$baseUrl/gettoolslist/';

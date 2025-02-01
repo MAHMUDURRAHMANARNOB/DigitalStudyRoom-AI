@@ -23,6 +23,7 @@ class TLoginForm extends StatelessWidget {
         child: Column(
           children: [
             TextFormField(
+              cursorColor: TColors.primaryColor,
               decoration: const InputDecoration(
                 prefixIcon: Icon(Iconsax.direct_right),
                 labelText: TTexts.email,
@@ -32,6 +33,7 @@ class TLoginForm extends StatelessWidget {
               height: TSizes.spaceBtwInputFields,
             ),
             TextFormField(
+              cursorColor: TColors.primaryColor,
               decoration: const InputDecoration(
                 prefixIcon: Icon(Iconsax.password_check),
                 labelText: TTexts.password,
@@ -75,7 +77,8 @@ class TLoginForm extends StatelessWidget {
             //   Sign In Buttons
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(
+              child: OutlinedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: TColors.primaryColor),
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const NavigationMenu()),
