@@ -4,6 +4,7 @@ class ToolsResponseDataModel {
   final String? question;
   final String? answer;
   final int? ticketId;
+  final int? remainingticket;
 
   ToolsResponseDataModel({
     required this.errorCode,
@@ -11,6 +12,7 @@ class ToolsResponseDataModel {
     required this.question,
     required this.answer,
     required this.ticketId,
+    required this.remainingticket,
   });
 
   factory ToolsResponseDataModel.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class ToolsResponseDataModel {
       question: json['question'],
       answer: json['answer'],
       ticketId: json['ticketid'],
+      remainingticket: json['remainingticket'],
     );
   }
 }

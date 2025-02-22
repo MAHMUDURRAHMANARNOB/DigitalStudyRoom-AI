@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:digital_study_room/features/ToolsContent/provider/studyToolsProvider.dart';
 import 'package:digital_study_room/utils/constants/colors.dart';
+import 'package:digital_study_room/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:iconsax/iconsax.dart';
@@ -11,6 +12,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:markdown_widget/config/configs.dart';
 import 'package:markdown_widget/config/markdown_generator.dart';
+import 'package:markdown_widget/widget/blocks/leaf/code_block.dart';
 import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:markdown_widget/markdown_widget.dart' as MW;
@@ -18,7 +20,10 @@ import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../../common/latexGenerator.dart';
 import '../../../utils/helpers/helper_function.dart';
+import '../../authentication/providers/AuthProvider.dart';
+import '../../profile/Providers/SubscriptionStatusProvider.dart';
 import '../datamodel/studyToolsDataModel.dart';
+import '../datamodel/toolsDataDataModel.dart';
 import '../provider/ToolsResponseProvider.dart';
 import '../provider/toolsDataByCodeProvider.dart';
 import '../provider/toolsReplyProvider.dart';
@@ -41,7 +46,7 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
   TextEditingController questionTextFieldController = TextEditingController();
   ScrollController _scrollController = ScrollController();
   late ToolsDataProvider toolsDataProvider;
-  late StudyToolsProvider toolsProvider;
+   StudyToolsProvider? toolsProvider;
 
   late ToolsResponseProvider toolsResponseProvider =
       Provider.of<ToolsResponseProvider>(context, listen: false);
@@ -56,14 +61,14 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
   bool _isReply = false;
   bool _isNewQuestion = false;
 
-  late int userID = 59350;
+  late int userID = 1;
   late int _selectedticketId;
   late bool isLoading = true;
 
   late String _selectedToolsCode;
   late String _selectedToolName = '';
-  late String _selectedClassName = 'Class - 12';
-  late String _selectedSubjectName = 'Basic Math';
+  late String _selectedClassName = 'Grade - 12';
+  late String _selectedSubjectName = 'Select Subject';
   late String _question = '';
   late String _maxLine = '';
   final String _isMobile = 'Y';
@@ -82,26 +87,269 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
 
     // Initialize toolsProvider in initState
     // final authProvider = context.read<AuthProvider>();
-    toolsProvider = StudyToolsProvider(userId: 2);
+    // Get provider from the widget tree
+    Future.microtask(() {
+      toolsProvider = context.read<StudyToolsProvider>();
+      fetchTools();
+    });
+
 
     // Fetch tools here once during the widget lifecycle
-    fetchTools(toolsProvider);
+    // fetchTools();
 
     _speech = SpeechToText();
   }
 
-  Future<void> fetchTools(StudyToolsProvider toolsProvider) async {
-    if (!toolsFetched) {
-      await toolsProvider.fetchTools();
-      setState(() {
-        isLoading = false;
-        toolsFetched = true; // Set the flag to true after fetching tools
-      });
-      selectToolByCode(widget.staticToolsCode!, toolsProvider);
-    }
+  Container buildDropdownMenuClass() {
+    return Container(
+      padding: EdgeInsets.fromLTRB(0.0, 2.0, 0.0, 2.0),
+      child: DropdownMenu<String>(
+        initialSelection:
+        _selectedClassName != "null" ? _selectedClassName : '',
+        // width: 150,
+        menuHeight: 250,
+        label: Text("Class"),
+        textStyle: Theme.of(context).textTheme.bodySmall,
+        onSelected: (String? value) {
+          setState(() {
+            _selectedClassName = value!;
+            print("$_selectedClassName << Selectedclassname");
+          });
+        },
+        dropdownMenuEntries: toolsDataProvider.toolsData?.classList
+            .map<DropdownMenuEntry<String>>((ClassInfo classInfo) {
+          return DropdownMenuEntry<String>(
+            value: classInfo.className,
+            label: classInfo.className,
+          );
+        }).toList() ??
+            [],
+      ),
+    );
   }
 
-  Future<void> selectToolByCode(
+  Container buildDropdownMenuSubjects() {
+    List<DropdownMenuEntry<String>> dropdownEntries = [];
+
+    if (toolsDataProvider.toolsData?.subjectList != null) {
+      dropdownEntries = toolsDataProvider.toolsData!.subjectList
+          .map<DropdownMenuEntry<String>>((Subject subject) {
+        return DropdownMenuEntry<String>(
+          value: subject.subjectName,
+          label: subject.subjectName,
+        );
+      }).toList();
+    }
+
+    return Container(
+      padding: EdgeInsets.fromLTRB(0.0, 2.0, 0.0, 2.0),
+      child: DropdownMenu<String>(
+        initialSelection:
+        _selectedSubjectName != "null" ? _selectedSubjectName : '',
+        // width: 150,
+        menuHeight: 250,
+        label: const Text('Subject'),
+        textStyle: Theme.of(context).textTheme.bodySmall,
+        onSelected: (String? value) {
+          // This is called when the user selects an item.
+          setState(() {
+            _selectedSubjectName = value!;
+            print("$_selectedSubjectName << _selectedSubjectName");
+          });
+        },
+        dropdownMenuEntries: dropdownEntries,
+      ),
+    );
+  }
+
+  Widget buildChipClass(ToolsDataProvider toolsDataProvider) {
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("Select Class"),
+              content: SingleChildScrollView(
+                child: Column(
+                  children: toolsDataProvider.toolsData?.classList
+                      .map((ClassInfo classInfo) {
+                    return ListTile(
+                      title: Text(classInfo.className),
+                      onTap: () {
+                        setState(() {
+                          _selectedClassName = classInfo.className;
+                        });
+                        Navigator.of(context).pop();
+                      },
+                    );
+                  }).toList() ??
+                      [],
+                ),
+              ),
+            );
+          },
+        );
+      },
+      child: Chip(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: const BorderSide(
+              color: TColors.primaryColor), // Change the border color here
+        ),
+        label: Text(
+          _selectedClassName != "null" ? _selectedClassName : 'Select Class',
+          style: const TextStyle(
+            color: TColors.primaryColor,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildChipSubjects(ToolsDataProvider toolsDataProvider) {
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text("Select Subject"),
+              content: SingleChildScrollView(
+                child: Column(
+                  children: toolsDataProvider.toolsData?.subjectList
+                      .map((Subject subject) {
+                    return ListTile(
+                      title: Text(subject.subjectName),
+                      onTap: () {
+                        setState(() {
+                          _selectedSubjectName = subject.subjectName;
+                        });
+                        Navigator.of(context).pop();
+                      },
+                    );
+                  }).toList() ??
+                      [],
+                ),
+              ),
+            );
+          },
+        );
+      },
+      child: Chip(
+        // backgroundColor: TColors.backgroundColorDark,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+          side: BorderSide(
+              color: TColors.primaryColor), // Change the border color here
+        ),
+        label: Text(
+          _selectedSubjectName != "null"
+              ? _selectedSubjectName
+              : 'Select Subject',
+          style: TextStyle(
+            color: TColors.primaryColor,
+          ),
+        ),
+      ),
+    );
+  }
+
+  void resetSelectedClassAndSubject() {
+    setState(() {
+      _selectedClassName = 'null';
+      _selectedSubjectName = 'null';
+      _isImageSelected = false;
+      _selectedImage = null;
+    });
+  }
+
+  void resetLessonComponent() {
+    setState(() {
+      _lessonComponents.clear();
+    });
+  }
+
+  /*COMMON TOOL BUTTONS*/
+  ElevatedButton buildToolButton(
+      String toolName,
+      String toolsCode,
+      int toolId,
+      String subject,
+      String maxWord,
+      String mathKeyboard, {
+        required VoidCallback onToolSelected,
+        bool isSelected = false,
+      }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: TColors.primaryColor,
+      ),
+      onPressed: () {
+        isLoading = false;
+        resetSelectedClassAndSubject();
+        _scaffoldKey.currentState?.closeEndDrawer();
+        onToolSelected();
+        setState(() {
+          _selectedToolsCode = toolsCode;
+          _selectedToolName = toolName;
+        });
+        if (maxWord == "Y") {
+          setState(() {
+            maxWordVisibility = true;
+          });
+        } else {
+          setState(() {
+            maxWordVisibility = false;
+          });
+        }
+        if (mathKeyboard == "Y") {
+          setState(() {
+            mathKeyboardVisibility = true;
+          });
+        } else {
+          setState(() {
+            mathKeyboardVisibility = false;
+          });
+        }
+
+        if (subject == "Y") {
+          setState(() {
+            subjectSelectionVisibility = true;
+          });
+        } else {
+          setState(() {
+            subjectSelectionVisibility = false;
+          });
+        }
+      },
+      child: Text(
+        toolName,
+        style: TextStyle(color: Colors.white),
+      ),
+    );
+  }
+
+  Future<void> fetchTools() async {
+    if (!toolsFetched) {
+      await toolsProvider!.fetchTools(userID);
+
+      if (toolsProvider!.tools.isNotEmpty) {
+        setState(() {
+          isLoading = false;
+          toolsFetched = true;
+        });
+
+        print("✅ Tools fetched successfully, calling selectToolByCode()");
+        await selectToolByCode(widget.staticToolsCode!, toolsProvider!);
+      } else {
+        print("❌ No tools available after fetching.");
+      }
+    }
+  }
+  
+
+  /*Future<void> selectToolByCode(
       String toolsCode, StudyToolsProvider toolsProvider) async {
     // Find the corresponding tool in the toolsProvider
     List<StudyToolsDataModel> matchingTools = toolsProvider.tools
@@ -160,13 +408,90 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
       print("Tool with toolsCode $toolsCode not found");
       isLoading = false;
     }
+  }*/
+  /*Future<void> selectToolByCode(
+      String toolsCode, StudyToolsProvider toolsProvider) async {
+    // Find the corresponding tool in the toolsProvider
+    List<StudyToolsDataModel> matchingTools = toolsProvider.tools
+        .where((tool) => tool.toolsCode == toolsCode)
+        .toList();
+
+    print("Total tools available -> ${toolsProvider.tools.length}");
+    print("Matching tools count -> ${matchingTools.length}");
+
+    if (matchingTools.isNotEmpty) {
+      isLoading = false;
+      StudyToolsDataModel selectedTool = matchingTools.first;
+
+      _scaffoldKey.currentState?.closeEndDrawer();
+
+      print("Selected tool -> ID: ${selectedTool.toolID}, Name: ${selectedTool.toolName}");
+
+      toolsDataProvider.fetchToolsData(userID, selectedTool.toolID);
+
+      setState(() {
+        _selectedToolsCode = selectedTool.toolsCode;
+        _selectedToolName = selectedTool.toolName;
+        maxWordVisibility = selectedTool.maxWord == "Y";
+        mathKeyboardVisibility = selectedTool.mathKeyboard == "Y";
+      });
+
+    } else {
+      // Handle the case when the tool with toolsCode is not found
+      print("Error: Tool with toolsCode $toolsCode not found");
+      isLoading = false;
+      return; // Exit the function early
+    }
+  }*/
+  Future<void> selectToolByCode(
+      String toolsCode, StudyToolsProvider toolsProvider) async {
+
+    // print("🔍 Searching for toolCode: $toolsCode in ${toolsProvider.tools.length} tools.");
+    //
+    // for (var tool in toolsProvider.tools) {
+    //   print("🛠 Tool Found: Code -> ${tool.toolsCode}, Name -> ${tool.toolName}");
+    // }
+
+    List<StudyToolsDataModel> matchingTools = toolsProvider.tools
+        .where((tool) => tool.toolsCode == toolsCode)
+        .toList();
+
+    // print("🔎 Matching tools count -> ${matchingTools.length}");
+
+    if (matchingTools.isNotEmpty) {
+      print("✅ Tool found: ${matchingTools.first.toolName}");
+      isLoading = false;
+
+      StudyToolsDataModel selectedTool = matchingTools.first;
+      _scaffoldKey.currentState?.closeEndDrawer();
+
+      toolsDataProvider.fetchToolsData(userID, selectedTool.toolID);
+
+      setState(() {
+        _selectedToolsCode = selectedTool.toolsCode;
+        _selectedToolName = selectedTool.toolName;
+        maxWordVisibility = selectedTool.maxWord == "Y";
+        mathKeyboardVisibility = selectedTool.mathKeyboard == "Y";
+      });
+    } else {
+      print("❌ Tool with toolsCode $toolsCode not found in provider.");
+      isLoading = false;
+    }
   }
 
+
   late bool dark;
+
+  final SubscriptionStatusProvider subscriptionStatusProvider =
+  SubscriptionStatusProvider();
 
   @override
   Widget build(BuildContext context) {
     dark = THelperFunction.isDarkMode(context);
+    final authProvider = Provider.of<AuthProvider>(context);
+
+    userID = /*authProvider.user!.id*/1;
+    toolsProvider = StudyToolsProvider();
 
     toolsDataProvider = Provider.of<ToolsDataProvider>(context, listen: false);
 
@@ -219,95 +544,74 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        /*Text(
-          _selectedToolName,
-          style: TextStyle(color: Colors.green, fontSize: 12.0),
-        ),*/
-
         Expanded(
           flex: 2,
           child: Container(
             width: double.infinity,
-            // color: Colors.grey[100],
+            color: TColors.white,
             child: SingleChildScrollView(
               controller: _scrollController,
               physics: BouncingScrollPhysics(),
               child: _lessonComponents.isNotEmpty
                   ? Column(
-                      children: _lessonComponents,
-                    )
+                children: _lessonComponents,
+              )
                   : Container(
-                      decoration: BoxDecoration(
-                        color: dark?TColors.primaryColor.withOpacity(0.2):TColors.light,
-                        borderRadius: BorderRadius.circular(8.0),
+                decoration: BoxDecoration(
+                  color: TColors.white,
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                margin: EdgeInsets.all(8),
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Welcome to HomeWork Board',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
                       ),
-                      margin: EdgeInsets.all(8),
-                      padding: EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Welcome to HomeWork Board',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: dark?Colors.white:Colors.black,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Your selected tool is - $_selectedToolName',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: TColors.primaryColor,),
-                          ),
-                          /*UnorderedList([
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Your selected tool is - $_selectedToolName',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: TColors.primaryColor),
+                    ),
+                    /*UnorderedList([
                                 "What conclusions can we draw from the implementation?",
                                 "Are there any changes that need to be introduced permanently?"
                               ]),*/
-                          SizedBox(height: 8),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '⚈ Now select your class and subject from below dropdown',
-                                style: TextStyle(
-                                  color: dark?Colors.white:Colors.black,
-                                ),
-                              ),
-                              Text(
-                                "⚈ Write down your question or problem",
-                                style: TextStyle(
-                                  color: dark?Colors.white:Colors.black,
-                                ),
-                              ),
-                              Text(
-                                "⚈ You can add image if you want",
-                                style: TextStyle(
-                                  color: dark?Colors.white:Colors.black,
-                                ),
-                              ),
-                              Text(
-                                "⚈ Send and get the solution",
-                                style: TextStyle(
-                                  color: dark?Colors.white:Colors.black,
-                                ),
-                              ),
-                              Text(
-                                "⚈ From the top-right corner menu, you can explore more tools",
-                                style: TextStyle(
-                                  color: dark?Colors.white:Colors.black,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 5.0),
-                          Text(
-                            "Now Keep Simplifying 😉",
-                          ),
-                        ],
-                      ),
+                    SizedBox(height: 8),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '⚈ Now select your class and subject from below dropdown',
+                        ),
+                        Text(
+                          "⚈ Write down your question or problem",
+                        ),
+                        Text(
+                          "⚈ You can add image if you want",
+                        ),
+                        Text(
+                          "⚈ Send and get the solution",
+                        ),
+                        Text(
+                          "⚈ From the top-right corner menu, you can explore more tools",
+                        ),
+                      ],
                     ),
+                    SizedBox(height: 5.0),
+                    Text(
+                      "Now Keep Simplifying 😉",
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),
@@ -376,26 +680,26 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
               /*SELECTED CLASS*/
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 5.0),
-                child: /*Consumer<ToolsDataProvider>(
+                child: Consumer<ToolsDataProvider>(
                   builder: (context, toolsDataProvider, child) {
-                    return */ /*buildDropdownMenuClass()*/ /* buildChipClass(
+                    return  /*buildDropdownMenuClass()*/  buildChipClass(
                         toolsDataProvider);
                   },
-                ),*/
-                    Text("Selected Class"),
+                ),
+                    // Text("Selected Class"),
               ),
               /*SELECTED SUBJECT*/
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 5.0),
                 child: Visibility(
                   // visible: subjectSelectionVisibility,
-                  child: /*Consumer<ToolsDataProvider>(
+                  child: Consumer<ToolsDataProvider>(
                     builder: (context, toolsDataProvider, child) {
-                      return */ /*buildDropdownMenuSubjects()*/ /* buildChipSubjects(
+                      return  /*buildDropdownMenuSubjects()*/  buildChipSubjects(
                           toolsDataProvider);
                     },
-                  ),*/
-                      Text("Selected Subject"),
+                  ),
+                      // Text("Selected Subject"),
                 ),
               ),
             ],
@@ -1283,19 +1587,27 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   /*Top Part*/
                   Container(
                     width: double.infinity,
+                    padding: EdgeInsets.all(10.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                          color: TColors.primaryColor),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "$selectedClass ${selectedSubject != "null" ? selectedSubject : ""}",
+                          "Question:",
                           softWrap: true,
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: TColors.primaryColor,
+                          ),
                         ),
                         Text(
                           "$question",
@@ -1309,14 +1621,15 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
                       ],
                     ),
                   ),
+                  SizedBox(height: TSizes.sm),
                   Container(
                     width: double.infinity,
                     // margin: const EdgeInsets.all(10.0),
                     padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
-                      color: dark?TColors.black:TColors.primaryColor,
+                      // color: dark?TColors.black:TColors.primaryColor,
                       border: Border.all(
-                          color: TColors.primaryColor.withOpacity(0.5)),
+                          color: TColors.tertiaryColor),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: MW.MarkdownWidget(
@@ -1520,11 +1833,12 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
             final ticketId = response.ticketId!;
 
             return Container(
+              width: double.infinity,
               // Your 'T' case UI code
               margin: const EdgeInsets.all(5.0),
               padding: const EdgeInsets.all(5.0),
               decoration: BoxDecoration(
-                color: TColors.primaryColor,
+                // color: TColors.primaryColor,
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: Column(
@@ -1532,24 +1846,35 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   /*Top Part*/
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "$selectedClass -- ${selectedSubject != "null" ? selectedSubject : ""} ",
-                      ),
-                    ],
-                  ),
                   Container(
+                    padding: EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
+                      border: Border.all(color: TColors.primaryColor)
                     ),
-                    padding: const EdgeInsets.all(5.0),
-                    width: double.infinity,
-                    height: 100,
-                    child: Image.file(
-                      questionImage,
-                      fit: BoxFit.contain,
+                    child: Column(
+                      children: [
+                        Text(
+                          "Question",
+                          softWrap: true,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: TColors.primaryColor,
+                          ),
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          padding: const EdgeInsets.all(5.0),
+                          width: double.infinity,
+                          height: 100,
+                          child: Image.file(
+                            questionImage,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Container(
@@ -1560,15 +1885,17 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
                     // margin: const EdgeInsets.all(10.0),
                     padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
-                      color: dark?TColors.black:TColors.primaryColor,
+                      // color: dark?TColors.black:TColors.primaryColor,
+                      border: Border.all(color: TColors.tertiaryColor),
                       borderRadius: BorderRadius.circular(6.0),
                     ),
                     child: MW.MarkdownWidget(
                       data: lessonAnswer!,
                       shrinkWrap: true,
                       selectable: true,
-                      config: MarkdownConfig.defaultConfig,
+                      config: MarkdownConfig.defaultConfig.copy(),
                       markdownGenerator: MarkdownGenerator(
+
                           generators: [latexGenerator],
                           inlineSyntaxList: [LatexSyntax()]),
                     ),
@@ -1649,6 +1976,7 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
       },
     );
   }
+
   Widget generateComponentGettingToolsReply(BuildContext context, int userid,
       int ticketId, String question, String isMobile) {
     // Capture the required values before calling setState
@@ -1662,7 +1990,7 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           /*return const SpinKitThreeInOut(
-            color: AppColors.primaryColor,
+            color: TColors.primaryColor,
           );*/
           return Container(
             padding: EdgeInsets.all(10.0),
@@ -1784,9 +2112,9 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
                     // margin: const EdgeInsets.all(10.0),
                     padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
-                      color: dark?TColors.black:TColors.primaryColor,
+                      // color: dark?TColors.black:TColors.primaryColor,
                       border: Border.all(
-                          color: TColors.primaryColor.withOpacity(0.5)),
+                          color: TColors.tertiaryColor),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child:
@@ -1811,7 +2139,7 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
-                              AppColors.primaryColor.withOpacity(0.1),
+                              TColors.primaryColor.withOpacity(0.1),
                         ),
                         onPressed: () {
                           setState(() {
@@ -1821,20 +2149,20 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
                         child: Text(
                           "Reply",
                           style: TextStyle(
-                            color: AppColors.primaryColor,
+                            color: TColors.primaryColor,
                           ),
                         ),
                       ),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor:
-                              AppColors.primaryColor.withOpacity(0.1),
+                              TColors.primaryColor.withOpacity(0.1),
                         ),
                         onPressed: () {},
                         child: Text(
                           "Review",
                           style: TextStyle(
-                            color: AppColors.primaryColor,
+                            color: TColors.primaryColor,
                           ),
                         ),
                       ),

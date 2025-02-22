@@ -52,29 +52,39 @@ class LatexNode extends SpanNode {
     final isInline = attributes['isInline'] == 'true';
     final style = parentStyle ?? config.p.textStyle;
     if (content.isEmpty) return TextSpan(style: style, text: textContent);
-    final latex = Math.tex(
-      content,
-      mathStyle: MathStyle.text,
-      textStyle: style.copyWith(
-        color: Colors.white,
-        overflow: TextOverflow.ellipsis,
+    final latex = FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Math.tex(
+        content,
+        mathStyle: MathStyle.text,
+        textStyle: style.copyWith(
+          color: Colors.black,
+          overflow: TextOverflow.visible,
+        ),
+        textScaleFactor: 1,
+        onErrorFallback: (error) {
+          return Text(
+            '$textContent',
+            style: style.copyWith(color: Colors.red),
+          );
+        },
       ),
-      textScaleFactor: 1,
-      onErrorFallback: (error) {
-        return Text(
-          '$textContent',
-          style: style.copyWith(color: Colors.red),
-        );
-      },
     );
     return WidgetSpan(
         alignment: PlaceholderAlignment.middle,
         child: !isInline
-            ? Container(
+            ? /*Container(
                 width: double.infinity,
                 child: Center(child: latex),
                 margin: EdgeInsets.symmetric(vertical: 16),
-              )
+              )*/Container(
+          width: double.infinity,
+          child: FittedBox(
+            fit: BoxFit.scaleDown, // Allows shrinking large equations
+            child: Center(child: latex),
+          ),
+          margin: EdgeInsets.symmetric(vertical: 8),
+        )
             : latex);
   }
 }

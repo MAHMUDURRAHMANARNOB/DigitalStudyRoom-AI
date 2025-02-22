@@ -48,12 +48,12 @@ class _NavigationMenuState extends State<NavigationMenu> {
                   Iconsax.home,
                 ),
                 label: "Home"),
-            NavigationDestination(icon: Icon(Iconsax.book), label: "Courses"),
+            // NavigationDestination(icon: Icon(Iconsax.book), label: "Courses"),
             /*NavigationDestination(
                 icon: Icon(Iconsax.brifecase_cross), label: "Jobs"),*/
             NavigationDestination(icon: Icon(Iconsax.user), label: "Profile"),
           ],
-          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+          labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         ),
       ),
     );
@@ -106,13 +106,13 @@ class _NavigationMenuState extends State<NavigationMenu> {
       case 0:
         return const HomeScreen() /*Container(color: Colors.blue)*/;
         break;
-      case 1:
-        return const CoursesScreen() /*Container(color: Colors.green)*/;
-        break;
+      /*case 1:
+        return const CoursesScreen() *//*Container(color: Colors.green)*//*;
+        break;*/
       /*case 2:
         return const ExamScreen() Container(color: Colors.orange);
         break;*/
-      case 2:
+      case 1:
         return const ProfileScreen() /*Container(color: Colors.purple)*/;
         break;
       default:

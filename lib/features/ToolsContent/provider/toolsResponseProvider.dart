@@ -33,9 +33,13 @@ class ToolsResponseProvider extends ChangeNotifier {
         maxLine,
         isMobile,
       );
-      _toolsResponse = ToolsResponseDataModel.fromJson(response);
-      print("Response from fetchToolsResponse: $response");
-      notifyListeners();
+      print("Raw API Response: $response");
+      if (response != null && response is Map<String, dynamic>) {
+        _toolsResponse = ToolsResponseDataModel.fromJson(response);
+        notifyListeners();
+      } else {
+        throw Exception("Invalid response format: Expected JSON object but got ${response.runtimeType}");
+      }
     } catch (error) {
       print('Error in getToolsResponse: $error');
       throw Exception('Failed to load data. Check your network connection.');
