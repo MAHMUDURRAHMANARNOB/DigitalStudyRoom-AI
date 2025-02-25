@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../features/ToolsContent/datamodel/studyToolsDataModel.dart';
+import '../features/Tutor/datamodels/TutorChapterListDataModel.dart';
 import '../features/Tutor/datamodels/TutorDataModel.dart';
 import '../features/authentication/models/LoginResponseDataModel.dart';
 import '../features/profile/datamodels/SubscriptionStatusDataModel.dart';
@@ -425,6 +426,25 @@ class ApiController{
     }
   }
 
+  static Future<ChapterListDataModel?> getTutorsChapters(String classId, String subjectId) async {
+    final url = Uri.parse("$baseUrl/getChapters/");
+    final request = http.MultipartRequest("POST", url);
+    request.fields["classId"] = classId;
+    request.fields["SubjectID"] = subjectId;
+
+    try {
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode == 200) {
+        return ChapterListDataModel.fromJson(Utf8Decoder().convert(response.bodyBytes));
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
+  }
+
   Future<Map<String, dynamic>> getTutorResponse(
       int userid,
       String userName,
@@ -438,7 +458,7 @@ class ApiController{
       String? answerText,
 
       ) async {
-    print("$userid , $userName , $TutorId, $SubjectName, $courseTopic, $audioFile, $answerText");
+    print("testing $userid , $userName , $TutorId, $className ,$SubjectName, $courseTopic, $audioFile, $answerText");
     try {
       final uri = Uri.parse("$baseUrl/Tutor/");
 
@@ -492,5 +512,74 @@ class ApiController{
     }
   }
 
+  Future<Map<String, dynamic>> getMathSolutionResponse(
+      int userid,
+      String gradeClass,
+      String problemText,
+      ) async {
+    final url = '$baseUrl/SolvebanglaMath/';
+    print("Posting in api service $url, $userid, $gradeClass, $problemText");
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: {
+          'userid': userid.toString(),
+          'gradeclass': gradeClass.toString(),
+          'questiontext': problemText.toString(),
+        },
+      );
+      print("Response  $response");
+      if (response.statusCode == 200) {
+        // If the server returns a 200 OK response, parse the JSON
+        print("Response in getMathSolutionResponse " + response.body);
+        return json.decode(response.body);
+      } else {
+        // If the server did not return a 200 OK response, throw an exception.
+        throw Exception('Failed to load data in getMathSolutionResponse');
+      }
+    } catch (e) {
+      throw Exception("Failed getMathSolutionResponse $e");
+    }
+  }
+  Future<Map<String, dynamic>> getMathImageResponse(
+      File questionImage,
+      int userid,
+      String gradeClass,
+      String? questiontext,
+      ) async {
+    const url = '$baseUrl/SolvebanglaMath/';
+    print("Posting in api service $url $questionImage ,$userid, $gradeClass, $questiontext");
+
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.fields['userid'] = userid.toString();
+    request.fields['gradeclass'] = gradeClass.toString();
+    request.fields['questiontext'] = questiontext.toString();
+    request.files.add(
+        await http.MultipartFile.fromPath('mathPhoto', questionImage!.path));
+    print("QUESTIONIMAGEPATH: ${questionImage.path}");
+
+    final response = await request.send();
+
+    if (response.statusCode == 200) {
+      print('Image uploaded successfully');
+      final responseString =
+      await response.stream.transform(utf8.decoder).join();
+      final responseCheck = json.decode(responseString);
+      // final responseCheck = json.decode(await response.stream.bytesToString());
+      print("Response check -> $responseCheck");
+      /*if (responseCheck["errorcode"] == 200) {
+        print('200');*/
+      return responseCheck;
+      /*} else {
+        print('else msg');
+        throw Exception(responseCheck["message"]);
+      }*/
+      /*print("Response in getImageToolsResponse " +
+          await response.stream.bytesToString());*/
+    } else {
+      print('Failed to upload image. Status code: ${response.statusCode}');
+      throw ("Failed getImageToolsResponse ${response.statusCode}");
+    }
+  }
 
 }

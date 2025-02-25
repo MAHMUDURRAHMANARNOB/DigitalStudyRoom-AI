@@ -5,10 +5,12 @@ import 'package:digital_study_room/features/profile/Providers/SubscriptionStatus
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'features/ToolsContent/provider/SolveBanglaMathProvider.dart';
 import 'features/ToolsContent/provider/ToolsResponseProvider.dart';
 import 'features/ToolsContent/provider/studyToolsProvider.dart';
 import 'features/ToolsContent/provider/toolsDataByCodeProvider.dart';
 import 'features/ToolsContent/provider/toolsReplyProvider.dart';
+import 'features/Tutor/providers/TutorChapterListProvider.dart';
 import 'features/Tutor/providers/TutorResponseProvider.dart';
 
 /*void main() {
@@ -41,6 +43,10 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) => TutorProvider(),
+        ),ChangeNotifierProvider(
+          create: (context) => TutorsChapterProvider(),
+        ),ChangeNotifierProvider(
+          create: (context) => SolveBanglaMathResponseProvider(),
         ),
       ],
       child: DigitalStudyRoom(),

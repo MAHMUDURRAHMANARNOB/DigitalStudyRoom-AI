@@ -30,8 +30,10 @@ import '../provider/toolsReplyProvider.dart';
 
 class ToolsContentScreen extends StatefulWidget {
   final String? staticToolsCode;
+  final String? isClassAvailable;
+  final String? isSubjectAvailable;
 
-  const ToolsContentScreen({super.key, this.staticToolsCode});
+  const ToolsContentScreen({super.key, this.staticToolsCode, this.isClassAvailable, this.isSubjectAvailable});
 
   @override
   State<ToolsContentScreen> createState() => _ToolsContentScreenState();
@@ -67,7 +69,7 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
 
   late String _selectedToolsCode;
   late String _selectedToolName = '';
-  late String _selectedClassName = 'Grade - 12';
+  late String _selectedClassName = 'Select Class';
   late String _selectedSubjectName = 'Select Subject';
   late String _question = '';
   late String _maxLine = '';
@@ -100,67 +102,6 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
     _speech = SpeechToText();
   }
 
-  Container buildDropdownMenuClass() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(0.0, 2.0, 0.0, 2.0),
-      child: DropdownMenu<String>(
-        initialSelection:
-        _selectedClassName != "null" ? _selectedClassName : '',
-        // width: 150,
-        menuHeight: 250,
-        label: Text("Class"),
-        textStyle: Theme.of(context).textTheme.bodySmall,
-        onSelected: (String? value) {
-          setState(() {
-            _selectedClassName = value!;
-            print("$_selectedClassName << Selectedclassname");
-          });
-        },
-        dropdownMenuEntries: toolsDataProvider.toolsData?.classList
-            .map<DropdownMenuEntry<String>>((ClassInfo classInfo) {
-          return DropdownMenuEntry<String>(
-            value: classInfo.className,
-            label: classInfo.className,
-          );
-        }).toList() ??
-            [],
-      ),
-    );
-  }
-
-  Container buildDropdownMenuSubjects() {
-    List<DropdownMenuEntry<String>> dropdownEntries = [];
-
-    if (toolsDataProvider.toolsData?.subjectList != null) {
-      dropdownEntries = toolsDataProvider.toolsData!.subjectList
-          .map<DropdownMenuEntry<String>>((Subject subject) {
-        return DropdownMenuEntry<String>(
-          value: subject.subjectName,
-          label: subject.subjectName,
-        );
-      }).toList();
-    }
-
-    return Container(
-      padding: EdgeInsets.fromLTRB(0.0, 2.0, 0.0, 2.0),
-      child: DropdownMenu<String>(
-        initialSelection:
-        _selectedSubjectName != "null" ? _selectedSubjectName : '',
-        // width: 150,
-        menuHeight: 250,
-        label: const Text('Subject'),
-        textStyle: Theme.of(context).textTheme.bodySmall,
-        onSelected: (String? value) {
-          // This is called when the user selects an item.
-          setState(() {
-            _selectedSubjectName = value!;
-            print("$_selectedSubjectName << _selectedSubjectName");
-          });
-        },
-        dropdownMenuEntries: dropdownEntries,
-      ),
-    );
-  }
 
   Widget buildChipClass(ToolsDataProvider toolsDataProvider) {
     return GestureDetector(
@@ -169,6 +110,7 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
           context: context,
           builder: (context) {
             return AlertDialog(
+              backgroundColor: TColors.white,
               title: const Text("Select Class"),
               content: SingleChildScrollView(
                 child: Column(
@@ -192,8 +134,10 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
         );
       },
       child: Chip(
+        backgroundColor: TColors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
+
           side: const BorderSide(
               color: TColors.primaryColor), // Change the border color here
         ),
@@ -214,6 +158,7 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
           context: context,
           builder: (context) {
             return AlertDialog(
+              backgroundColor: TColors.white,
               title: const Text("Select Subject"),
               content: SingleChildScrollView(
                 child: Column(
@@ -237,7 +182,7 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
         );
       },
       child: Chip(
-        // backgroundColor: TColors.backgroundColorDark,
+        backgroundColor: TColors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
           side: BorderSide(
@@ -678,28 +623,34 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               /*SELECTED CLASS*/
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 5.0),
-                child: Consumer<ToolsDataProvider>(
-                  builder: (context, toolsDataProvider, child) {
-                    return  /*buildDropdownMenuClass()*/  buildChipClass(
-                        toolsDataProvider);
-                  },
-                ),
-                    // Text("Selected Class"),
-              ),
-              /*SELECTED SUBJECT*/
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 5.0),
-                child: Visibility(
-                  // visible: subjectSelectionVisibility,
+              Visibility(
+                visible: widget.isClassAvailable=="Y",
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 5.0),
                   child: Consumer<ToolsDataProvider>(
                     builder: (context, toolsDataProvider, child) {
-                      return  /*buildDropdownMenuSubjects()*/  buildChipSubjects(
+                      return  /*buildDropdownMenuClass()*/  buildChipClass(
                           toolsDataProvider);
                     },
                   ),
-                      // Text("Selected Subject"),
+                      // Text("Selected Class"),
+                ),
+              ),
+              /*SELECTED SUBJECT*/
+              Visibility(
+                visible: widget.isSubjectAvailable=="Y",
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Visibility(
+                    // visible: subjectSelectionVisibility,
+                    child: Consumer<ToolsDataProvider>(
+                      builder: (context, toolsDataProvider, child) {
+                        return  /*buildDropdownMenuSubjects()*/  buildChipSubjects(
+                            toolsDataProvider);
+                      },
+                    ),
+                        // Text("Selected Subject"),
+                  ),
                 ),
               ),
             ],

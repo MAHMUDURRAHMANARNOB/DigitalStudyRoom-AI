@@ -18,6 +18,7 @@ import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_function.dart';
+import '../../ToolsContent/screens/SolveBanglaMathScreen.dart';
 import '../../Tutor/datamodels/TutorDataModel.dart';
 import '../../Tutor/providers/TutorsProvider.dart';
 
@@ -35,7 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
 
   @override
@@ -69,7 +69,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const THomeAppBar(),
-                    // SizedBox(height: TSizes.defaultSpace),
                     Container(
                       padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                       child: RichText(
@@ -88,122 +87,328 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
-                    // SizedBox(height: TSizes.spaceBtwItems),
+                    // -- TOOLS
                     Container(
                       padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                      /*decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12.0),
-                      ),*/
                       child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: _buildToolCard(
-                                    'গণিত \nসমাধান',
-                                    "assets/images/dashboard_images/math.png",
-                                    TColors.primaryColor,
-                                    "MATH"),
-                              ),
-                              Expanded(
-                                child: _buildToolCard(
-                                  'নোট \nপ্রস্তুতি',
-                                  "assets/images/dashboard_images/note.png",
-                                  TColors.error,
-                                  "NOTE",
+                          SizedBox(
+                            height: MediaQuery.of(context).size.width * 0.5,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: GestureDetector(
+                                    onTap: (){
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => SolveBanglaMathScreen(
+
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Card(
+                                      surfaceTintColor: Colors.transparent,
+                                      color: TColors.white,
+                                      child: Container(
+                                        // padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                                        // decoration: BoxDecoration(
+                                        //   color: TColors.tertiaryColor
+                                        //       .withOpacity(0.1),
+                                        //   borderRadius: BorderRadius.circular(10.0),
+                                        // ),
+                                        margin: const EdgeInsets.all(5.0),
+
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                width: double.infinity,
+                                                padding: const EdgeInsets.all(5.0),
+                                                decoration: BoxDecoration(
+                                                  // color: TColors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(8.0),
+                                                ),
+                                                child: Image.asset(
+                                                  "assets/images/dashboard_images/math_ttt.png",
+                                                  fit: BoxFit.contain,
+                                                ),
+                                              ),
+                                            ),
+
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 8.0,right: 8.0,top: 2.0,bottom: 2.0),
+                                              child: Text(
+                                                "গণিত সমাধান",
+                                                // maxLines: 2,
+                                                style: TextStyle(
+                                                  //*color: Colors.grey.shade900,*//*
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: const EdgeInsets.only(left: 8.0,right: 8.0,top: 2.0,bottom: 8.0),
+                                              child: Text(
+                                                "যেকোনো গণিত সমস্যার সমাধান করুন নিমেষে",
+                                                // maxLines: 2,
+                                                style: TextStyle(
+                                                  //*color: Colors.grey.shade900,*//*
+                                                  fontWeight: FontWeight.normal,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              Expanded(
-                                child: _buildToolCard(
-                                    'রচনা \n ',
-                                    "assets/images/dashboard_images/essay_bn.png",
-                                    TColors.secondaryColor,
-                                    "BANGLAEASSY"),
-                              ),
-                              Expanded(
-                                child: _buildToolCard(
-                                    'চিঠি\n দরখাস্ত',
-                                    "assets/images/dashboard_images/letter_bn.png",
-                                    TColors.tertiaryColor,
-                                    "BANGLALETTER"),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: _buildToolCard(
-                                    'ভাবসম্প্রসারণ\n',
-                                    "assets/images/dashboard_images/bhabsomprosaron.png",
-                                    TColors.secondaryColor,
-                                    "EXP"),
-                              ),
-                              Expanded(
-                                child: _buildToolCard(
-                                    'পরীক্ষক \n ',
-                                    "assets/images/dashboard_images/examiner.png",
-                                    TColors.error,
-                                    "SELF"),
-                              ),
-                              Expanded(
-                                child: _buildToolCard(
-                                    'ছবি থেকে\nপড়া',
-                                    "assets/images/dashboard_images/scan.png",
-                                    TColors.tertiaryColor,
-                                    "IMG"),
-                              ),
-                              Expanded(
-                                child: _buildToolCard(
-                                    'English\nGrammar',
-                                    "assets/images/dashboard_images/grammar.png",
-                                    TColors.primaryColor,
-                                    "GRAMMAR"),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                // flex: 1,
-                                child: _buildToolCard(
-                                    'Letter',
-                                    "assets/images/dashboard_images/letter.png",
-                                    TColors.primaryColor,
-                                    "LETTER"),
-                              ),
-                              Expanded(
-                                // flex: 1,
-                                child: _buildToolCard(
-                                    'Accounting',
-                                    "assets/images/dashboard_images/accounting.png",
-                                    TColors.secondaryColor,
-                                    "ACC"),
-                              ),
-                              Expanded(
-                                child: _buildToolCard(
-                                    'Essay',
-                                    "assets/images/dashboard_images/essay.png",
-                                    TColors.secondaryColor,
-                                    "EASSY"),
-                              ),
-                              Expanded(
-                                // flex: 1,
-                                child: SizedBox(
-                                  width: 20,
+                                const SizedBox(width: TSizes.sm),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: _buildToolCard(
+                                          'নোট প্রস্তুতি',
+                                          "assets/images/dashboard_images/note.png",
+                                          TColors.error,
+                                          "NOTE",
+                                          "Y",
+                                          "Y",
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Expanded(
+                                        child: _buildToolCard(
+                                          'রচনা',
+                                          "assets/images/dashboard_images/essay_bn.png",
+                                          TColors.secondaryColor,
+                                          "BANGLAEASSY",
+                                          "Y",
+                                          "N",
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
+                                const SizedBox(width: TSizes.sm),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: _buildToolCard(
+                                          'চিঠি দরখাস্ত',
+                                          "assets/images/dashboard_images/letter_bn.png",
+                                          TColors.tertiaryColor,
+                                          "BANGLALETTER",
+                                          "Y",
+                                          "N",
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Expanded(
+                                        child: _buildToolCard(
+                                          'ভাবসম্প্রসারণ',
+                                          "assets/images/dashboard_images/bhabsomprosaron.png",
+                                          TColors.secondaryColor,
+                                          "EXP",
+                                          "Y",
+                                          "N",
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
+                          SizedBox(height: TSizes.sm),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.width * 0.56,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: /*_buildToolCard(
+                                          'পরীক্ষক',
+                                          "assets/images/dashboard_images/examiner.png",
+                                          TColors.error,
+                                          "SELF",
+                                          "Y",
+                                          "Y",
+                                        ),*/
+                                        _buildToolCard(
+                                          'Essay',
+                                          "assets/images/dashboard_images/essay.png",
+                                          TColors.secondaryColor,
+                                          "EASSY",
+                                          "Y",
+                                          "N",
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Expanded(
+                                        child: _buildToolCard(
+                                          'English Grammar',
+                                          "assets/images/dashboard_images/grammar.png",
+                                          TColors.primaryColor,
+                                          "GRAMMAR",
+                                          "Y",
+                                          "Y",
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: TSizes.sm),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: [
+                                      Expanded(
+                                        child: _buildToolCard(
+                                          'Letter',
+                                          "assets/images/dashboard_images/letter.png",
+                                          TColors.primaryColor,
+                                          "LETTER",
+                                          "Y",
+                                          "Y",
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Expanded(
+                                        child: _buildToolCard(
+                                          'Accounting',
+                                          "assets/images/dashboard_images/accounting.png",
+                                          TColors.secondaryColor,
+                                          "ACC",
+                                          "Y",
+                                          "N",
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: TSizes.sm),
+                                Expanded(
+                                  flex: 2,
+                                  child: GestureDetector(
+                                    onTap: (){
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ToolsContentScreen(
+                                            staticToolsCode: "IMG",
+                                            isClassAvailable: "N",
+                                            isSubjectAvailable: "N",
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Card(
+                                      color: TColors.white,
+                                      surfaceTintColor: Colors.transparent,
+                                      child: Container(
+                                        // padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                                        // decoration: BoxDecoration(
+                                        //   color: TColors.tertiaryColor
+                                        //       .withOpacity(0.1),
+                                        //   borderRadius: BorderRadius.circular(10.0),
+                                        // ),
+                                        margin: const EdgeInsets.all(5.0),
+
+                                        child: Column(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(10.0),
+                                                  topRight: Radius.circular(10.0),
+                                                ),
+                                                // Match the main container's radius
+                                                child: Container(
+                                                  width: double.infinity,
+                                                  // padding: const EdgeInsets.all(5.0),
+                                                  child: Image.asset(
+                                                    "assets/images/dashboard_images/scan_study.png",
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            const Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 8.0,
+                                                  right: 8.0,
+                                                  top: 4,
+                                                  bottom: 4),
+                                              child: Text(
+                                                "ছবি থেকে সমাধান",
+                                                // maxLines: 2,
+                                                style: TextStyle(
+                                                  //*color: Colors.grey.shade900,*//*
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                            const Padding(
+                                              padding: EdgeInsets.only(
+                                                  left: 8.0,
+                                                  right: 8.0,
+                                                  top: 4,
+                                                  bottom: 8),
+                                              child: Text(
+                                                "যেকোনো প্রশ্নের সমাধান করুন শুধুমাত্র ছবি তুলে।",
+                                                // maxLines: 2,
+
+                                                style: TextStyle(
+                                                  //*color: Colors.grey.shade900,*//*
+                                                  fontWeight: FontWeight.normal,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+
+                              ],
+                            ),
+                          ),
+
                         ],
                       ),
                     ),
-                    // SizedBox(height: TSizes.sm),
+
+                    // -- TUTOR
                     Container(
                       padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                       child: Column(
@@ -226,7 +431,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
                                 return Center(
-                                    child: CircularProgressIndicator(color: TColors.primaryColor,));
+                                    child: CircularProgressIndicator(
+                                  color: TColors.primaryColor,
+                                ));
                               }
 
                               // Check for errors
@@ -252,63 +459,64 @@ class _HomeScreenState extends State<HomeScreen> {
                                 // Disable internal scrolling
                                 itemBuilder: (context, index) {
                                   final tutor = tutors[index];
-                                  return Container(
-                                    padding: EdgeInsets.all(5.0),
-                                    margin: EdgeInsets.all(5.0),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12.0),
-                                      border: Border.all(
-                                          color: TColors.tertiaryColor),
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        /*Image.asset(
-                                          "assets/images/dashboard_images/math_tutor.png", // Placeholder image
-                                          width: 100,
-                                        ),*/
-                                        tutor.tutorImage != null
-                                            ? Image.network(
-                                                tutor.tutorImage!,
-                                                // Placeholder image
-                                                width: 100,
-                                              )
-                                            : tutor.tutorName == "Mathematics"
-                                                ?Image.network(
-                                          "https://rishoguru.sgp1.digitaloceanspaces.com/dsr/math_tutor",
-                                          // Placeholder image
-                                          width: 100,
-                                        ):tutor.tutorName == "English Grammar"
-                                            ?Image.network(
-                                          "https://rishoguru.sgp1.digitaloceanspaces.com/dsr/eng_grammar_tutor",
-                                          // Placeholder image
-                                          width: 100,
-                                        ):CircleAvatar(
-                                          radius:40,
-                                                child: Icon(
-                                                  CupertinoIcons.person_fill,
-                                                  color: Colors.green[900],
-                                                  size: 50,
-                                                ),
-                                                backgroundColor: TColors
-                                                    .tertiaryColor
-                                                    .withOpacity(0.2),
-                                              ),
-                                        Expanded(
-                                          child: Text(
-                                            tutor.tutorName,
-                                            // Replace with actual tutor name
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                  return GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ChaptersScreen(
+                                            courseTutorName: tutor.tutorName,
+                                            subject: tutor.tutorSubjects,
+                                            subjectId: tutor.subjectID!,
                                           ),
                                         ),
-                                      ],
+                                      );
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.all(5.0),
+                                      margin: EdgeInsets.all(5.0),
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(12.0),
+                                        border: Border.all(
+                                            color: TColors.tertiaryColor),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          tutor.tutorImage != null
+                                              ? Image.network(
+                                                  tutor.tutorImage!,
+                                                  // Placeholder image
+                                                  width: 100,
+                                                )
+                                              : CircleAvatar(
+                                                  radius: 40,
+                                                  child: Icon(
+                                                    CupertinoIcons.person_fill,
+                                                    color: Colors.green[900],
+                                                    size: 50,
+                                                  ),
+                                                  backgroundColor: TColors
+                                                      .tertiaryColor
+                                                      .withOpacity(0.2),
+                                                ),
+                                          Expanded(
+                                            child: Text(
+                                              tutor.tutorName,
+                                              // Replace with actual tutor name
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 16.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   );
                                 },
@@ -320,51 +528,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
 
-                    /*Consumer<TutorProvider>(
-                      builder: (context, tutorProvider, child) {
-                        // Check if the data is loading
-                        if (tutorProvider.isLoading) {
-                          return Center(child: CircularProgressIndicator()); // Show loading indicator
-                        }
-
-                        // Check for errors
-                        if (tutorProvider.errorMessage != null) {
-                          return Center(child: Text("Error: ${tutorProvider.errorMessage}"));
-                        }
-
-                        // If no tutors available, show a message
-                        if (tutorProvider.tutors.isEmpty) {
-                          return Center(child: Text("No tutors available"));
-                        }
-
-                        // Tutors data is available
-                        final tutors = tutorProvider.tutors;
-
-                        return SizedBox(
-                          height: 200,
-                          width: double.infinity,
-                          child: ListView.builder(
-                            itemCount: tutors.length,
-                            // physics: NeverScrollableScrollPhysics(),
-                            // scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              final tutor = tutors[index];
-                              return ListTile(
-                                leading: tutor.tutorImage != null
-                                    ? CircleAvatar(
-                                  backgroundImage: NetworkImage(tutor.tutorImage!),
-                                )
-                                    : CircleAvatar(child: Icon(Icons.person)),
-                                title: Text(tutor.tutorName),
-                                subtitle: Text(tutor.tutorSubjects),
-                              );
-                            },
-                          ),
-                        );
-                      },
-                    ),*/
-
                     // SizedBox(height: TSizes.sm),
+                    // -- MENTAL HEALTH
                     Container(
                       padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                       child: Column(
@@ -388,7 +553,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   'মানসিক স্বাস্থ্য সম্পর্কে জানুন এবং নিজেকে ভালোবাসুন',
                                   "assets/images/dashboard_images/psychology.png",
                                   TColors.primaryColor,
-                                  "",
+                                  "MHA",
+                                  "Y",
+                                  "N",
                                 ),
                               ),
                               Expanded(
@@ -397,7 +564,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   'হতাশা কাটিয়ে উঠুন, নতুন করে শুরু করুন',
                                   "assets/images/dashboard_images/mental_health.png",
                                   TColors.primaryColor,
-                                  "",
+                                  "PSY",
+                                  "Y",
+                                  "N",
                                 ),
                               ),
                             ],
@@ -420,6 +589,8 @@ class _HomeScreenState extends State<HomeScreen> {
     String image,
     Color color,
     String staticToolsCode,
+    String isClassAvailable,
+    String isSubjectAvailable,
   ) {
     return GestureDetector(
       onTap: () {
@@ -429,6 +600,8 @@ class _HomeScreenState extends State<HomeScreen> {
           MaterialPageRoute(
             builder: (context) => ToolsContentScreen(
               staticToolsCode: staticToolsCode,
+              isClassAvailable: isClassAvailable,
+              isSubjectAvailable: isSubjectAvailable,
             ),
           ),
         );
@@ -480,14 +653,19 @@ class _HomeScreenState extends State<HomeScreen> {
     String image,
     Color color,
     String staticToolsCode,
+    String isClassAvailable,
+    String isSubjectAvailable,
   ) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) =>
-                  ToolsContentScreen(staticToolsCode: staticToolsCode)),
+              builder: (context) => ToolsContentScreen(
+                    staticToolsCode: staticToolsCode,
+                    isClassAvailable: isClassAvailable,
+                    isSubjectAvailable: isSubjectAvailable,
+                  )),
         );
       },
       child: Container(

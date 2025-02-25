@@ -54,7 +54,7 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
       'joy', // userName
       '', // nextLesson (not required for the first call)
       '1', // TutorId
-      'Class 10', // className
+      '9', // className
       _subject, // SubjectName
       courseTopic, // courseTopic
       _sessionId, // sessionID (null for the first call)
@@ -134,7 +134,7 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
       'joy', // userName
       '', // nextLesson (not required)
       '1', // TutorId
-      'Class 10', // className
+      '9', // className
       _subject, // SubjectName
       courseTopic, // courseTopic
       _sessionId, // sessionID (updated after the first call)
@@ -163,7 +163,7 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
       'joy', // userName
       '', // nextLesson (not required)
       '1', // TutorId
-      'Class 10', // className
+      '9', // className
       _subject, // SubjectName
       courseTopic, // courseTopic
       _sessionId, // sessionID (updated after the first call)
