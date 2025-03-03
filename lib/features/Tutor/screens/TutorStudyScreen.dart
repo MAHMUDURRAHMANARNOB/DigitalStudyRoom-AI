@@ -7,10 +7,11 @@ import 'package:provider/provider.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:record/record.dart';
+import 'package:record/record.dart'; // Updated import
 
 import '../../../common/latexGenerator.dart';
 import '../../../utils/constants/colors.dart';
+import '../../authentication/providers/AuthProvider.dart';
 import '../providers/TutorResponseProvider.dart';
 
 class TutorStudyScreen extends StatefulWidget {
@@ -24,7 +25,7 @@ class TutorStudyScreen extends StatefulWidget {
 
 class _TutorStudyScreenState extends State<TutorStudyScreen> {
   AudioPlayer _audioPlayer = AudioPlayer();
-  Record audioRecord = Record();
+  late AudioRecorder audioRecorder; // Updated: Use AudioRecorder instead of Record
   String? _sessionId;
   File? _audioFile;
   bool _isRecording = false;
@@ -32,10 +33,14 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
   TextEditingController _textController = TextEditingController();
   late String courseTopic;
   late String _subject;
+  late AuthProvider authProvider;
+
   @override
   void initState() {
     super.initState();
     _checkPermissions();
+
+    authProvider = Provider.of<AuthProvider>(context, listen: false);
     courseTopic = widget.topic;
     _subject = widget.subject;
     _textController = TextEditingController();
@@ -46,15 +51,17 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _fetchTutorResponse();
     });
+
+    audioRecorder = AudioRecorder(); // Initialize AudioRecorder
   }
 
   Future<void> _fetchTutorResponse() async {
     await Provider.of<TutorResponseProvider>(context, listen: false).getTutorResponse(
-      1, // userid
-      'joy', // userName
+      userID, // userid
+      authProvider.user!.name, // userName
       '', // nextLesson (not required for the first call)
       '1', // TutorId
-      '9', // className
+      gradeClass, // className
       _subject, // SubjectName
       courseTopic, // courseTopic
       _sessionId, // sessionID (null for the first call)
@@ -79,9 +86,16 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
 
   Future<void> startRecording() async {
     try {
-      if (await audioRecord.hasPermission()) {
+      if (await Permission.microphone.request().isGranted) {
         _audioPlayer.stop();
-        await audioRecord.start();
+
+        // Get the directory for saving the recording
+        final directory = await getApplicationDocumentsDirectory();
+        final path = '${directory.path}/recording.m4a'; // Save as .m4a file
+
+        // Start recording with the specified path
+        await audioRecorder.start(RecordConfig(), path: path); // Updated: Added path parameter
+
         setState(() {
           _isRecording = true;
         });
@@ -93,11 +107,10 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
 
   Future<void> stopRecording() async {
     try {
-      if (await audioRecord.hasPermission()) {
-        String? path = await audioRecord.stop();
+      if (await Permission.microphone.request().isGranted) { // Updated: Request permission
+        final path = await audioRecorder.stop(); // Updated: Stop recording
         if (path != null) {
-          path = path.replaceFirst('file://', ''); // Clean the path
-          File file = File(path);
+          final file = File(path);
           if (await file.exists()) {
             _audioFile = file;
             print("Recorded file path: $path");
@@ -130,11 +143,11 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
     if (_audioFile == null) return;
 
     await Provider.of<TutorResponseProvider>(context, listen: false).getTutorResponse(
-      1, // userid
-      'joy', // userName
+      userID, // userid
+      authProvider.user!.name, // userName
       '', // nextLesson (not required)
       '1', // TutorId
-      '9', // className
+      gradeClass, // className
       _subject, // SubjectName
       courseTopic, // courseTopic
       _sessionId, // sessionID (updated after the first call)
@@ -159,11 +172,11 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
 
   Future<void> _sendTextToAPI(String answerText) async {
     await Provider.of<TutorResponseProvider>(context, listen: false).getTutorResponse(
-      1, // userid
-      'joy', // userName
+      userID, // userid
+      authProvider.user!.name, // userName
       '', // nextLesson (not required)
       '1', // TutorId
-      '9', // className
+      gradeClass, // className
       _subject, // SubjectName
       courseTopic, // courseTopic
       _sessionId, // sessionID (updated after the first call)
@@ -173,16 +186,22 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
   }
 
   Future<void> _checkPermissions() async {
-    if (await Permission.microphone.request().isGranted) {
+    if (await Permission.microphone.request().isGranted) { // Updated: Request permission
       print("Microphone permission granted");
     } else {
       print("Microphone permission denied");
     }
   }
 
+  late int userID;
+  late String gradeClass;
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TutorResponseProvider>(context);
+
+    userID = authProvider.user!.id;
+    gradeClass = authProvider.user!.classId.toString();
 
     return Scaffold(
       appBar: AppBar(
@@ -196,7 +215,6 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
-
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.all(16.0),
@@ -242,6 +260,7 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
   @override
   void dispose() {
     _audioPlayer.dispose();
+    audioRecorder.dispose(); // Dispose the AudioRecorder
     _textController.dispose();
     super.dispose();
   }

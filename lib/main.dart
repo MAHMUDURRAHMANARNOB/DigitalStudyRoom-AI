@@ -12,6 +12,10 @@ import 'features/ToolsContent/provider/toolsDataByCodeProvider.dart';
 import 'features/ToolsContent/provider/toolsReplyProvider.dart';
 import 'features/Tutor/providers/TutorChapterListProvider.dart';
 import 'features/Tutor/providers/TutorResponseProvider.dart';
+import 'features/authentication/providers/SelectClassProvider.dart';
+import 'features/authentication/providers/optProvider.dart';
+import 'features/profile/Providers/coupnDiscountProvider.dart';
+import 'features/profile/Providers/packagesProvider.dart';
 
 /*void main() {
   runApp(const MyApp());
@@ -28,6 +32,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => OtpProvider()),
         ChangeNotifierProvider(create: (context) => StudyToolsProvider()),
         ChangeNotifierProvider(create: (context) => SubscriptionStatusProvider()),
         ChangeNotifierProvider(
@@ -47,6 +52,12 @@ void main() {
           create: (context) => TutorsChapterProvider(),
         ),ChangeNotifierProvider(
           create: (context) => SolveBanglaMathResponseProvider(),
+        ),ChangeNotifierProvider(
+          create: (context) => ClassProvider(),
+        ),ChangeNotifierProvider(
+          create: (context) => CouponDiscountProvider(),
+        ),ChangeNotifierProvider(
+          create: (context) => PackagesProvider(),
         ),
       ],
       child: DigitalStudyRoom(),

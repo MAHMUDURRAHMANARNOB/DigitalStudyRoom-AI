@@ -9,6 +9,8 @@ class SubscriptionStatusDataModel {
   final int? ticketUsed;
   final int? ticketsAvailable;
   final String? datePurchased;
+  final double? audioMinutesUsed;
+  final double? audioReamins;
 
   SubscriptionStatusDataModel({
     required this.errorCode,
@@ -21,6 +23,8 @@ class SubscriptionStatusDataModel {
     required this.ticketUsed,
     required this.ticketsAvailable,
     required this.datePurchased,
+    required this.audioMinutesUsed,
+    required this.audioReamins,
   });
 
   factory SubscriptionStatusDataModel.fromJson(Map<String, dynamic> json) {
@@ -35,6 +39,8 @@ class SubscriptionStatusDataModel {
       ticketUsed: json['TicketUsed'],
       ticketsAvailable: json['ticketsavailable'],
       datePurchased: json['datePurchased'],
+      audioMinutesUsed: json['audioMinutesUsed'],
+      audioReamins: json['audioReamins'],
     );
   }
 }

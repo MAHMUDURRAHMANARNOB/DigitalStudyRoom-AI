@@ -1,6 +1,7 @@
 import 'package:digital_study_room/features/ToolsContent/screens/ToolsContentScreen.dart';
 import 'package:digital_study_room/features/Tutor/providers/TutorResponseProvider.dart';
 import 'package:digital_study_room/features/Tutor/screens/ChaptersScreen.dart';
+import 'package:digital_study_room/features/authentication/providers/AuthProvider.dart';
 import 'package:digital_study_room/features/home/screens/widgets/ai_helper_container.dart';
 import 'package:digital_study_room/features/home/screens/widgets/card_container_button.dart';
 import 'package:digital_study_room/features/home/screens/widgets/home_app_bar.dart';
@@ -42,7 +43,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     _tutorProvider = Provider.of<TutorProvider>(context, listen: false);
     bool dark = THelperFunction.isDarkMode(context);
-    final userId = 2;
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final userId = authProvider.user?.id;
+    final fullName = authProvider.user?.name;
+    final classId = authProvider.user?.classId;
 
     return Scaffold(
       body: Stack(
@@ -68,7 +72,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const THomeAppBar(),
+                    THomeAppBar(
+                      fullName: fullName!,
+                      className: classId.toString(),
+                    ),
                     Container(
                       padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
                       child: RichText(
@@ -103,13 +110,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Expanded(
                                   flex: 2,
                                   child: GestureDetector(
-                                    onTap: (){
+                                    onTap: () {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => SolveBanglaMathScreen(
-
-                                          ),
+                                          builder: (context) =>
+                                              SolveBanglaMathScreen(),
                                         ),
                                       );
                                     },
@@ -134,11 +140,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                             Expanded(
                                               child: Container(
                                                 width: double.infinity,
-                                                padding: const EdgeInsets.all(5.0),
+                                                padding:
+                                                    const EdgeInsets.all(5.0),
                                                 decoration: BoxDecoration(
                                                   // color: TColors.white,
                                                   borderRadius:
-                                                      BorderRadius.circular(8.0),
+                                                      BorderRadius.circular(
+                                                          8.0),
                                                 ),
                                                 child: Image.asset(
                                                   "assets/images/dashboard_images/math_ttt.png",
@@ -146,9 +154,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ),
                                               ),
                                             ),
-
                                             Padding(
-                                              padding: const EdgeInsets.only(left: 8.0,right: 8.0,top: 2.0,bottom: 2.0),
+                                              padding: const EdgeInsets.only(
+                                                  left: 8.0,
+                                                  right: 8.0,
+                                                  top: 2.0,
+                                                  bottom: 2.0),
                                               child: Text(
                                                 "গণিত সমাধান",
                                                 // maxLines: 2,
@@ -160,7 +171,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: const EdgeInsets.only(left: 8.0,right: 8.0,top: 2.0,bottom: 8.0),
+                                              padding: const EdgeInsets.only(
+                                                  left: 8.0,
+                                                  right: 8.0,
+                                                  top: 2.0,
+                                                  bottom: 8.0),
                                               child: Text(
                                                 "যেকোনো গণিত সমস্যার সমাধান করুন নিমেষে",
                                                 // maxLines: 2,
@@ -197,7 +212,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         child: _buildToolCard(
                                           'রচনা',
                                           "assets/images/dashboard_images/essay_bn.png",
-                                          TColors.secondaryColor,
+                                          TColors.primaryColor,
                                           "BANGLAEASSY",
                                           "Y",
                                           "N",
@@ -249,15 +264,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Column(
                                     children: [
                                       Expanded(
-                                        child: /*_buildToolCard(
-                                          'পরীক্ষক',
-                                          "assets/images/dashboard_images/examiner.png",
-                                          TColors.error,
-                                          "SELF",
-                                          "Y",
-                                          "Y",
-                                        ),*/
-                                        _buildToolCard(
+                                        child: _buildToolCard(
                                           'Essay',
                                           "assets/images/dashboard_images/essay.png",
                                           TColors.secondaryColor,
@@ -289,7 +296,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         child: _buildToolCard(
                                           'Letter',
                                           "assets/images/dashboard_images/letter.png",
-                                          TColors.primaryColor,
+                                          TColors.tertiaryColor,
                                           "LETTER",
                                           "Y",
                                           "Y",
@@ -300,7 +307,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         child: _buildToolCard(
                                           'Accounting',
                                           "assets/images/dashboard_images/accounting.png",
-                                          TColors.secondaryColor,
+                                          Colors.redAccent,
                                           "ACC",
                                           "Y",
                                           "N",
@@ -313,11 +320,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Expanded(
                                   flex: 2,
                                   child: GestureDetector(
-                                    onTap: (){
+                                    onTap: () {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => ToolsContentScreen(
+                                          builder: (context) =>
+                                              ToolsContentScreen(
                                             staticToolsCode: "IMG",
                                             isClassAvailable: "N",
                                             isSubjectAvailable: "N",
@@ -339,16 +347,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                         child: Column(
                                           mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                              MainAxisAlignment.center,
                                           crossAxisAlignment:
-                                          CrossAxisAlignment.center,
+                                              CrossAxisAlignment.center,
                                           children: [
                                             Expanded(
                                               child: ClipRRect(
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(10.0),
-                                                  topRight: Radius.circular(10.0),
-                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(10.0),
                                                 // Match the main container's radius
                                                 child: Container(
                                                   width: double.infinity,
@@ -399,11 +405,36 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   ),
                                 ),
-
                               ],
                             ),
                           ),
-
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: _buildHorizontalToolCard(
+                                  'পরীক্ষক',
+                                  "assets/images/dashboard_images/examiner.png",
+                                  TColors.error,
+                                  "SELF",
+                                  "Y",
+                                  "Y",
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Expanded(
+                                child: _buildHorizontalToolCard(
+                                  'Programming',
+                                  "assets/images/dashboard_images/programmer.png",
+                                  TColors.primaryColor,
+                                  "ICT",
+                                  "Y",
+                                  "Y",
+                                ),
+                              ),
+                              const SizedBox(width: TSizes.sm),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -640,6 +671,64 @@ class _HomeScreenState extends State<HomeScreen> {
                   fontWeight: FontWeight.bold,
                   fontSize: 12.0),
               textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHorizontalToolCard(
+    String title,
+    String image,
+    Color color,
+    String staticToolsCode,
+    String isClassAvailable,
+    String isSubjectAvailable,
+  ) {
+    return GestureDetector(
+      onTap: () {
+        print('$title pressed, $staticToolsCode');
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ToolsContentScreen(
+              staticToolsCode: staticToolsCode,
+              isClassAvailable: isClassAvailable,
+              isSubjectAvailable: isSubjectAvailable,
+            ),
+          ),
+        );
+      },
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.all(10.0),
+        margin: const EdgeInsets.all(5.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12.0),
+          color: color.withOpacity(0.1),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: Image.asset(
+                image,
+                height: 40,
+                width: 40,
+              ),
+            ),
+
+            Expanded(
+              child: Text(
+                title,
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12.0),
+                textAlign: TextAlign.start,
+              ),
             ),
           ],
         ),

@@ -1,67 +1,95 @@
-// providers/auth_provider.dart
-import 'dart:convert';
-
-import 'package:digital_study_room/api/api_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
-
-import '../models/LoginResponseDataModel.dart';
+import '../../../api/api_controller.dart';
 import '../models/UserDataModel.dart';
 
 class AuthProvider with ChangeNotifier {
+  final ApiController _authService = ApiController();
   User? _user;
+  bool _isLoading = false;
 
   User? get user => _user;
+  bool get isLoading => _isLoading;
+  bool get isAuthenticated => _user != null;
 
-  Future<void> login(String username, String password) async {
-    try {
-      // Call the loginApi method from the ApiService
-      LoginResponse loginResponse =
-      await ApiController.loginApi(username, password);
+  Future<bool> login(String userId, String password) async {
+    _isLoading = true;
+    notifyListeners();
 
-      // Process the API response
-      if (loginResponse.errorCode == 200) {
-        _user = User(
-          id: loginResponse.id,
-          userID: loginResponse.userID,
-          username: loginResponse.username,
-          name: loginResponse.name,
-          email: loginResponse.email,
-          mobile: loginResponse.mobile,
-          password: loginResponse.password,
-          userType: loginResponse.userType,
-        );
+    final response = await _authService.loginUser(userId, password);
 
-        // Notify listeners to trigger a rebuild in the UI
+    if (response != null && response['errorcode'] == 200) {
+      try {
+        _user = User.fromJson(response);
+        print("User Logged In: $_user");
+
+        await _saveUserSession(_user!);
         notifyListeners();
-      } else {
-        // Handle unsuccessful login
-        print(
-            "Login failed. ErrorCode: ${loginResponse.errorCode}, Message: ${loginResponse.message}");
+        return true;
+      } catch (e) {
+        print("Error parsing user data: $e");
       }
-    } catch (error) {
-      // Handle errors from the ApiService
-      print("Error during login: $error");
+    }
+
+    _isLoading = false;
+    notifyListeners();
+    return false;
+  }
+
+  Future<bool> createUser(
+      String userId,
+      String username,
+      String name,
+      String email,
+      String mobile,
+      String password,
+      String userType,
+      String school,
+      String address,
+      String marketingSource,
+      String classId,
+      ) async {
+    try {
+      final bool success = await _authService.createUser(
+        userId,
+        username,
+        name,
+        email,
+        mobile,
+        password,
+        userType,
+        school,
+        address,
+        marketingSource,
+        classId,
+      );
+
+      // Notify listeners about the result
+      notifyListeners();
+
+      return success;
+    } catch (e) {
+      // Exception occurred
+      print('Exception creating user: $e');
+      return false;
     }
   }
 
   Future<void> logout() async {
-    try {
-      // Clear stored credentials using SharedPreferences
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.remove('username');
-      await prefs.remove('password');
+    await _authService.logout();
+    _user = null;
+    notifyListeners();
+  }
 
-      // Clear any other session data or tokens
-
-      // Notify listeners that the user has logged out
-      _user = null;
-      notifyListeners();
-    } catch (error) {
-      // Handle errors gracefully
-      print('Error during logout: $error');
-      // You might want to display a message to the user or perform other error handling here
+  Future<void> checkLoginStatus() async {
+    final user = await _authService.getLoggedInUser();
+    if (user != null) {
+      _user = user;
     }
+    notifyListeners();
+  }
+
+  Future<void> _saveUserSession(User user) async {
+    // Implement session saving (SharedPreferences, Secure Storage, etc.)
+    print("User session saved successfully");
   }
 }

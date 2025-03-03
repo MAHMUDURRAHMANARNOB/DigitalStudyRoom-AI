@@ -432,10 +432,10 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
     dark = THelperFunction.isDarkMode(context);
-    final authProvider = Provider.of<AuthProvider>(context);
 
-    userID = /*authProvider.user!.id*/1;
+    userID = authProvider.user!.id;
     toolsProvider = StudyToolsProvider();
 
     toolsDataProvider = Provider.of<ToolsDataProvider>(context, listen: false);

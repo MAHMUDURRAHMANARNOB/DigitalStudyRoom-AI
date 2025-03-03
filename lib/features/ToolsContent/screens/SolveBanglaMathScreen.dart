@@ -15,6 +15,7 @@ import 'package:markdown_widget/markdown_widget.dart' as MW;
 import '../../../common/latexGenerator.dart';
 import '../../../utils/constants/colors.dart';
 import '../../../utils/constants/sizes.dart';
+import '../../authentication/providers/AuthProvider.dart';
 import '../provider/SolveBanglaMathProvider.dart';
 
 class SolveBanglaMathScreen extends StatefulWidget {
@@ -25,7 +26,6 @@ class SolveBanglaMathScreen extends StatefulWidget {
 }
 
 class _SolveBanglaMathScreenState extends State<SolveBanglaMathScreen> {
-
   List<Widget> _lessonComponents = [];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -34,7 +34,7 @@ class _SolveBanglaMathScreenState extends State<SolveBanglaMathScreen> {
   ScrollController _scrollController = ScrollController();
 
   late SolveBanglaMathResponseProvider toolsResponseProvider =
-  Provider.of<SolveBanglaMathResponseProvider>(context, listen: false);
+      Provider.of<SolveBanglaMathResponseProvider>(context, listen: false);
 
   File? _selectedImage;
   bool _isImageSelected = false;
@@ -62,9 +62,9 @@ class _SolveBanglaMathScreenState extends State<SolveBanglaMathScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    userID = /*Provider.of<AuthProvider>(context, listen: false).user!.id*/1;
-    gradeClass = /*Provider.of<AuthProvider>(context, listen: false).user!.id*/"9";
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    userID = authProvider.user!.id;
+    gradeClass = authProvider.user!.classId.toString();
     return Scaffold(
       appBar: AppBar(
         title: Text("গণিত সমাধান"),
@@ -74,24 +74,24 @@ class _SolveBanglaMathScreenState extends State<SolveBanglaMathScreen> {
         visible: !_isNewQuestion,
         child: !_lessonComponents.isEmpty
             ? FloatingActionButton.extended(
-          onPressed: () {
-            setState(() {
-              _isNewQuestion = true;
-              _isReply = false;
-            });
-          },
-          label: const Text(
-            'New Question',
-            style: TextStyle(
-              color: TColors.primaryColor,
-            ),
-          ),
-          icon: const Icon(
-            Icons.add,
-            color: TColors.primaryColor,
-          ),
-          backgroundColor:TColors.primaryBackground,
-        )
+                onPressed: () {
+                  setState(() {
+                    _isNewQuestion = true;
+                    _isReply = false;
+                  });
+                },
+                label: const Text(
+                  'New Question',
+                  style: TextStyle(
+                    color: TColors.primaryColor,
+                  ),
+                ),
+                icon: const Icon(
+                  Icons.add,
+                  color: TColors.primaryColor,
+                ),
+                backgroundColor: TColors.primaryBackground,
+              )
             : Container(),
       ),
       body: SafeArea(child: MainContent()),
@@ -112,35 +112,223 @@ class _SolveBanglaMathScreenState extends State<SolveBanglaMathScreen> {
               physics: BouncingScrollPhysics(),
               child: _lessonComponents.isNotEmpty
                   ? Column(
-                children: _lessonComponents,
-              )
+                      children: _lessonComponents,
+                    )
                   : Container(
-                margin: EdgeInsets.all(8),
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-
-                    // question
-                    Column(
-                      children: [
-                        TextFormField(
-                          maxLines: 3,
-                          controller: questionTextFieldController,
-                          cursorColor: TColors.primaryColor,
-                          decoration: InputDecoration(
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: TColors.primaryColor,
+                      margin: EdgeInsets.all(8),
+                      padding: EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          // question
+                          Column(
+                            children: [
+                              TextFormField(
+                                maxLines: 3,
+                                controller: questionTextFieldController,
+                                cursorColor: TColors.primaryColor,
+                                decoration: InputDecoration(
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: TColors.primaryColor,
+                                    ),
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  labelText: "গণিত সমস্যাটি লিখুন ",
+                                  border: OutlineInputBorder(),
+                                ),
+                                onChanged: (value) {
+                                  _question = value;
+                                },
                               ),
-                              borderRadius: BorderRadius.circular(12.0),
-                            ),
-                            labelText: "Enter your problem",
-                            border: OutlineInputBorder(),
+                              SizedBox(height: 10.0),
+                              if (_selectedImage != null)
+                                Visibility(
+                                  visible: _isImageSelected,
+                                  child: Stack(
+                                    children: [
+                                      ClipPath(
+                                        child: Container(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(12.0),
+                                            child: Image.file(
+                                              _selectedImage!,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                          height: 80,
+                                          width: 80,
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 0,
+                                        right: 0,
+                                        child: GestureDetector(
+                                          onTap: _removeImage,
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors
+                                                  .red, // Background color of the button
+                                            ),
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: Icon(
+                                              Icons.close,
+                                              color: Colors.white,
+                                              // Color of the icon
+                                              size: 16.0,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              SizedBox(height: 10.0),
+                              TextButton.icon(
+                                onPressed: () {
+                                  _showImageSourceDialog();
+                                  print(isImagePicked);
+                                  setState(() {
+                                    isImagePicked = true;
+                                  });
+                                },
+                                icon: Icon(
+                                  Iconsax.gallery_add,
+                                  color: TColors.secondaryColor,
+                                ),
+                                label: Text(
+                                  "ছবি যুক্ত করুন",
+                                  style: TextStyle(
+                                      color: TColors.secondaryColor,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              SizedBox(height: 10.0),
+                            ],
                           ),
-                          onChanged: (value) {
-                            _question = value;
-                          },
+
+                          TextButton(
+                            style: TextButton.styleFrom(
+                                backgroundColor: TColors.primaryColor),
+                            onPressed: () {
+                              setState(() {
+                                if (_selectedImage != null && isImagePicked) {
+                                  _lessonComponents.add(
+                                    generateSolveBanglaMathImageResponse(
+                                      context,
+                                      _selectedImage!,
+                                      userID,
+                                      gradeClass,
+                                      _question,
+                                    ),
+                                  );
+                                } else {
+                                  _lessonComponents.add(
+                                    generateMathSolutionResponse(
+                                      context,
+                                      userID,
+                                      gradeClass,
+                                      _question,
+                                    ),
+                                  );
+                                }
+
+                                questionTextFieldController.clear();
+                                _selectedImage = null;
+                                _isImageSelected = false;
+                                isImagePicked = false;
+                                _question = '';
+                              });
+                            },
+                            child: Container(
+                              width: double.infinity,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: const Text(
+                                "সমাধান করুন",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ),
+                          const Text(
+                            "N.B: We do not store any of you personal information",
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+            ),
+          ),
+        ),
+        Visibility(
+          visible: _isNewQuestion,
+          child: newQuestionBarWidget(),
+        )
+      ],
+    );
+  }
+
+  Widget newQuestionBarWidget() {
+    return Container(
+      margin: EdgeInsets.all(8),
+      padding: EdgeInsets.all(8),
+      child: Stack(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // question
+              _lessonComponents.isNotEmpty
+                  ? Column(
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                maxLines: 3,
+                                controller: questionTextFieldController,
+                                cursorColor: TColors.primaryColor,
+                                decoration: InputDecoration(
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: TColors.primaryColor,
+                                    ),
+                                    borderRadius: BorderRadius.circular(12.0),
+                                  ),
+                                  labelText: "গণিত সমস্যাটি লিখুন",
+                                  border: OutlineInputBorder(),
+                                ),
+                                onChanged: (value) {
+                                  _question = value;
+                                },
+                              ),
+                            ),
+                            IconButton(
+                              style: IconButton.styleFrom(
+                                elevation:5,
+                                backgroundColor: TColors.error.withOpacity(0.1),
+                              ),
+                              onPressed: () {
+                                // Add your logic to send the message
+                                setState(() {
+                                  _isNewQuestion = false;
+                                });
+                              },
+                              icon: const Icon(
+                                Icons.close_rounded,
+                                color: TColors.error,
+                                size: 18,
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(height: 10.0),
                         if (_selectedImage != null)
@@ -152,8 +340,7 @@ class _SolveBanglaMathScreenState extends State<SolveBanglaMathScreen> {
                                   child: Container(
                                     padding: const EdgeInsets.all(5.0),
                                     child: ClipRRect(
-                                      borderRadius:
-                                      BorderRadius.circular(12.0),
+                                      borderRadius: BorderRadius.circular(12.0),
                                       child: Image.file(
                                         _selectedImage!,
                                         fit: BoxFit.cover,
@@ -174,8 +361,7 @@ class _SolveBanglaMathScreenState extends State<SolveBanglaMathScreen> {
                                         color: Colors
                                             .red, // Background color of the button
                                       ),
-                                      padding:
-                                      const EdgeInsets.all(5.0),
+                                      padding: const EdgeInsets.all(5.0),
                                       child: Icon(
                                         Icons.close,
                                         color: Colors.white,
@@ -189,264 +375,108 @@ class _SolveBanglaMathScreenState extends State<SolveBanglaMathScreen> {
                             ),
                           ),
                         SizedBox(height: 10.0),
-                        TextButton.icon(
-                          onPressed: () {
-                            _showImageSourceDialog();
-                            print(isImagePicked);
-                            setState(() {
-                              isImagePicked = true;
-                            });
-                          },
-                          icon: Icon(
-                            Iconsax.gallery_add,
-                            color: TColors.secondaryColor,
-                          ),
-                          label: Text(
-                            "Add Image",
-                            style: TextStyle(
-                                color: TColors.secondaryColor),
-                          ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            TextButton.icon(
+                              style: ElevatedButton.styleFrom(backgroundColor: TColors.secondaryColor),
+                              onPressed: () {
+                                _showImageSourceDialog();
+                                print(isImagePicked);
+                                setState(() {
+                                  isImagePicked = true;
+                                });
+                              },
+                              icon: Icon(
+                                Iconsax.gallery_add,
+                                color: TColors.white,
+                              ),
+                              label: Text(
+                                "ছবি যুক্ত করুন",
+                                style: TextStyle(
+                                    color: TColors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            TextButton(
+                              style: TextButton.styleFrom(backgroundColor: TColors.primaryColor),
+                              onPressed: () {
+                                setState(() {
+                                  if (_selectedImage != null && isImagePicked) {
+                                    _lessonComponents.add(
+                                      generateSolveBanglaMathImageResponse(
+                                        context,
+                                        _selectedImage!,
+                                        userID,
+                                        gradeClass,
+                                        _question,
+                                      ),
+                                    );
+                                  } else {
+                                    _lessonComponents.add(
+                                      generateMathSolutionResponse(
+                                        context,
+                                        userID,
+                                        gradeClass,
+                                        _question,
+                                      ),
+                                    );
+                                  }
+
+                                  questionTextFieldController.clear();
+                                  _selectedImage = null;
+                                  _isImageSelected = false;
+                                  isImagePicked = false;
+                                  _isReply = false;
+                                  _isNewQuestion = false;
+                                  _question = '';
+                                });
+                              },
+                              child: Container(
+                                // width: double.infinity,
+                                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                                child: const Text(
+                                  "সমাধান",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(height: 10.0),
                       ],
-                    ),
-
-                    TextButton(
-                      style: TextButton.styleFrom(
-                          backgroundColor: TColors.primaryColor),
-                      onPressed: () {
-                        setState(() {
-                          if(_selectedImage != null &&
-                              isImagePicked){
-                            _lessonComponents.add(
-                              generateSolveBanglaMathImageResponse(
-                                context,
-                                _selectedImage!,
-                                userID,
-                                gradeClass,
-                                _question,
-                              ),
-                            );
-                          }else{
-                            _lessonComponents.add(
-                              generateMathSolutionResponse(
-                                context,
-                                userID,
-                                gradeClass,
-                                _question,
-                              ),
-                            );
-                          }
+                    )
+                  : Container(),
 
 
-
-
-                          questionTextFieldController.clear();
-                          _selectedImage = null;
-                          _isImageSelected = false;
-                          isImagePicked = false;
-                          _question = '';
-                        });
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        padding:
-                        const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: const Text(
-                          "Advice Me",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
-                    const Text(
-                      "N.B: We do not store any of you personal information",
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-        Visibility(
-          visible: _isNewQuestion,
-          child: newQuestionBarWidget(),
-        )
-      ],
-    );
-  }
-
-  Widget newQuestionBarWidget() {
-    return Container(
-      margin: EdgeInsets.all(8),
-      padding: EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          // question
-          _lessonComponents.isNotEmpty
-              ?Column(
-            children: [
-              TextFormField(
-                maxLines: 3,
-                controller: questionTextFieldController,
-                cursorColor: TColors.primaryColor,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: TColors.primaryColor,
-                    ),
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  labelText: "Enter your problem",
-                  border: OutlineInputBorder(),
-                ),
-                onChanged: (value) {
-                  _question = value;
-                },
-              ),
-              SizedBox(height: 10.0),
-              if (_selectedImage != null)
-                Visibility(
-                  visible: _isImageSelected,
-                  child: Stack(
-                    children: [
-                      ClipPath(
-                        child: Container(
-                          padding: const EdgeInsets.all(5.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                            child: Image.file(
-                              _selectedImage!,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                          height: 80,
-                          width: 80,
-                        ),
-                      ),
-                      Positioned(
-                        top: 0,
-                        right: 0,
-                        child: GestureDetector(
-                          onTap: _removeImage,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors
-                                  .red, // Background color of the button
-                            ),
-                            padding: const EdgeInsets.all(5.0),
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              // Color of the icon
-                              size: 16.0,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              SizedBox(height: 10.0),
-              TextButton.icon(
-                onPressed: () {
-                  _showImageSourceDialog();
-                  print(isImagePicked);
-                  setState(() {
-                    isImagePicked = true;
-                  });
-                },
-                icon: Icon(
-                  Iconsax.gallery_add,
-                  color: TColors.secondaryColor,
-                ),
-                label: Text(
-                  "Add Image",
-                  style: TextStyle(color: TColors.secondaryColor),
-                ),
-              ),
-              SizedBox(height: 10.0),
-            ],
-          ):Container(),
-
-          TextButton(
-            style: TextButton.styleFrom(backgroundColor: TColors.primaryColor),
-            onPressed: () {
-              setState(() {
-                if(_selectedImage != null &&
-                    isImagePicked){
-                  _lessonComponents.add(
-                    generateSolveBanglaMathImageResponse(
-                      context,
-                      _selectedImage!,
-                      userID,
-                      gradeClass,
-                      _question,
-                    ),
-                  );
-                }else{
-                  _lessonComponents.add(
-                    generateMathSolutionResponse(
-                      context,
-                      userID,
-                      gradeClass,
-                      _question,
-                    ),
-                  );
-                }
-
-
-
-
-                questionTextFieldController.clear();
-                _selectedImage = null;
-                _isImageSelected = false;
-                isImagePicked = false;
-                _isReply = false;
-                _isNewQuestion = false;
-                _question = '';
-              });
-            },
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 10.0),
-              child: const Text(
-                "Advice Me",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
+              const Text(
+                "N.B: We do not store any of you personal information",
                 textAlign: TextAlign.center,
               ),
-            ),
+            ],
           ),
-          const Text(
-            "N.B: We do not store any of you personal information",
-            textAlign: TextAlign.center,
-          ),
+
         ],
       ),
     );
   }
 
   Widget generateMathSolutionResponse(
-      BuildContext context,
-      int userid,
-      String gradeClass,
-      String problemText,
-      ) {
+    BuildContext context,
+    int userid,
+    String gradeClass,
+    String problemText,
+  ) {
     bool _isPressed = false;
     final toolsResponseProvider =
-    Provider.of<SolveBanglaMathResponseProvider>(context, listen: false);
+        Provider.of<SolveBanglaMathResponseProvider>(context, listen: false);
     return FutureBuilder<void>(
-      future:
-      toolsResponseProvider.fetchMathSolutionResponse(userid, gradeClass, problemText),
+      future: toolsResponseProvider.fetchMathSolutionResponse(
+          userid, gradeClass, problemText),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(
@@ -466,7 +496,7 @@ class _SolveBanglaMathScreenState extends State<SolveBanglaMathScreen> {
                     baseColor: TColors.primaryColor,
                     highlightColor: Colors.white,
                     child: const Text(
-                      'Preparing...',
+                      'সমাধান করা হচ্ছে...',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 20.0,
@@ -506,7 +536,7 @@ class _SolveBanglaMathScreenState extends State<SolveBanglaMathScreen> {
             final response = toolsResponseProvider.toolsResponse;
             final lessonAnswerEncoded = response!.answer;
             final lessonAnswer =
-            utf8.decode(lessonAnswerEncoded!.runes.toList());
+                utf8.decode(lessonAnswerEncoded!.runes.toList());
             final question = toolsResponseProvider.toolsResponse!.question;
 
             // final ticketId = response.ticketId!;
@@ -526,14 +556,13 @@ class _SolveBanglaMathScreenState extends State<SolveBanglaMathScreen> {
                     width: double.infinity,
                     padding: EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
-                      border: Border.all(
-                          color: TColors.primaryColor),
+                      border: Border.all(color: TColors.primaryColor),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: Column(
                       children: [
                         Text(
-                          "Question:",
+                          "প্রশ্ন",
                           softWrap: true,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -559,21 +588,31 @@ class _SolveBanglaMathScreenState extends State<SolveBanglaMathScreen> {
                     padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
                       // color: dark?TColors.black:TColors.primaryColor,
-                      border: Border.all(
-                          color: TColors.tertiaryColor),
+                      border: Border.all(color: TColors.tertiaryColor),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    child: MW.MarkdownWidget(
-                      data: lessonAnswer,
-                      shrinkWrap: true,
-                      selectable: true,
-                      config: MarkdownConfig.defaultConfig,
-                      markdownGenerator: MarkdownGenerator(
-                          generators: [latexGenerator],
-                          inlineSyntaxList: [LatexSyntax()]),
+                    child: Column(
+                      children: [
+                        Text(
+                          "সমাধান",
+                          softWrap: true,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: TColors.primaryColor,
+                          ),
+                        ),
+                        MW.MarkdownWidget(
+                          data: lessonAnswer,
+                          shrinkWrap: true,
+                          selectable: true,
+                          config: MarkdownConfig.defaultConfig,
+                          markdownGenerator: MarkdownGenerator(
+                              generators: [latexGenerator],
+                              inlineSyntaxList: [LatexSyntax()]),
+                        ),
+                      ],
                     ),
                   ),
-
                 ],
               ),
             );
@@ -727,14 +766,14 @@ class _SolveBanglaMathScreenState extends State<SolveBanglaMathScreen> {
   }
 
   Widget generateSolveBanglaMathImageResponse(
-      BuildContext context,
-      File questionImage,
-      int userid,
-      String gradeClass,
-      String question,
-      ) {
+    BuildContext context,
+    File questionImage,
+    int userid,
+    String gradeClass,
+    String question,
+  ) {
     final Future<void> responseFuture =
-    toolsResponseProvider.fetchMathImageSolutionResponse(
+        toolsResponseProvider.fetchMathImageSolutionResponse(
       questionImage,
       userid,
       gradeClass,
@@ -744,7 +783,6 @@ class _SolveBanglaMathScreenState extends State<SolveBanglaMathScreen> {
       future: responseFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-
           return Container(
             padding: EdgeInsets.all(10.0),
             child: Row(
@@ -762,7 +800,7 @@ class _SolveBanglaMathScreenState extends State<SolveBanglaMathScreen> {
                     baseColor: TColors.primaryColor,
                     highlightColor: Colors.white,
                     child: const Text(
-                      'Preparing...',
+                      'সমাধান করা হচ্ছে...',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 20.0,
@@ -787,34 +825,34 @@ class _SolveBanglaMathScreenState extends State<SolveBanglaMathScreen> {
               child: Column(
                 children: [
                   toolsResponseProvider.toolsResponse != null &&
-                      toolsResponseProvider.toolsResponse!.message != null
+                          toolsResponseProvider.toolsResponse!.message != null
                       ? Text(
-                    "Sorry: ${toolsResponseProvider.toolsResponse!.message}",
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
+                          "Sorry: ${toolsResponseProvider.toolsResponse!.message}",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
                       : const Text(
-                      "Sorry: You ran out of your Homework-tokens or your subscription is Expired. "),
+                          "Sorry: You ran out of your Homework-tokens or your subscription is Expired. "),
                   toolsResponseProvider.toolsResponse != null &&
-                      toolsResponseProvider.toolsResponse!.errorCode == 201
+                          toolsResponseProvider.toolsResponse!.errorCode == 201
                       ? ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: TColors.primaryColor),
-                    onPressed: () {
-                      /*Navigator.push(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: TColors.primaryColor),
+                          onPressed: () {
+                            /*Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const PackagesScreen()),
                       );*/
-                    },
-                    child: const Text(
-                      "Buy Subscription",
-                      style: TextStyle(
-                        color: TColors.primaryColor,
-                      ),
-                    ),
-                  )
+                          },
+                          child: const Text(
+                            "Buy Subscription",
+                            style: TextStyle(
+                              color: TColors.primaryColor,
+                            ),
+                          ),
+                        )
                       : Container(),
                 ],
               ),
@@ -848,12 +886,11 @@ class _SolveBanglaMathScreenState extends State<SolveBanglaMathScreen> {
                     padding: EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10.0),
-                        border: Border.all(color: TColors.primaryColor)
-                    ),
+                        border: Border.all(color: TColors.primaryColor)),
                     child: Column(
                       children: [
                         Text(
-                          "Question",
+                          "প্রশ্ন",
                           softWrap: true,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -887,18 +924,28 @@ class _SolveBanglaMathScreenState extends State<SolveBanglaMathScreen> {
                       border: Border.all(color: TColors.tertiaryColor),
                       borderRadius: BorderRadius.circular(6.0),
                     ),
-                    child: MW.MarkdownWidget(
-                      data: lessonAnswer!,
-                      shrinkWrap: true,
-                      selectable: true,
-                      config: MarkdownConfig.defaultConfig.copy(),
-                      markdownGenerator: MarkdownGenerator(
-
-                          generators: [latexGenerator],
-                          inlineSyntaxList: [LatexSyntax()]),
+                    child: Column(
+                      children: [
+                        Text(
+                          "সমাধান",
+                          softWrap: true,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: TColors.primaryColor,
+                          ),
+                        ),
+                        MW.MarkdownWidget(
+                          data: lessonAnswer!,
+                          shrinkWrap: true,
+                          selectable: true,
+                          config: MarkdownConfig.defaultConfig.copy(),
+                          markdownGenerator: MarkdownGenerator(
+                              generators: [latexGenerator],
+                              inlineSyntaxList: [LatexSyntax()]),
+                        ),
+                      ],
                     ),
                   ),
-
                 ],
               ),
             );

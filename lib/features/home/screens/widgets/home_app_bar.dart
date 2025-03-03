@@ -6,15 +6,19 @@ import '../../../../utils/constants/colors.dart';
 import '../../../../utils/constants/text_strings.dart';
 
 class THomeAppBar extends StatelessWidget {
+  final String fullName;
+  final String? className;
+
   const THomeAppBar({
     super.key,
+    required this.fullName,
+    this.className,
   });
 
   @override
   Widget build(BuildContext context) {
     return TAppBar(
       title: Row(
-
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(30.0),
@@ -25,10 +29,12 @@ class THomeAppBar extends StatelessWidget {
                 maxHeight: 50,
               ),
               // color: Colors.green,
-              child:  Image.asset("assets/images/user_image.png"),
+              child: Image.asset("assets/images/user_image.png"),
             ),
           ),
-          SizedBox(width: 10,),
+          SizedBox(
+            width: 10,
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -40,38 +46,61 @@ class THomeAppBar extends StatelessWidget {
                     .apply(color: TColors.primaryColor),
               ),*/
               Text(
-                TTexts.homeAppbarSubTitle,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge!
-                    .apply(),
-              ),Container(
-                padding: EdgeInsets.all(5.0),
-                decoration: BoxDecoration(
-                  color: TColors.primaryColor.withOpacity(1),
-                  borderRadius: BorderRadius.circular(6.0),
-                ),
-                child: Text(
-                  "Class - 12",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .apply(color: Colors.white),
-                ),
+                fullName,
+                style: Theme.of(context).textTheme.bodyLarge!.apply(),
               ),
+              className == null
+                  ? GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          // barrierDismissible: false,
+                          // Prevent closing the dialog until download completes
+                          builder: (BuildContext context) {
+                            return AlertDialog();
+                          },
+                        );
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(5.0),
+                        decoration: BoxDecoration(
+                          color: TColors.secondaryColor.withOpacity(1),
+                          borderRadius: BorderRadius.circular(6.0),
+                        ),
+                        child: Text(
+                          "Select your class",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyLarge!
+                              .apply(color: Colors.white),
+                        ),
+                      ),
+                    )
+                  : Container(
+                      padding: EdgeInsets.all(5.0),
+                      decoration: BoxDecoration(
+                        // color: TColors.primaryColor.withOpacity(1),
+                        borderRadius: BorderRadius.circular(3.0),
+                        border: Border.all(color: TColors.primaryColor),
+                      ),
+                      child: Text(
+                        "Class $className",
+                        style: Theme.of(context).textTheme.bodyLarge!.apply(color: TColors.primaryColor),
+                      ),
+                    ),
             ],
           ),
         ],
       ),
       showBackArrow: false,
-      actions: [
+      /*actions: [
         IconButton(
             onPressed: () {},
             icon: Icon(
               Iconsax.search_normal,
               color: Colors.black,
             ))
-      ],
+      ],*/
     );
   }
 }
