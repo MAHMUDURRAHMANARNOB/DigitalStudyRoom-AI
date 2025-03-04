@@ -408,6 +408,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                           ),
+                          SizedBox(height: TSizes.sm),
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -576,6 +577,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           SizedBox(height: TSizes.sm),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             // mainAxisSize: MainAxisSize.min,
                             children: [
                               Expanded(
@@ -759,7 +761,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: Container(
         // width: constraints.maxWidth,
-        height: 160,
+        // height: 200,
         padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
         margin: const EdgeInsets.all(5.0),
         decoration: BoxDecoration(

@@ -1,4 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:avatar_glow/avatar_glow.dart';
+import 'package:digital_study_room/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:markdown_widget/config/configs.dart';
 import 'package:markdown_widget/config/markdown_generator.dart';
@@ -17,7 +19,9 @@ import '../providers/TutorResponseProvider.dart';
 class TutorStudyScreen extends StatefulWidget {
   final String topic;
   final String subject;
-  const TutorStudyScreen({super.key, required this.topic, required this.subject});
+
+  const TutorStudyScreen(
+      {super.key, required this.topic, required this.subject});
 
   @override
   _TutorStudyScreenState createState() => _TutorStudyScreenState();
@@ -25,7 +29,8 @@ class TutorStudyScreen extends StatefulWidget {
 
 class _TutorStudyScreenState extends State<TutorStudyScreen> {
   AudioPlayer _audioPlayer = AudioPlayer();
-  late AudioRecorder audioRecorder; // Updated: Use AudioRecorder instead of Record
+  late AudioRecorder
+      audioRecorder; // Updated: Use AudioRecorder instead of Record
   String? _sessionId;
   File? _audioFile;
   bool _isRecording = false;
@@ -56,20 +61,31 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
   }
 
   Future<void> _fetchTutorResponse() async {
-    await Provider.of<TutorResponseProvider>(context, listen: false).getTutorResponse(
-      userID, // userid
-      authProvider.user!.name, // userName
-      '', // nextLesson (not required for the first call)
-      '1', // TutorId
-      gradeClass, // className
-      _subject, // SubjectName
-      courseTopic, // courseTopic
-      _sessionId, // sessionID (null for the first call)
-      null, // audioFile (null for the first call)
+    await Provider.of<TutorResponseProvider>(context, listen: false)
+        .getTutorResponse(
+      userID,
+      // userid
+      authProvider.user!.name,
+      // userName
+      '',
+      // nextLesson (not required for the first call)
+      '1',
+      // TutorId
+      gradeClass,
+      // className
+      _subject,
+      // SubjectName
+      courseTopic,
+      // courseTopic
+      _sessionId,
+      // sessionID (null for the first call)
+      null,
+      // audioFile (null for the first call)
       null, // answerText (null for the first call)
     );
 
-    final response = Provider.of<TutorResponseProvider>(context, listen: false).successResponse;
+    final response = Provider.of<TutorResponseProvider>(context, listen: false)
+        .successResponse;
 
     if (response != null) {
       // Update sessionID for subsequent API calls
@@ -94,7 +110,8 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
         final path = '${directory.path}/recording.m4a'; // Save as .m4a file
 
         // Start recording with the specified path
-        await audioRecorder.start(RecordConfig(), path: path); // Updated: Added path parameter
+        await audioRecorder.start(RecordConfig(),
+            path: path); // Updated: Added path parameter
 
         setState(() {
           _isRecording = true;
@@ -107,7 +124,8 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
 
   Future<void> stopRecording() async {
     try {
-      if (await Permission.microphone.request().isGranted) { // Updated: Request permission
+      if (await Permission.microphone.request().isGranted) {
+        // Updated: Request permission
         final path = await audioRecorder.stop(); // Updated: Stop recording
         if (path != null) {
           final file = File(path);
@@ -142,20 +160,31 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
   Future<void> _sendAudioToAPI() async {
     if (_audioFile == null) return;
 
-    await Provider.of<TutorResponseProvider>(context, listen: false).getTutorResponse(
-      userID, // userid
-      authProvider.user!.name, // userName
-      '', // nextLesson (not required)
-      '1', // TutorId
-      gradeClass, // className
-      _subject, // SubjectName
-      courseTopic, // courseTopic
-      _sessionId, // sessionID (updated after the first call)
-      _audioFile, // audioFile (recorded audio)
+    await Provider.of<TutorResponseProvider>(context, listen: false)
+        .getTutorResponse(
+      userID,
+      // userid
+      authProvider.user!.name,
+      // userName
+      '',
+      // nextLesson (not required)
+      '1',
+      // TutorId
+      gradeClass,
+      // className
+      _subject,
+      // SubjectName
+      courseTopic,
+      // courseTopic
+      _sessionId,
+      // sessionID (updated after the first call)
+      _audioFile,
+      // audioFile (recorded audio)
       null, // answerText
     );
 
-    final response = Provider.of<TutorResponseProvider>(context, listen: false).successResponse;
+    final response = Provider.of<TutorResponseProvider>(context, listen: false)
+        .successResponse;
 
     if (response != null) {
       // Update sessionID for future API calls
@@ -171,22 +200,33 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
   }
 
   Future<void> _sendTextToAPI(String answerText) async {
-    await Provider.of<TutorResponseProvider>(context, listen: false).getTutorResponse(
-      userID, // userid
-      authProvider.user!.name, // userName
-      '', // nextLesson (not required)
-      '1', // TutorId
-      gradeClass, // className
-      _subject, // SubjectName
-      courseTopic, // courseTopic
-      _sessionId, // sessionID (updated after the first call)
-      null, // audioFile
+    await Provider.of<TutorResponseProvider>(context, listen: false)
+        .getTutorResponse(
+      userID,
+      // userid
+      authProvider.user!.name,
+      // userName
+      '',
+      // nextLesson (not required)
+      '1',
+      // TutorId
+      gradeClass,
+      // className
+      _subject,
+      // SubjectName
+      courseTopic,
+      // courseTopic
+      _sessionId,
+      // sessionID (updated after the first call)
+      null,
+      // audioFile
       answerText, // answerText
     );
   }
 
   Future<void> _checkPermissions() async {
-    if (await Permission.microphone.request().isGranted) { // Updated: Request permission
+    if (await Permission.microphone.request().isGranted) {
+      // Updated: Request permission
       print("Microphone permission granted");
     } else {
       print("Microphone permission denied");
@@ -209,51 +249,80 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
         centerTitle: true,
       ),
       body: provider.isLoading
-          ? Center(child: CircularProgressIndicator(color: TColors.tertiaryColor,))
+          ? Center(
+              child: CircularProgressIndicator(
+              color: TColors.tertiaryColor,
+            ))
           : SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  border: Border.all(color: TColors.tertiaryColor),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: MW.MarkdownWidget(
-                  data: provider.successResponse?.aiDialog ?? 'No AI response yet.',
-                  shrinkWrap: true,
-                  selectable: true,
-                  config: MarkdownConfig.defaultConfig,
-                  markdownGenerator: MarkdownGenerator(generators: [latexGenerator], inlineSyntaxList: [LatexSyntax()]),
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: TColors.tertiaryColor),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: MW.MarkdownWidget(
+                        data: provider.successResponse?.aiDialog ??
+                            'No AI response yet.',
+                        shrinkWrap: true,
+                        selectable: true,
+                        config: MarkdownConfig.defaultConfig,
+                        markdownGenerator: MarkdownGenerator(
+                            generators: [latexGenerator],
+                            inlineSyntaxList: [LatexSyntax()]),
+                      ),
+                    ),
+                    SizedBox(height: TSizes.sm),
+                    AvatarGlow(
+                      animate: _isRecording,
+                      curve: Curves.fastOutSlowIn,
+                      glowColor: TColors.primaryColor,
+                      duration: const Duration(milliseconds: 1000),
+                      repeat: true,
+                      glowRadiusFactor: 1,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                _isRecording ? Colors.red : Colors.blue),
+                        onPressed: _textController.text.isNotEmpty
+                            ? null
+                            : (_isRecording ? stopRecording : startRecording),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(_isRecording ? Icons.mic_off : Icons.mic),
+                            Text(
+                                _isRecording ? 'Stop Recording' : 'Start Recording'),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: TSizes.sm),
+                    TextField(
+                      controller: _textController,
+                      decoration: InputDecoration(
+                        labelText: 'Type your answer',
+                        border: OutlineInputBorder(),
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.send, color: TColors.primaryColor),
+                          onPressed: _textController.text.isEmpty
+                              ? null
+                              : () {
+                                  _sendTextToAPI(_textController.text);
+                                  _textController.clear();
+                                },
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                  ],
                 ),
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(backgroundColor: _isRecording ? Colors.red : Colors.blue),
-                onPressed: _textController.text.isNotEmpty ? null : (_isRecording ? stopRecording : startRecording),
-                child: Text(_isRecording ? 'Stop Recording' : 'Start Recording'),
-              ),
-              TextField(
-                controller: _textController,
-                decoration: InputDecoration(
-                  labelText: 'Type your answer',
-                  border: OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.send,color: TColors.primaryColor),
-                    onPressed: _textController.text.isEmpty ? null : () {
-                      _sendTextToAPI(_textController.text);
-                      _textController.clear();
-                    },
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 

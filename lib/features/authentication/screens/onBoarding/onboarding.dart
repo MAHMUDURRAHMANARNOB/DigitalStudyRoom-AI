@@ -1,4 +1,4 @@
-import 'package:concentric_transition/concentric_transition.dart';
+
 import 'package:digital_study_room/features/authentication/screens/onBoarding/widgets/onboarding_dot_navigation.dart';
 import 'package:digital_study_room/features/authentication/screens/onBoarding/widgets/onboarding_next_button.dart';
 import 'package:digital_study_room/features/authentication/screens/onBoarding/widgets/onboarding_page.dart';
