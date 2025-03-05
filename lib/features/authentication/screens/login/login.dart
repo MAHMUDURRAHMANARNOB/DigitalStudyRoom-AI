@@ -104,11 +104,11 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               ///divider
-              TFormDivider(dark: dark, dividerText: TTexts.orSignInWith),
+              // TFormDivider(dark: dark, dividerText: TTexts.orSignInWith),
               const SizedBox(height: TSizes.spaceBtwSections / 2),
 
               /// Footer
-              const TSocialButtons()
+              // const TSocialButtons()
             ],
           ),
         ),

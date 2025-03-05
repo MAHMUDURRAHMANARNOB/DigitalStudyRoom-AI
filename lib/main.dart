@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 import 'features/ToolsContent/provider/SolveBanglaMathProvider.dart';
 import 'features/ToolsContent/provider/ToolsResponseProvider.dart';
 import 'features/ToolsContent/provider/studyToolsProvider.dart';
+import 'features/ToolsContent/provider/submitReactionProvider.dart';
 import 'features/ToolsContent/provider/toolsDataByCodeProvider.dart';
 import 'features/ToolsContent/provider/toolsReplyProvider.dart';
 import 'features/Tutor/providers/TutorChapterListProvider.dart';
@@ -58,6 +59,8 @@ void main() {
           create: (context) => CouponDiscountProvider(),
         ),ChangeNotifierProvider(
           create: (context) => PackagesProvider(),
+        ),ChangeNotifierProvider(
+          create: (context) => SubmitReactionProvider(),
         ),
       ],
       child: DigitalStudyRoom(),

@@ -480,6 +480,35 @@ class ApiController {
     }
   }
 
+  Future<Map<String, dynamic>> getSubmitReaction(int userid, int reactingid,
+      String reactiontype, String reactionfor) async {
+    final url = '$baseUrl/submitreaction/';
+    print(
+        "Posting in api service $url, $userid, $reactingid, $reactiontype, $reactionfor");
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        body: {
+          'vuserid': userid.toString(),
+          'reactingid': reactingid.toString(),
+          'reactiontype': reactiontype.toString(),
+          'reactionfor': reactionfor.toString(),
+        },
+      );
+      print("Response  $response");
+      if (response.statusCode == 200) {
+        // If the server returns a 200 OK response, parse the JSON
+        print("Response in getSubmitReaction " + response.body);
+        return json.decode(response.body);
+      } else {
+        // If the server did not return a 200 OK response, throw an exception.
+        throw Exception('Failed to load data');
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<TutorResponse> getTutors() async {
     final url = '$baseUrl/getTutors/';
     final uri = Uri.parse(url); // Adjust endpoint as needed

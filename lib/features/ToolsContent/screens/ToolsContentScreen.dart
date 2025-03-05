@@ -25,6 +25,7 @@ import '../../profile/Providers/SubscriptionStatusProvider.dart';
 import '../datamodel/studyToolsDataModel.dart';
 import '../datamodel/toolsDataDataModel.dart';
 import '../provider/ToolsResponseProvider.dart';
+import '../provider/submitReactionProvider.dart';
 import '../provider/toolsDataByCodeProvider.dart';
 import '../provider/toolsReplyProvider.dart';
 
@@ -288,11 +289,25 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
         print("✅ Tools fetched successfully, calling selectToolByCode()");
         await selectToolByCode(widget.staticToolsCode!, toolsProvider!);
       } else {
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: Text("ERROR!!"),
+            content: Text("Please check your internet connection."),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text("OK"),
+              ),
+            ],
+          ),
+        );
         print("❌ No tools available after fetching.");
       }
     }
   }
-  
+
 
   /*Future<void> selectToolByCode(
       String toolsCode, StudyToolsProvider toolsProvider) async {
@@ -1621,6 +1636,35 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
                           ),
                         ),
                         SizedBox(width: 5.0),
+                        Consumer<SubmitReactionProvider>(
+                          builder: (context, submitReactionProvider, _) {
+                            return ElevatedButton(
+                              onPressed: submitReactionProvider.isLoading ||
+                                  submitReactionProvider.isSubmitted
+                                  ? null
+                                  : () {
+                                submitReactionProvider
+                                    .fetchSubmitReaction(userid,
+                                    response.ticketId, "I", "C");
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  submitReactionProvider.isLoading
+                                      ? CircularProgressIndicator()
+                                      : Text(
+                                    submitReactionProvider.isSubmitted
+                                        ? 'Submitted'
+                                        : 'Review',
+                                    style: TextStyle(
+                                      color: TColors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
                       ],
                     ),
                   )
@@ -1876,6 +1920,36 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
                               color: TColors.primaryColor,
                             ),
                           ),
+                        ),
+                        SizedBox(width: 5),
+                        Consumer<SubmitReactionProvider>(
+                          builder: (context, submitReactionProvider, _) {
+                            return ElevatedButton(
+                              onPressed: submitReactionProvider.isLoading ||
+                                  submitReactionProvider.isSubmitted
+                                  ? null
+                                  : () {
+                                submitReactionProvider
+                                    .fetchSubmitReaction(userid,
+                                    response.ticketId, "I", "C");
+                              },
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  submitReactionProvider.isLoading
+                                      ? CircularProgressIndicator()
+                                      : Text(
+                                    submitReactionProvider.isSubmitted
+                                        ? 'Submitted'
+                                        : 'Review',
+                                    style: TextStyle(
+                                      color: TColors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
                       ],
                     ),
