@@ -1,47 +1,26 @@
-import 'package:digital_study_room/api/api_controller.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
 
-import '../datamodel/submitReactionDataModel.dart';
+class SubmitReactionProvider with ChangeNotifier {
+  bool isLoading = false;
+  bool isSubmitted = false;
 
-class SubmitReactionProvider extends ChangeNotifier {
-  SubmitReactionDataModel? _submitReactionDataModel;
-  bool _isLoading = false;
-  bool _isSubmitted = false;
-  SubmitReactionDataModel? get submitReactionDataModel =>
-      _submitReactionDataModel;
-  bool get isLoading => _isLoading;
-  bool get isSubmitted => _isSubmitted;
-
-  Future<void> fetchSubmitReaction(int userid, int? reactingid,
-      String reactiontype, String reactionfor) async {
-    print('Fetching submitReaction for userId: $userid');
-    _isLoading = true;
-    notifyListeners();
-
+  Future<bool> fetchSubmitReaction(String userId, String ticketId, String type, String category) async {
     try {
-      final Map<String, dynamic> submitReactionResponse = await ApiController()
-          .getSubmitReaction(userid, reactingid!, reactiontype, reactionfor);
-      _submitReactionDataModel =
-          SubmitReactionDataModel.fromJson(submitReactionResponse);
-      if (_submitReactionDataModel!.errorCode == 200) {
-        _isLoading = false;
-        _isSubmitted = true;
-        notifyListeners();
-      } else {
-        // Handle the case when the response has an error code other than 200
-        print(
-            'Failed to Submit for Review. Error code: ${_submitReactionDataModel!.errorCode}');
-        _isLoading = false;
-        notifyListeners();
-        throw 'Failed to Submit for Review. Error code: ${_submitReactionDataModel!.errorCode}';
-      }
+      isLoading = true;
+      notifyListeners();  // Notify UI that loading started
+
+      // Perform the API request or logic here
+      await Future.delayed(Duration(seconds: 2)); // Simulate network delay
+
+      isSubmitted = true;
+      isLoading = false;
+      notifyListeners();  // Notify UI that submission is complete
+
+      return true;  // Indicate success
     } catch (e) {
-      // Handle the case when there is an exception during the API call
-      _isLoading = false;
-      notifyListeners();
-      print('Failed to Submit for Review: $e');
-      throw 'Failed to Submit for Review: $e';
+      isLoading = false;
+      notifyListeners();  // Notify UI that loading stopped due to an error
+      return false; // Indicate failure
     }
   }
 }

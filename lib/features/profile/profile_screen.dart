@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import '../../common/widgets/custom_shapes/containers/circular_container.dart';
 import '../authentication/providers/AuthProvider.dart';
 import '../authentication/screens/login/login.dart';
+import 'DeleteAccountScreen.dart';
 import 'Providers/SubscriptionStatusProvider.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -587,7 +588,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Divider(
                             color: TColors.primaryColor,
                           ),
-                          Row(
+                          /*Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
@@ -616,6 +617,93 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ],
                           ),
+                          Divider(
+                            color: TColors.primaryColor,
+                          ),*/
+                          //Delete Account
+                          GestureDetector(
+                            onTap: () {
+                              // Call the logout method from AuthProvider
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    backgroundColor: TColors.white,
+                                    title: const Text("Delete Account"),
+                                    content: Text("Are you sure you want to Proceed?"),
+                                    actions: <Widget>[
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                          TColors.primaryColor,
+                                        ),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text(
+                                          "Cancel",
+                                          style:
+                                          TextStyle(color: TColors.white),
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                  side:BorderSide(color: TColors.secondaryColor),
+                                          backgroundColor:
+                                          TColors.secondaryColor,
+                                        ),
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                const DeleteAccountScreen()),
+                                          );
+                                        },
+                                        child: Text("Proceed",
+                                            style: TextStyle(
+                                                color: TColors.white)),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                              // Navigate back to the login screen
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                        BorderRadius.circular(6.0),
+                                      ),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Icon(
+                                        Iconsax.trash,
+                                        color: TColors.primaryColor,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: TSizes.sm,
+                                    ),
+                                    Text("Delete Account"),
+                                  ],
+                                ),
+                                Icon(
+                                  Icons.arrow_forward_rounded,
+                                  color: TColors.primaryColor,
+                                  size: 30,
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          // SizedBox(height: 10),
                           Divider(
                             color: TColors.primaryColor,
                           ),

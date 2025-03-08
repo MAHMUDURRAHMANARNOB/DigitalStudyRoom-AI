@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:digital_study_room/features/ToolsContent/provider/studyToolsProvider.dart';
+import 'package:digital_study_room/features/ToolsContent/screens/widgets/reportButton.dart';
 import 'package:digital_study_room/utils/constants/colors.dart';
 import 'package:digital_study_room/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
@@ -83,7 +84,7 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
   late SpeechToText _speech;
   bool _isListening = false;
   bool toolsFetched = false;
-
+  SubmitReactionProvider submitReactionProvider = SubmitReactionProvider();
   @override
   void initState() {
     super.initState();
@@ -1636,7 +1637,7 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
                           ),
                         ),
                         SizedBox(width: 5.0),
-                        Consumer<SubmitReactionProvider>(
+                        /*Consumer<SubmitReactionProvider>(
                           builder: (context, submitReactionProvider, _) {
                             return ElevatedButton(
                               onPressed: submitReactionProvider.isLoading ||
@@ -1654,8 +1655,8 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
                                       ? CircularProgressIndicator()
                                       : Text(
                                     submitReactionProvider.isSubmitted
-                                        ? 'Submitted'
-                                        : 'Review',
+                                        ? 'Report Submitted'
+                                        : 'Report Inappropriate',
                                     style: TextStyle(
                                       color: TColors.white,
                                     ),
@@ -1664,6 +1665,11 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
                               ),
                             );
                           },
+                        ),*/
+                        ReportButton(
+                          userId: userid,
+                          ticketId: response.ticketId,
+                          submitReactionProvider: submitReactionProvider,
                         ),
                       ],
                     ),
@@ -1922,7 +1928,7 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
                           ),
                         ),
                         SizedBox(width: 5),
-                        Consumer<SubmitReactionProvider>(
+                        /*Consumer<SubmitReactionProvider>(
                           builder: (context, submitReactionProvider, _) {
                             return ElevatedButton(
                               onPressed: submitReactionProvider.isLoading ||
@@ -1940,8 +1946,8 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
                                       ? CircularProgressIndicator()
                                       : Text(
                                     submitReactionProvider.isSubmitted
-                                        ? 'Submitted'
-                                        : 'Review',
+                                        ? 'Report Submitted'
+                                        : 'Report Inappropriate',
                                     style: TextStyle(
                                       color: TColors.white,
                                     ),
@@ -1950,6 +1956,11 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
                               ),
                             );
                           },
+                        ),*/
+                        ReportButton(
+                          userId: userid,
+                          ticketId: response.ticketId,
+                          submitReactionProvider: submitReactionProvider,
                         ),
                       ],
                     ),
@@ -2185,7 +2196,7 @@ class _ToolsContentScreenState extends State<ToolsContentScreen> {
                         ),
                         onPressed: () {},
                         child: Text(
-                          "Review",
+                          "Report Inappropriate",
                           style: TextStyle(
                             color: TColors.primaryColor,
                           ),

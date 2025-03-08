@@ -16,6 +16,7 @@ import 'features/Tutor/providers/TutorResponseProvider.dart';
 import 'features/authentication/providers/SelectClassProvider.dart';
 import 'features/authentication/providers/optProvider.dart';
 import 'features/profile/Providers/coupnDiscountProvider.dart';
+import 'features/profile/Providers/deleteUserProvider.dart';
 import 'features/profile/Providers/packagesProvider.dart';
 
 /*void main() {
@@ -61,6 +62,8 @@ void main() {
           create: (context) => PackagesProvider(),
         ),ChangeNotifierProvider(
           create: (context) => SubmitReactionProvider(),
+        ),ChangeNotifierProvider(
+          create: (context) => DeleteUserProvider(),
         ),
       ],
       child: DigitalStudyRoom(),
