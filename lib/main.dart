@@ -5,6 +5,7 @@ import 'package:digital_study_room/features/profile/Providers/SubscriptionStatus
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'features/PdfReader/providers/pdfProvider.dart';
 import 'features/ToolsContent/provider/SolveBanglaMathProvider.dart';
 import 'features/ToolsContent/provider/ToolsResponseProvider.dart';
 import 'features/ToolsContent/provider/studyToolsProvider.dart';
@@ -64,6 +65,8 @@ void main() {
           create: (context) => SubmitReactionProvider(),
         ),ChangeNotifierProvider(
           create: (context) => DeleteUserProvider(),
+        ),ChangeNotifierProvider(
+          create: (context) => PdfProvider(),
         ),
       ],
       child: DigitalStudyRoom(),
