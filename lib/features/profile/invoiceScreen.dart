@@ -390,8 +390,7 @@ class _InvoiceScreenState extends State<InvoiceScreenMobile> {
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: TColors
-                                .secondaryColor
-                                .withOpacity(0.5),
+                                .primaryColor,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(6.0),
                             ),
@@ -402,7 +401,7 @@ class _InvoiceScreenState extends State<InvoiceScreenMobile> {
                           child: const Text(
                             "Apply",
                             style: TextStyle(
-                              color: TColors.primaryColor,
+                              color: TColors.white,
                             ),
                           ),
                         ),

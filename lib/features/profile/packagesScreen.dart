@@ -295,7 +295,7 @@ class _PackagesScreenState extends State<PackagesScreen> {
                 );
               },
               child: Text(
-                "Proceed to Invoice",
+                "Proceed",
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.white,

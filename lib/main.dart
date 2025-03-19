@@ -4,6 +4,7 @@ import 'package:digital_study_room/features/authentication/providers/AuthProvide
 import 'package:digital_study_room/features/profile/Providers/SubscriptionStatusProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shurjopay/utilities/functions.dart';
 
 import 'features/PdfReader/providers/pdfProvider.dart';
 import 'features/ToolsContent/provider/SolveBanglaMathProvider.dart';
@@ -25,12 +26,13 @@ import 'features/profile/Providers/packagesProvider.dart';
 }*/
 // ---- Entry Point of Flutter App ----
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   // TODO: Add Widget Binding / Multi-Providers
   // TODO: init Local Storage
   // TODO: Await Native Splash
   // TODO: Initialize FireBase
   // TODO: Initialize Authentication
-
+  initializeShurjopay(environment: "live");
   runApp(
     MultiProvider(
       providers: [

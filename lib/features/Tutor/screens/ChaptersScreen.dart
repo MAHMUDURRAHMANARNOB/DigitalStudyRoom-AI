@@ -3,6 +3,7 @@ import 'package:digital_study_room/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../authentication/providers/AuthProvider.dart';
 import '../providers/TutorChapterListProvider.dart';
 
 class ChaptersScreen extends StatefulWidget {
@@ -18,16 +19,22 @@ class ChaptersScreen extends StatefulWidget {
 }
 
 class _ChaptersScreenState extends State<ChaptersScreen> {
+
   @override
   void initState() {
     super.initState();
+    authProvider = Provider.of<AuthProvider>(context, listen: false);
+    classid = authProvider.user?.classId;
+
     Future.microtask(() =>
         Provider.of<TutorsChapterProvider>(context, listen: false)
-            .fetchTutorsChapters('9', widget.subjectId));
+            .fetchTutorsChapters(classid.toString(), widget.subjectId));
   }
-
+  late final classid;
+  late final authProvider;
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.courseTutorName),
@@ -37,7 +44,7 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
         child: Consumer<TutorsChapterProvider>(
           builder: (context, provider, child) {
             if (provider.isLoading) {
-              return Center(child: CircularProgressIndicator());
+              return Center(child: CircularProgressIndicator(color: TColors.primaryColor,));
             }
             if (provider.chapters == null || provider.chapters!.isEmpty) {
               return Center(child: Text("No chapters available"));
@@ -61,7 +68,7 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
                         MaterialPageRoute(
                           builder: (context) => TutorStudyScreen(
                             topic: provider.chapters![index].chapterName,
-                            subject: widget.subject,
+                            subject: widget.subject, chapterId: provider.chapters![index].id,
                           ),
                         ),
                       );

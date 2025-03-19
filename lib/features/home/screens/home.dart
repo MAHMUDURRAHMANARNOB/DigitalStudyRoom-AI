@@ -561,51 +561,54 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
 
-                    GestureDetector(
-                      onTap: (){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PdfHomeScreen(),
+                    Visibility(
+                      visible: false,
+                      child: GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PdfHomeScreen(),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(left: 8.0, right: 8.0),
+                          padding: EdgeInsets.only(
+                              left: 8.0, right: 8.0, top: 8.0, bottom: 8.0),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                           color: TColors.primaryColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(12)
                           ),
-                        );
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(left: 8.0, right: 8.0),
-                        padding: EdgeInsets.only(
-                            left: 8.0, right: 8.0, top: 8.0, bottom: 8.0),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                         color: TColors.primaryColor.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(12)
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                color: TColors.primaryColor,
-                                borderRadius: BorderRadius.circular(64)
+                          child: Row(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: TColors.primaryColor,
+                                  borderRadius: BorderRadius.circular(64)
+                                ),
+                                padding: EdgeInsets.all(10.0),
+                                child: Icon(Iconsax.book,color: TColors.white,),
                               ),
-                              padding: EdgeInsets.all(10.0),
-                              child: Icon(Iconsax.book,color: TColors.white,),
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "Read Books",
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold, fontSize: 20),
-                                ),
-                                Text(
-                                  "Lets Read Some Books",
-                                ),
-                              ],
-                            ),
-                          ],
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Read Books",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold, fontSize: 20),
+                                  ),
+                                  Text(
+                                    "Lets Read Some Books",
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

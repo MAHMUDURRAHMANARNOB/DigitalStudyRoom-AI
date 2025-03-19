@@ -31,6 +31,7 @@ class TutorResponseProvider with ChangeNotifier {
     String? sessionId,
     File? audioFile,
     String? answerText,
+    int? chapterId,
   ) async {
     _setLoading(true);
 
@@ -45,17 +46,22 @@ class TutorResponseProvider with ChangeNotifier {
           courseTopic,
           sessionId,
           audioFile,
-          answerText);
+          answerText,
+          chapterId);
 
       // final data = json.decode(response.body);
       if (response['errorcode'] == 200) {
         // Parse success response
         _successResponse = TutorSuccessResponseDataModel.fromJson(response);
         // _tutorNotSelectedResponse = null; // Clear error response
-      } else if (response['errorcode'] == 210) {
+      } else if (response['errorcode'] == 201) {
         // Parse error response
         // _tutorNotSelectedResponse = TutorNotSelectedResponse.fromJson(response);
-        _successResponse = null; // Clear success response
+        _successResponse = TutorSuccessResponseDataModel.fromJson(response); // Clear success response
+      }else if (response['errorcode'] == 210) {
+        // Parse error response
+        // _tutorNotSelectedResponse = TutorNotSelectedResponse.fromJson(response);
+        _successResponse = TutorSuccessResponseDataModel.fromJson(response); // Clear success response
       }
     } catch (error) {
       // Handle any errors here

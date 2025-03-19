@@ -568,9 +568,10 @@ class ApiController {
     String? sessionId,
     File? audioFile,
     String? answerText,
+    int? chapterId,
   ) async {
     print(
-        "testing $userid , $userName , $TutorId, $className ,$SubjectName, $courseTopic, $audioFile, $answerText");
+        "testing $userid , $userName , $TutorId, $className ,$SubjectName, $courseTopic, $audioFile, $answerText, chapterid:- $chapterId, sessionId:- $sessionId");
     try {
       final uri = Uri.parse("$baseUrl/Tutor/");
 
@@ -581,6 +582,7 @@ class ApiController {
         ..fields['TutorId'] = TutorId.toString()
         ..fields['className'] = className.toString()
         ..fields['SubjectName'] = SubjectName.toString()
+        ..fields['chapterId'] = chapterId.toString()
         ..fields['courseTopic'] = courseTopic.toString();
 
       if (audioFile != null) {
@@ -598,6 +600,7 @@ class ApiController {
       print("hello ${response.statusCode}");
       if (response.statusCode == 200) {
         var responseBody = await response.stream.bytesToString();
+        print(responseBody);
         // print(json.decode(responseBody));
         return json.decode(responseBody);
       } else {

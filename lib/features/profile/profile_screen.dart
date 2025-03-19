@@ -107,14 +107,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         SizedBox(height: TSizes.sm / 2),
-                        ElevatedButton(
+                        /*ElevatedButton(
                           onPressed: () {},
                           child: Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 12.0),
                             child: Text("Edit Profile"),
                           ),
-                        ),
+                        ),*/
                       ],
                     ),
 

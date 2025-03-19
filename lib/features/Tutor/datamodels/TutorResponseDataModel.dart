@@ -3,28 +3,28 @@ import 'dart:convert';
 class TutorSuccessResponseDataModel {
   final int errorCode;
   final String message;
-  final String sessionId;
-  final String aiDialog;
-  final String aiDialogAudio;
-  final String lessonTitle;
-  final String chapterTitle;
-  final int lessonCount;
-  final String userText;
-  final String userAudioFile;
-  final String voiceText;
+  final String? sessionId;
+  final String? aiDialog;
+  final String? aiDialogAudio;
+  final String? lessonTitle;
+  final String? chapterTitle;
+  final int? lessonCount;
+  final String? userText;
+  final String? userAudioFile;
+  final String? voiceText;
 
   TutorSuccessResponseDataModel({
     required this.errorCode,
     required this.message,
-    required this.sessionId,
-    required this.aiDialog,
-    required this.aiDialogAudio,
-    required this.lessonTitle,
-    required this.chapterTitle,
-    required this.lessonCount,
-    required this.userText,
-    required this.userAudioFile,
-    required this.voiceText,
+     this.sessionId,
+     this.aiDialog,
+     this.aiDialogAudio,
+     this.lessonTitle,
+     this.chapterTitle,
+     this.lessonCount,
+     this.userText,
+     this.userAudioFile,
+     this.voiceText,
   });
 
   factory TutorSuccessResponseDataModel.fromJson(Map<String, dynamic> json) {
