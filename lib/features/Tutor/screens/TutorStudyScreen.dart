@@ -22,12 +22,13 @@ class TutorStudyScreen extends StatefulWidget {
   final String topic;
   final String subject;
   final int chapterId;
+  final int tutorId;
 
   const TutorStudyScreen(
       {super.key,
       required this.topic,
       required this.subject,
-      required this.chapterId});
+      required this.chapterId, required this.tutorId});
 
   @override
   _TutorStudyScreenState createState() => _TutorStudyScreenState();
@@ -159,7 +160,7 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
         // userName
         '',
         // nextLesson (not required for the first call)
-        '1',
+        widget.tutorId.toString(),
         // TutorId
         gradeClass,
         // className
@@ -304,7 +305,7 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
         authProvider.user!.name,
         '',
         // nextLesson (not required)
-        '1',
+        widget.tutorId.toString(),
         // TutorId
         gradeClass,
         // className
@@ -612,7 +613,7 @@ class _TutorStudyScreenState extends State<TutorStudyScreen> {
         userID,
         authProvider.user!.name,
         '',
-        '1',
+        widget.tutorId.toString(),
         gradeClass,
         _subject,
         courseTopic,

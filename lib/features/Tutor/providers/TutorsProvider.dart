@@ -16,14 +16,14 @@ class TutorProvider extends ChangeNotifier {
   List<Tutor> get tutors => _tutors;
   int get errorCode => _errorCode;
 
-  Future<void> fetchTutors() async {
+  Future<void> fetchTutors(int classId) async {
     _isLoading = true;
     _errorMessage = null;
     // notifyListeners();
     // Do not notify listeners immediately here to avoid the issue during build phase
 
     try {
-      final TutorResponse response = await apiController.getTutors();
+      final TutorResponse response = await apiController.getTutors(classId);
       _errorCode = response.errorCode;
 
       if (_errorCode == 200) {

@@ -10,9 +10,10 @@ class ChaptersScreen extends StatefulWidget {
   final String courseTutorName;
   final String subject;
   final String subjectId;
+  final int tutorId;
 
   ChaptersScreen(
-      {super.key, required this.courseTutorName, required this.subject, required this.subjectId});
+      {super.key, required this.courseTutorName, required this.subject, required this.subjectId, required this.tutorId});
 
   @override
   State<ChaptersScreen> createState() => _ChaptersScreenState();
@@ -68,6 +69,7 @@ class _ChaptersScreenState extends State<ChaptersScreen> {
                         MaterialPageRoute(
                           builder: (context) => TutorStudyScreen(
                             topic: provider.chapters![index].chapterName,
+                            tutorId: widget.tutorId,
                             subject: widget.subject, chapterId: provider.chapters![index].id,
                           ),
                         ),

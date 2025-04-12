@@ -509,13 +509,18 @@ class ApiController {
     }
   }
 
-  Future<TutorResponse> getTutors() async {
+  Future<TutorResponse> getTutors(int classId) async {
     final url = '$baseUrl/getTutors/';
     final uri = Uri.parse(url); // Adjust endpoint as needed
     // print(uri);
 
     try {
-      final response = await http.post(uri);
+      final response = await http.post(
+        Uri.parse(url),
+        body: {
+          'classid': classId.toString(),
+        },
+      );
       // print(response.body);
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
@@ -571,7 +576,7 @@ class ApiController {
     int? chapterId,
   ) async {
     print(
-        "testing $userid , $userName , $TutorId, $className ,$SubjectName, $courseTopic, $audioFile, $answerText, chapterid:- $chapterId, sessionId:- $sessionId");
+        "testing $userid , $userName , tutorID- $TutorId, $className ,$SubjectName, $courseTopic, $audioFile, $answerText, chapterid:- $chapterId, sessionId:- $sessionId");
     try {
       final uri = Uri.parse("$baseUrl/Tutor/");
 

@@ -458,7 +458,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             height: TSizes.spaceBtwItems / 2,
                           ),
                           FutureBuilder<void>(
-                            future: _tutorProvider.fetchTutors(),
+                            future: _tutorProvider.fetchTutors(classId!),
                             builder: (context, snapshot) {
                               // Check if data is loading
                               if (snapshot.connectionState ==
@@ -499,6 +499,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         MaterialPageRoute(
                                           builder: (context) => ChaptersScreen(
                                             courseTutorName: tutor.tutorName,
+                                            tutorId: tutor.id,
                                             subject: tutor.tutorSubjects,
                                             subjectId: tutor.subjectID!,
                                           ),

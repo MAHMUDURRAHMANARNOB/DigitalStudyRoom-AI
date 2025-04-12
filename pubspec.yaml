@@ -3,7 +3,8 @@ description: "A new Flutter project."
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 #version: 1.0.4+5
-version: 1.0.5+6 #Tutor section redesigned
+#version: 1.0.5+6 #Tutor section redesigned
+version: 1.0.6+7 #Tutor Id added, tutors come according to class
 
 environment:
   sdk: ^3.5.3
