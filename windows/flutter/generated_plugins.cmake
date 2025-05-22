@@ -10,6 +10,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   pdfx
   permission_handler_windows
   record_windows
+  syncfusion_pdfviewer_windows
   url_launcher_windows
 )
 

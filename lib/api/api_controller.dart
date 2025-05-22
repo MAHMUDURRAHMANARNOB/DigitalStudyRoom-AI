@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:digital_study_room/features/AiTutor/datamodels/getCoursesDataModel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -90,7 +91,7 @@ class ApiController {
         // Parse successful response
         final responseData = jsonDecode(response.body);
         if (responseData["errorcode"] == 200) {
-          print("Success Response: ${response.body}");
+          // print("Success Response: ${response.body}");
           /*SuccessfulResponse.fromJson(jsonDecode(response.body));*/
           return true;
         } else if (responseData["errorcode"] == 400) {
@@ -199,7 +200,7 @@ class ApiController {
       final responseCheck = json.decode(response.body);
       if (response.statusCode == 200) {
         // If the server returns a 200 OK response, parse the JSON
-        print("Response in getOTP " + response.body);
+        // print("Response in getOTP " + response.body);
         return json.decode(response.body);
       } else {
         // If the server did not return a 200 OK response, throw an exception.
@@ -229,7 +230,7 @@ class ApiController {
       final responseCheck = json.decode(response.body);
       if (response.statusCode == 200) {
         // If the server returns a 200 OK response, parse the JSON
-        print("Response in resetPassword " + response.body);
+        // print("Response in resetPassword " + response.body);
         return responseCheck;
       } else {
         // If the server did not return a 200 OK response, throw an exception.
@@ -253,7 +254,7 @@ class ApiController {
     /*print("Response $response");*/
 
     if (response.statusCode == 200) {
-      print(SubscriptionStatusDataModel.fromJson(jsonDecode(response.body)));
+      // print(SubscriptionStatusDataModel.fromJson(jsonDecode(response.body)));
       return SubscriptionStatusDataModel.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to load Sub status');
@@ -310,8 +311,8 @@ class ApiController {
     String isMobile,
   ) async {
     final url = '$baseUrl/gettoolsresponse/';
-    print(
-        "Posting in api service $url, $userid, $questiontext, $subject, $gradeclass, $toolscode");
+    // print(
+    //     "Posting in api service $url, $userid, $questiontext, $subject, $gradeclass, $toolscode");
     try {
       final response = await http.post(
         Uri.parse(url),
@@ -602,7 +603,7 @@ class ApiController {
       }
 
       var response = await request.send();
-      print("hello ${response.statusCode}");
+      // print("hello ${response.statusCode}");
       if (response.statusCode == 200) {
         var responseBody = await response.stream.bytesToString();
         print(responseBody);
@@ -638,7 +639,7 @@ class ApiController {
     String problemText,
   ) async {
     final url = '$baseUrl/SolvebanglaMath/';
-    print("Posting in api service $url, $userid, $gradeClass, $problemText");
+    // print("Posting in api service $url, $userid, $gradeClass, $problemText");
     try {
       final response = await http.post(
         Uri.parse(url),
@@ -648,7 +649,7 @@ class ApiController {
           'questiontext': problemText.toString(),
         },
       );
-      print("Response  $response");
+      // print("Response  $response");
       if (response.statusCode == 200) {
         // If the server returns a 200 OK response, parse the JSON
         print("Response in getMathSolutionResponse " + response.body);
@@ -669,8 +670,8 @@ class ApiController {
     String? questiontext,
   ) async {
     const url = '$baseUrl/SolvebanglaMath/';
-    print(
-        "Posting in api service $url $questionImage ,$userid, $gradeClass, $questiontext");
+    /*print(
+        "Posting in api service $url $questionImage ,$userid, $gradeClass, $questiontext");*/
 
     var request = http.MultipartRequest('POST', Uri.parse(url));
     request.fields['userid'] = userid.toString();
@@ -678,17 +679,17 @@ class ApiController {
     request.fields['questiontext'] = questiontext.toString();
     request.files.add(
         await http.MultipartFile.fromPath('mathPhoto', questionImage!.path));
-    print("QUESTIONIMAGEPATH: ${questionImage.path}");
+    // print("QUESTIONIMAGEPATH: ${questionImage.path}");
 
     final response = await request.send();
 
     if (response.statusCode == 200) {
-      print('Image uploaded successfully');
+      // print('Image uploaded successfully');
       final responseString =
           await response.stream.transform(utf8.decoder).join();
       final responseCheck = json.decode(responseString);
       // final responseCheck = json.decode(await response.stream.bytesToString());
-      print("Response check -> $responseCheck");
+      // print("Response check -> $responseCheck");
       /*if (responseCheck["errorcode"] == 200) {
         print('200');*/
       return responseCheck;
@@ -699,13 +700,13 @@ class ApiController {
       /*print("Response in getImageToolsResponse " +
           await response.stream.bytesToString());*/
     } else {
-      print('Failed to upload image. Status code: ${response.statusCode}');
+      // print('Failed to upload image. Status code: ${response.statusCode}');
       throw ("Failed getImageToolsResponse ${response.statusCode}");
     }
   }
   Future<Map<String, dynamic>> getPackagesList(int userid) async {
     final url = '$baseUrl/getPackageList/';
-    print("Posting in api service $url, $userid");
+    // print("Posting in api service $url, $userid");
     try {
       final response = await http.post(
         Uri.parse(url),
@@ -714,15 +715,15 @@ class ApiController {
           'subscriptionType': "A",
         },
       );
-      print("Response:   ${response.body}");
+      // print("Response:   ${response.body}");
       if (response.statusCode == 200) {
         return json.decode(response.body);
       } else {
-        print("Response in getPackagesList else" + response.body);
+        // print("Response in getPackagesList else" + response.body);
         throw Exception('Failed to load data in getPackagesList');
       }
     } catch (e) {
-      print("Response in getPackagesList Catch" + e.toString());
+      // print("Response in getPackagesList Catch" + e.toString());
       throw Exception("Failed getPackagesList $e");
     }
   }
@@ -739,9 +740,9 @@ class ApiController {
           'amount': amount.toString(),
         },
       );
-      print("Response  $response");
+      // print("Response  $response");
       if (response.statusCode == 200) {
-        print("Response in api: ${json.decode(response.body)}");
+        // print("Response in api: ${json.decode(response.body)}");
         return json.decode(Utf8Decoder().convert(response.bodyBytes));
       } else {
         // Handle error
@@ -763,7 +764,7 @@ class ApiController {
       int? CouponPartnerID,
       ) async {
     final url = '$baseUrl/initiatepayment';
-    print("Posting in api service $url");
+    // print("Posting in api service $url");
     try {
       /*final response = await http.post(
         Uri.parse(url),
@@ -796,7 +797,7 @@ class ApiController {
         body: body,
       );
 
-      print("Response:   ${response.statusCode}");
+      // print("Response:   ${response.statusCode}");
       if (response.statusCode == 200) {
         return json.decode(response.body);
       } else {
@@ -804,7 +805,7 @@ class ApiController {
         throw Exception('Failed to load data in getPackagesList');
       }
     } catch (e) {
-      print("Response in initiatePayment Catch" + e.toString());
+      // print("Response in initiatePayment Catch" + e.toString());
       throw Exception("Failed getPackagesList $e");
     }
   }
@@ -826,7 +827,7 @@ class ApiController {
       String risk_title,
       ) async {
     final url = '$baseUrl/receivepayment';
-    print("Posting in api service $url");
+    // print("Posting in api service $url");
     try {
       final response = await http.post(
         Uri.parse(url),
@@ -847,7 +848,7 @@ class ApiController {
           'risk_title': risk_title.toString(),
         },
       );
-      print("Response:   ${response.statusCode}");
+      // print("Response:   ${response.statusCode}");
       if (response.statusCode == 200) {
         return json.decode(response.body);
       } else {
@@ -855,7 +856,7 @@ class ApiController {
         throw Exception('Failed to load data in getPackagesList');
       }
     } catch (e) {
-      print("Response in receivePayment Catch" + e.toString());
+      // print("Response in receivePayment Catch" + e.toString());
       throw Exception("Failed getPackagesList $e");
     }
   }
@@ -865,8 +866,8 @@ class ApiController {
       String reason,
       ) async {
     final url = '$baseUrl/deleteuser/';
-    print("Posting in api service $url");
-    print("$userid , $reason");
+    // print("Posting in api service $url");
+    // print("$userid , $reason");
     try {
       final Map<String, dynamic> body = {
         'id': userid.toString(),
@@ -875,16 +876,45 @@ class ApiController {
         Uri.parse(url),
         body: body,
       );
-      print("Response: ${response.body}");
+      // print("Response: ${response.body}");
       if (response.statusCode == 200) {
         return json.decode(response.body);
       } else {
-        print("Response in getDeleteResponse else" + response.body);
+        // print("Response in getDeleteResponse else" + response.body);
         throw Exception('Failed to load data in getPackagesList');
       }
     } catch (e) {
-      print("Response in getPackagesList Catch" + e.toString());
+      // print("Response in getPackagesList Catch" + e.toString());
       throw Exception("Failed getPackagesList $e");
+    }
+  }
+
+
+//   AI TUTOR
+  Future<List<GetCoursesDataModel>> getCoursesAiTutor(String userId, String classId) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/getCourses/'),
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: {
+          'userId': userId,
+          'classId': classId,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final jsonData = jsonDecode(response.body);
+        if (jsonData['errorcode'] == 200) {
+          final List<dynamic> coursesJson = jsonData['classes'];
+          return coursesJson.map((json) => GetCoursesDataModel.fromJson(json)).toList();
+        } else {
+          throw Exception(jsonData['message'] ?? 'Failed to fetch courses');
+        }
+      } else {
+        throw Exception('Failed to fetch courses: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error fetching courses: $e');
     }
   }
 }

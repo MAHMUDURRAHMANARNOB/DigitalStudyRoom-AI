@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shurjopay/utilities/functions.dart';
 
+import 'features/AiTutor/providers/getCoursesAiTutorProvider.dart';
 import 'features/PdfReader/providers/pdfProvider.dart';
 import 'features/ToolsContent/provider/SolveBanglaMathProvider.dart';
 import 'features/ToolsContent/provider/ToolsResponseProvider.dart';
@@ -69,6 +70,8 @@ void main() {
           create: (context) => DeleteUserProvider(),
         ),ChangeNotifierProvider(
           create: (context) => PdfProvider(),
+        ),ChangeNotifierProvider(
+          create: (context) => GetCoursesAiTutorProvider(),
         ),
       ],
       child: DigitalStudyRoom(),

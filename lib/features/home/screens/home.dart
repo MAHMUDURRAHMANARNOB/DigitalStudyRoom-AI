@@ -1,3 +1,4 @@
+import 'package:digital_study_room/features/AiTutor/screens/GetCoursesAiTutorScreen.dart';
 import 'package:digital_study_room/features/PdfReader/screens/PdfHomeScreen.dart';
 import 'package:digital_study_room/features/ToolsContent/screens/ToolsContentScreen.dart';
 import 'package:digital_study_room/features/Tutor/providers/TutorResponseProvider.dart';
@@ -441,6 +442,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
 
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => GetCourseAiTutorListScreen(
+                              userId: userId.toString(),
+                              classId: classId.toString(),
+                            ),
+                          ),
+                        );
+                      },
+                      child: Text("AI TUTOR"),
+                    ),
                     // -- TUTOR
                     Container(
                       padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
@@ -562,14 +577,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
 
-                    Visibility(
-                      visible: false,
+                    /*Visibility(
+                      visible: true,
                       child: GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => PdfHomeScreen(),
+                              builder: (context) => PdfViewerScreen(),
                             ),
                           );
                         },
@@ -579,18 +594,19 @@ class _HomeScreenState extends State<HomeScreen> {
                               left: 8.0, right: 8.0, top: 8.0, bottom: 8.0),
                           width: double.infinity,
                           decoration: BoxDecoration(
-                           color: TColors.primaryColor.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(12)
-                          ),
+                              color: TColors.primaryColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(12)),
                           child: Row(
                             children: [
                               Container(
                                 decoration: BoxDecoration(
-                                  color: TColors.primaryColor,
-                                  borderRadius: BorderRadius.circular(64)
-                                ),
+                                    color: TColors.primaryColor,
+                                    borderRadius: BorderRadius.circular(64)),
                                 padding: EdgeInsets.all(10.0),
-                                child: Icon(Iconsax.book,color: TColors.white,),
+                                child: Icon(
+                                  Iconsax.book,
+                                  color: TColors.white,
+                                ),
                               ),
                               SizedBox(
                                 width: 10,
@@ -601,7 +617,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Text(
                                     "Read Books",
                                     style: TextStyle(
-                                        fontWeight: FontWeight.bold, fontSize: 20),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
                                   ),
                                   Text(
                                     "Lets Read Some Books",
@@ -612,7 +629,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                    ),
+                    ),*/
                     // SizedBox(height: TSizes.sm),
                     // -- MENTAL HEALTH
                     Container(
