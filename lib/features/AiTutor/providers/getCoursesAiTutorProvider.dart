@@ -16,7 +16,7 @@ class GetCoursesAiTutorProvider with ChangeNotifier {
     try {
       _isLoading = true;
       _error = null;
-      notifyListeners();
+      // notifyListeners();
 
       _courses = await _apiController.getCoursesAiTutor(userId, classId);
       return _courses;

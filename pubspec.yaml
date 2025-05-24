@@ -64,6 +64,9 @@ dependencies:
   markdown_widget: ^2.3.2+6
   flutter_inappwebview: ^6.1.0+1
 
+  screenshot: ^3.0.0
+  share_plus: ^7.0.1
+
 
 
 dev_dependencies:

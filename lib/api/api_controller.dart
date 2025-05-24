@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../features/AiTutor/datamodels/getChaptersDataModel.dart';
 import '../features/ToolsContent/datamodel/studyToolsDataModel.dart';
 import '../features/Tutor/datamodels/TutorChapterListDataModel.dart';
 import '../features/Tutor/datamodels/TutorDataModel.dart';
@@ -915,6 +916,26 @@ class ApiController {
       }
     } catch (e) {
       throw Exception('Error fetching courses: $e');
+    }
+  }
+
+  Future<GetAiTutorChapterResponseDataModel> getChaptersAiTutor({
+    required String classId,
+    required String subjectId,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/getChapters/'),
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: {
+        'classId': classId,
+        'SubjectID': subjectId,
+      },
+    );
+    // print(jsonDecode(response.body));
+    if (response.statusCode == 200) {
+      return GetAiTutorChapterResponseDataModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+    } else {
+      throw Exception('Failed to load chapters');
     }
   }
 }

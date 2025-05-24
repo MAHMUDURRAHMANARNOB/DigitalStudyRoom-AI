@@ -1,9 +1,11 @@
 // course_model.dart
 class GetCoursesDataModel {
+  final int subjectId;
   final String subjectName;
   final String coursePDFLink;
 
-  GetCoursesDataModel({
+  GetCoursesDataModel( {
+    required this.subjectId,
     required this.subjectName,
     required this.coursePDFLink,
   });
@@ -12,6 +14,7 @@ class GetCoursesDataModel {
     return GetCoursesDataModel(
       subjectName: json['subjectName'] as String,
       coursePDFLink: json['CoursePDFLink'] as String,
+      subjectId: json['SubjectId'],
     );
   }
 }
