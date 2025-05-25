@@ -1,101 +1,3 @@
-/*
-
-// Updated PdfViewerScreen to scroll to startPage
-import 'package:flutter/material.dart';
-import 'package:pdfx/pdfx.dart';
-import 'package:http/http.dart' as http;
-
-class PdfViewerScreen extends StatefulWidget {
-  final String pdfUrl;
-  final String subjectName;
-  final int startPage; // Added to receive the start page
-
-  const PdfViewerScreen({
-    Key? key,
-    required this.pdfUrl,
-    required this.subjectName,
-    required this.startPage,
-  }) : super(key: key);
-
-  @override
-  State<PdfViewerScreen> createState() => _PdfViewerScreenState();
-}
-
-class _PdfViewerScreenState extends State<PdfViewerScreen> {
-  PdfController? _pdfController;
-  String? _error;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadPdf();
-  }
-
-  Future<void> _loadPdf() async {
-    try {
-      final response = await http.get(Uri.parse(widget.pdfUrl));
-      if (response.statusCode == 200) {
-        final pdfData = response.bodyBytes;
-        final document = await PdfDocument.openData(pdfData);
-        setState(() {
-          _pdfController = PdfController(
-            document: Future.value(document),
-            initialPage: widget.startPage, // Set initial page to startPage
-          );
-          _error = null;
-        });
-      } else {
-        setState(() {
-          _error = 'Failed to fetch PDF: HTTP ${response.statusCode}';
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _error = 'Error loading PDF: $e';
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _pdfController?.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.subjectName),
-      ),
-      body: _error != null
-          ? Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(_error!),
-            ElevatedButton(
-              onPressed: _loadPdf,
-              child: const Text('Retry'),
-            ),
-          ],
-        ),
-      )
-          : _pdfController == null
-          ? const Center(child: CircularProgressIndicator())
-          : PdfView(
-        controller: _pdfController!,
-        onDocumentError: (error) {
-          setState(() {
-            _error = 'Error rendering PDF: $error';
-          });
-        },
-      ),
-    );
-  }
-}
-*/
-
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
@@ -106,6 +8,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:image/image.dart' as img;
 
 class PdfViewerScreen extends StatefulWidget {
   final String pdfUrl;
@@ -169,13 +72,20 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
     }
   }
 
-  Future<void> _takeScreenshot() async {
+  /*Future<void> _takeScreenshot() async {
     setState(() {
       _isSelectingArea = true;
     });
+  }*/
+  Future<void> _takeScreenshot() async {
+    setState(() {
+      _isSelectingArea = true;
+      _selectedArea = null; // Reset any previous selection
+      _selectionStart = null;
+    });
   }
 
-  Future<void> _captureSelectedArea() async {
+ /* Future<void> _captureSelectedArea() async {
     if (_selectedArea == null) return;
 
     try {
@@ -208,28 +118,132 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
         _selectionStart = null;
       });
     }
+  }*/
+  Future<void> _captureSelectedArea() async {
+    if (_selectedArea == null) return;
+
+    try {
+      // Capture the screenshot of the PDF viewer
+      final Uint8List? fullImage = await _screenshotController.capture(
+        pixelRatio: MediaQuery.of(context).devicePixelRatio,
+      );
+      // final tempDir = await getTemporaryDirectory();
+      // final fullImagePath = '${tempDir.path}/full_screenshot_${DateTime.now().millisecondsSinceEpoch}.png';
+      // await File(fullImagePath).writeAsBytes(fullImage);
+      // print('Full screenshot saved to: $fullImagePath');
+
+      if (fullImage == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to capture screenshot')),
+        );
+        return;
+      }
+
+      // Decode the captured image to get its dimensions
+      final img.Image? decodedImage = img.decodeImage(fullImage);
+      if (decodedImage == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to decode screenshot')),
+        );
+        return;
+      }
+      print('Captured image size: ${decodedImage.width}x${decodedImage.height}');
+
+      // Adjust the selected area coordinates for the pixel ratio
+      final double pixelRatio = MediaQuery.of(context).devicePixelRatio;
+      final Rect adjustedArea = Rect.fromLTRB(
+        _selectedArea!.left * pixelRatio,
+        _selectedArea!.top * pixelRatio,
+        _selectedArea!.right * pixelRatio,
+        _selectedArea!.bottom * pixelRatio,
+      );
+
+      // Crop the image
+      final croppedImage = await _cropImage(fullImage, adjustedArea);
+
+      if (croppedImage != null) {
+        final directory = await getTemporaryDirectory();
+        final imagePath = '${directory.path}/screenshot_${DateTime.now().millisecondsSinceEpoch}.png';
+        final File imageFile = File(imagePath);
+        await imageFile.writeAsBytes(croppedImage);
+
+        // Log the cropped image size
+        final img.Image? croppedDecoded = img.decodeImage(croppedImage);
+        print('Cropped image size: ${croppedDecoded?.width}x${croppedDecoded?.height}');
+
+        setState(() {
+          _selectedImage = XFile(imagePath);
+          _isSelectingArea = false;
+          _selectedArea = null;
+          _selectionStart = null;
+          _showQuestionPanel = true;
+        });
+
+        // Optionally share the screenshot
+        await Share.shareFiles([imagePath], text: 'PDF screenshot');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error cropping screenshot')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error capturing screenshot: $e')),
+      );
+    } finally {
+      setState(() {
+        _isSelectingArea = false;
+        _selectedArea = null;
+        _selectionStart = null;
+      });
+    }
   }
+
   Future<Uint8List?> _cropImage(Uint8List imageBytes, Rect region) async {
-    // You'll need to implement image cropping here
-    // This requires the image package: https://pub.dev/packages/image
-    // Here's a basic implementation:
-    /*
-  final img = decodeImage(imageBytes);
-  if (img == null) return null;
+    try {
+      // Decode the image
+      final img.Image? decodedImage = img.decodeImage(imageBytes);
+      if (decodedImage == null) {
+        print('Error: Failed to decode image');
+        return null;
+      }
 
-  final cropped = copyCrop(
-    img,
-    x: region.left.toInt(),
-    y: region.top.toInt(),
-    width: region.width.toInt(),
-    height: region.height.toInt(),
-  );
+      // Calculate the cropping dimensions
+      final int x = region.left.toInt().clamp(0, decodedImage.width);
+      final int y = region.top.toInt().clamp(0, decodedImage.height);
+      final int width = region.width.toInt().clamp(0, decodedImage.width - x);
+      final int height = region.height.toInt().clamp(0, decodedImage.height - y);
 
-  return encodePng(cropped);
-  */
+      print('Crop dimensions: x=$x, y=$y, width=$width, height=$height');
+      print('Image dimensions: width=${decodedImage.width}, height=${decodedImage.height}');
 
-    // For now, return the full image as a placeholder
-    return imageBytes;
+      // Ensure the crop dimensions are valid
+      if (width <= 0 || height <= 0) {
+        print('Error: Invalid crop dimensions (width or height is zero)');
+        return null;
+      }
+
+      // Crop the image
+      final img.Image croppedImage = img.copyCrop(
+        decodedImage,
+        x: x,
+        y: y,
+        width: width,
+        height: height,
+      );
+
+      // Encode the cropped image as PNG
+      final Uint8List? encodedImage = img.encodePng(croppedImage);
+      if (encodedImage == null) {
+        print('Error: Failed to encode cropped image');
+        return null;
+      }
+
+      return encodedImage;
+    } catch (e) {
+      print('Error cropping image: $e');
+      return null;
+    }
   }
 
   Future<void> _pickImage() async {
@@ -302,16 +316,16 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
       ),
       body: Stack(
         children: [
-          Screenshot(
-            controller: _screenshotController,
-            child: Row(
-              children: [
-                Expanded(
+          Row(
+            children: [
+              Expanded(
+                child: Screenshot(
+                  controller: _screenshotController,
                   child: _buildPdfViewer(),
                 ),
-                if (_showRightDrawer) _buildRightDrawer(),
-              ],
-            ),
+              ),
+              if (_showRightDrawer) _buildRightDrawer(),
+            ],
           ),
           if (_isSelectingArea) _buildAreaSelectionOverlay(),
           if (_showQuestionPanel) _buildQuestionPanel(),
@@ -462,11 +476,15 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
       onPanEnd: (_) async {
         await _captureSelectedArea();
       },
-      child: Container(
-        color: Colors.black.withOpacity(0.4),
-        child: CustomPaint(
-          painter: _AreaSelectionPainter(_selectedArea),
-          child: Align(
+      child: Stack(
+        children: [
+          // Semi-transparent overlay with CustomPaint for the selected area
+          CustomPaint(
+            size: Size.infinite,
+            painter: _AreaSelectionPainter(_selectedArea),
+          ),
+          // Button to confirm the selection
+          Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 32.0),
@@ -476,7 +494,7 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -590,13 +608,8 @@ class _AreaSelectionPainter extends CustomPainter {
       ..color = Colors.black.withOpacity(0.4)
       ..style = PaintingStyle.fill;
 
-    // Draw the selected area (clear)
-    final selectedAreaPaint = Paint()
-      ..color = Colors.transparent
-      ..blendMode = BlendMode.clear;
-
+    // Draw the entire screen with the overlay
     canvas.drawRect(Offset.zero & size, overlayPaint);
-    canvas.drawRect(selectedArea!, selectedAreaPaint);
 
     // Draw border around selected area
     final borderPaint = Paint()
