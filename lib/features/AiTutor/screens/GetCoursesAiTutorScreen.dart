@@ -267,10 +267,10 @@ class _GetCourseAiTutorListScreenState extends State<GetCourseAiTutorListScreen>
             // Success State
             final courses = snapshot.data!;
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 10.0),
               child: ListView.separated(
                 itemCount: courses.length,
-                separatorBuilder: (context, index) => const SizedBox(height: 12),
+                separatorBuilder: (context, index) => const SizedBox(height: 6),
                 itemBuilder: (context, index) {
                   final course = courses[index];
                   return _buildCourseCard(course, context);
@@ -286,6 +286,7 @@ class _GetCourseAiTutorListScreenState extends State<GetCourseAiTutorListScreen>
   Widget _buildCourseCard(GetCoursesDataModel course, BuildContext context) {
     return Card(
       elevation: 2,
+      color: TColors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
