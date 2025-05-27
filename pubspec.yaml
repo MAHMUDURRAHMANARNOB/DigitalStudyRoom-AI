@@ -107,6 +107,7 @@ flutter:
     - assets/images/onboarding/
     - assets/images/animations/
     - assets/images/dashboard_images/
+    - assets/images/items/
 
   # ---------- LOCAL FONTS ----------#
   fonts:

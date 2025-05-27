@@ -16,14 +16,10 @@ import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
 import '../../../common/widgets/custom_shapes/containers/circular_container.dart';
-import '../../../common/widgets/custom_shapes/containers/searchContainer.dart';
-import '../../../common/widgets/texts/section_heading.dart';
 import '../../../utils/constants/colors.dart';
-import '../../../utils/constants/image_strings.dart';
 import '../../../utils/constants/sizes.dart';
 import '../../../utils/helpers/helper_function.dart';
 import '../../ToolsContent/screens/SolveBanglaMathScreen.dart';
-import '../../Tutor/datamodels/TutorDataModel.dart';
 import '../../Tutor/providers/TutorsProvider.dart';
 import '../../Tutor/screens/TutorListScreen.dart';
 
@@ -98,9 +94,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ),
                     ),
+
+                    SizedBox(height: TSizes.sm),
+                    // -- NCTB AI TUTOR
+                    buildNCTBAITutor(context, userId, classId),
+
+                    SizedBox(height: TSizes.sm),
+
                     // -- TOOLS
+
                     Container(
-                      padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
+                      padding: EdgeInsets.symmetric(horizontal:8.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -444,308 +448,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
 
-                    SizedBox(height: TSizes.sm),
-                    // -- NCTB AI TUTOR
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => GetCourseAiTutorListScreen(
-                              userId: userId.toString(),
-                              classId: classId.toString(),
-                            ),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
-                        decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Color(0xFF4B1248),  // Dark purple
-                                Color(0xFF2A0D2A),  // Slightly lighter than 1B1B1B for gradient smoothness
-                                /*Color(0xFF2C3E50),  // Dark navy
-                                Color(0xFF4CA1AF),*/
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                        BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 12,
-                        spreadRadius: 1,
-                        offset: Offset(0, 6)
-                        ),],
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.1),
-                          width: 1,
-                        ),
-                      ),
-                      child: Stack(
-                        children: [
-                          // Background glow effect
-                          Positioned(
-                            right: -30,
-                            bottom: -30,
-                            child: Container(
-                              width: 120,
-                              height: 120,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: TColors.secondaryColorEnhanced.withOpacity(0.1),
-                              ),
-                            ),
-                          ),
-
-                          Padding(
-                            padding: EdgeInsets.all(20.0),
-                            child: Row(
-                              children: [
-                                // Text Content
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      // Badge
-                                      Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                        decoration: BoxDecoration(
-                                          color: TColors.secondaryColorEnhanced.withOpacity(0.2),
-                                          borderRadius: BorderRadius.circular(12),
-                                          border: Border.all(
-                                            color: TColors.secondaryColorEnhanced.withOpacity(0.3),
-                                            width: 1,
-                                          ),
-                                        ),
-                                        child: Text(
-                                          "NEW FEATURE",
-                                          style: TextStyle(
-                                            color: TColors.secondaryColorEnhanced,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-
-                                      SizedBox(height: 12),
-
-                                      // Main Headers
-                                      RichText(
-                                        text: TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text: "Master NCTB Books\n",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 22,
-                                                fontWeight: FontWeight.w800,
-                                                height: 1.2,
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: "with Your ",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 22,
-                                                fontWeight: FontWeight.w800,
-                                                height: 1.2,
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text: "AI Tutor",
-                                              style: TextStyle(
-                                                color: TColors.secondaryColorEnhanced,
-                                                fontSize: 22,
-                                                fontWeight: FontWeight.w800,
-                                                height: 1.2,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-
-                                      SizedBox(height: 8),
-
-                                      // Description
-                                      Text(
-                                        "Interactive lessons, instant explanations, and personalized learning",
-                                        style: TextStyle(
-                                          color: Colors.white.withOpacity(0.9),
-                                          fontSize: 14,
-                                        ),
-                                      ),
-
-                                      SizedBox(height: 16),
-
-                                      // CTA Button
-                                      Container(
-                                        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                                        decoration: BoxDecoration(
-                                          gradient: LinearGradient(
-                                            colors: [
-                                              TColors.secondaryColorEnhanced.withOpacity(0.8),
-                                              Color(0xFFFFC000),
-                                            ],
-                                          ),
-                                          // color: Colors.white.withOpacity(0.2),
-                                          borderRadius: BorderRadius.circular(12),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: TColors.secondaryColorEnhanced.withOpacity(0.3),
-                                              blurRadius: 8,
-                                              offset: Offset(0, 2),
-                                            ),
-                                          ],
-                                        ),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Icon(Icons.auto_awesome, color: Colors.black, size: 18),
-                                            SizedBox(width: 8),
-                                            Text(
-                                              "Start Learning Now",
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-
-                                SizedBox(width: 16),
-
-                                // Image Container
-                                Container(
-                                  width: 100,
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(16),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.3),
-                                        blurRadius: 12,
-                                        offset: Offset(0, 4),
-                                      ),
-                                    ],
-                                    border: Border.all(
-                                      color: Colors.white.withOpacity(0.2),
-                                      width: 1,
-                                    ),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(16),
-                                    child: Image.asset(
-                                      'assets/images/dashboard_images/teacher_nctb.jpg',
-                                      fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                    SizedBox(height: TSizes.sm),
+                    SizedBox(height: TSizes.spaceBtwItems),
                     // -- TUTOR
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => TutorsListScreen()));
-                      },
-                      child: Container(
-                        margin: EdgeInsets.symmetric(horizontal: 16),
-                        padding: EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              /*Color(0xFF4B1248),  // Dark purple
-                              Color(0xFF2A0D2A),*/  // Slightly lighter than 1B1B1B for gradient smoothness
-                              TColors.buttonPrimary,  // Dark navy
-                              TColors.info,
-                            ],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 10,
-                              spreadRadius: 2,
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            // Left side - Icon with circular background
-                            Container(
-                              padding: EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: TColors.white.withOpacity(0.2),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.headphones, // Simple intuitive icon
-                                color: TColors.white,
-                                size: 30,
-                              ),
-                            ),
-
-                            SizedBox(width: 16),
-
-                            // Middle - Text content
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Interactive Voice Tutors",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontFamily: "Poppins",
-                                    ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    "Learn from expert tutors in Bangla medium curriculum",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white.withOpacity(0.9),
-                                      fontFamily: "Poppins",
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            // Right side - Arrow with circle
-                            Container(
-                              padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: TColors.white.withOpacity(0.3),
-                                shape: BoxShape.circle,
-                              ),
-                              child: Icon(
-                                Icons.arrow_forward,
-                                color: TColors.white,
-                                size: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    buildVoiceTutor(context),
 
 
                     SizedBox(height: TSizes.sm),
@@ -803,6 +508,313 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  GestureDetector buildNCTBAITutor(BuildContext context, int? userId, int? classId) {
+    return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => GetCourseAiTutorListScreen(
+                            userId: userId.toString(),
+                            classId: classId.toString(),
+                          ),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color(0xFF4B1248),  // Dark purple
+                              Color(0xFF2A0D2A),  // Slightly lighter than 1B1B1B for gradient smoothness
+                              /*Color(0xFF2C3E50),  // Dark navy
+                              Color(0xFF4CA1AF),*/
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                      BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 12,
+                      spreadRadius: 1,
+                      offset: Offset(0, 6)
+                      ),],
+                      border: Border.all(
+                        color: Colors.white.withOpacity(0.1),
+                        width: 1,
+                      ),
+                    ),
+                    child: Stack(
+                      children: [
+                        // Background glow effect
+                        Positioned(
+                          right: -30,
+                          bottom: -30,
+                          child: Container(
+                            width: 120,
+                            height: 120,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: TColors.secondaryColorEnhanced.withOpacity(0.1),
+                            ),
+                          ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.all(20.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  // Text Content
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        // Badge
+                                        Container(
+                                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                          decoration: BoxDecoration(
+                                            color: TColors.secondaryColorEnhanced.withOpacity(0.2),
+                                            borderRadius: BorderRadius.circular(12),
+                                            border: Border.all(
+                                              color: TColors.secondaryColorEnhanced.withOpacity(0.3),
+                                              width: 1,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            "NEW FEATURE",
+                                            style: TextStyle(
+                                              color: TColors.secondaryColorEnhanced,
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+
+                                        SizedBox(height: 12),
+
+                                        // Main Headers
+                                        RichText(
+                                          text: TextSpan(
+                                            children: [
+                                              TextSpan(
+                                                text: "Master NCTB Books\n",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 22,
+                                                  fontWeight: FontWeight.w800,
+                                                  height: 1.2,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: "with Your ",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 22,
+                                                  fontWeight: FontWeight.w800,
+                                                  height: 1.2,
+                                                ),
+                                              ),
+                                              TextSpan(
+                                                text: "AI Tutor",
+                                                style: TextStyle(
+                                                  color: TColors.secondaryColorEnhanced,
+                                                  fontSize: 22,
+                                                  fontWeight: FontWeight.w800,
+                                                  height: 1.2,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        SizedBox(height: 8),
+
+                                        // Description
+                                        Text(
+                                          "Interactive lessons, instant explanations, and personalized learning",
+                                          style: TextStyle(
+                                            color: Colors.white.withOpacity(0.9),
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
+                                  SizedBox(width: 16),
+
+                                  // Image Container
+                                  Container(
+                                    width: 100,
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(16),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.3),
+                                          blurRadius: 12,
+                                          offset: Offset(0, 4),
+                                        ),
+                                      ],
+                                      border: Border.all(
+                                        color: Colors.white.withOpacity(0.2),
+                                        width: 1,
+                                      ),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(16),
+                                      child: Image.asset(
+                                        'assets/images/dashboard_images/teacher_nctb.jpg',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 16),
+                              // CTA Button
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      TColors.secondaryColorEnhanced.withOpacity(0.8),
+                                      Color(0xFFFFC000),
+                                    ],
+                                  ),
+                                  // color: Colors.white.withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(12),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: TColors.secondaryColorEnhanced.withOpacity(0.3),
+                                      blurRadius: 8,
+                                      offset: Offset(0, 2),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(Icons.auto_awesome, color: Colors.black, size: 18),
+                                    SizedBox(width: 8),
+                                    Text(
+                                      "Start Learning Now",
+                                      style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+  }
+
+  GestureDetector buildVoiceTutor(BuildContext context) {
+    return GestureDetector(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => TutorsListScreen()));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            /*Color(0xFF4B1248),  // Dark purple
+                            Color(0xFF2A0D2A),*/  // Slightly lighter than 1B1B1B for gradient smoothness
+                            TColors.buttonPrimary,  // Dark navy
+                            TColors.info,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 10,
+                            spreadRadius: 2,
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          // Left side - Icon with circular background
+                          Container(
+                            padding: EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: TColors.white.withOpacity(0.2),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.headphones, // Simple intuitive icon
+                              color: TColors.white,
+                              size: 30,
+                            ),
+                          ),
+
+                          SizedBox(width: 16),
+
+                          // Middle - Text content
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Interactive Voice Tutors",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                    fontFamily: "Poppins",
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  "Learn from expert tutors in Bangla medium curriculum",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white.withOpacity(0.9),
+                                    fontFamily: "Poppins",
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          // Right side - Arrow with circle
+                          Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: TColors.white.withOpacity(0.3),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.arrow_forward,
+                              color: TColors.white,
+                              size: 20,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
   }
 
   Widget _buildToolCard(

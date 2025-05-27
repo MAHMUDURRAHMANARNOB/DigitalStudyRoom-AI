@@ -124,7 +124,7 @@ class TutorsListScreen extends StatelessWidget {
                               ),
                             ],
                             border: Border.all(
-                              color: TColors.tertiaryColor.withOpacity(0.3),
+                              color: TColors.grey,
                             ),
                           ),
                           child: Row(
@@ -141,10 +141,10 @@ class TutorsListScreen extends StatelessWidget {
                                     : Container(
                                   width: 80,
                                   height: 80,
-                                  color: TColors.tertiaryColor.withOpacity(0.2),
+                                  color: TColors.grey.withOpacity(0.2),
                                   child: Icon(
                                     CupertinoIcons.person_fill,
-                                    color: TColors.primaryColor,
+                                    color: TColors.tertiaryColor,
                                     size: 40,
                                   ),
                                 ),
@@ -164,7 +164,7 @@ class TutorsListScreen extends StatelessWidget {
                                     ),
                                     SizedBox(height: 4),
                                     Text(
-                                      tutor.tutorSubjects,
+                                      "Class - ${classId.toString()}",
                                       style: TextStyle(
                                         fontSize: 14.0,
                                         color: dark ? Colors.white70 : Colors.black54,
