@@ -1,5 +1,4 @@
 import 'package:digital_study_room/features/AiTutor/screens/GetCoursesAiTutorScreen.dart';
-import 'package:digital_study_room/features/PdfReader/screens/PdfHomeScreen.dart';
 import 'package:digital_study_room/features/ToolsContent/screens/ToolsContentScreen.dart';
 import 'package:digital_study_room/features/Tutor/providers/TutorResponseProvider.dart';
 import 'package:digital_study_room/features/Tutor/screens/ChaptersScreen.dart';

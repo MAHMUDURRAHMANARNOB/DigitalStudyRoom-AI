@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
-import '../../PdfReader/screens/PdfHomeScreen.dart';
+import '../PdfReader/screens/PdfHomeScreen.dart';
 import '../datamodels/getChaptersDataModel.dart';
 import '../providers/getChaptersAiTutorProvider.dart';
 
