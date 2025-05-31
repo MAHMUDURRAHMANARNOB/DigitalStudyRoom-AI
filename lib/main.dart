@@ -9,6 +9,7 @@ import 'package:shurjopay/utilities/functions.dart';
 import 'features/AiTutor/PdfReader/providers/pdfProvider.dart';
 import 'features/AiTutor/providers/getChaptersAiTutorProvider.dart';
 import 'features/AiTutor/providers/getCoursesAiTutorProvider.dart';
+import 'features/AiTutor/providers/mcqExamProvider.dart';
 import 'features/ToolsContent/provider/SolveBanglaMathProvider.dart';
 import 'features/ToolsContent/provider/ToolsResponseProvider.dart';
 import 'features/ToolsContent/provider/studyToolsProvider.dart';
@@ -75,6 +76,8 @@ void main() {
           create: (context) => GetCoursesAiTutorProvider(),
         ),ChangeNotifierProvider(
           create: (context) => GetChaptersAiTutorProvider(),
+        ),ChangeNotifierProvider(
+          create: (context) => McqProvider(),
         ),
       ],
       child: DigitalStudyRoom(),

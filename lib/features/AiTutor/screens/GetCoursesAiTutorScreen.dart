@@ -94,7 +94,7 @@ class _GetCourseAiTutorListScreenState
                         subjectName: course.subjectName,
                       ),
                     ),
-                  );*//*
+                  );*/ /*
 
                   Navigator.push(
                     context,
@@ -150,24 +150,28 @@ class GetCourseAiTutorListScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<GetCourseAiTutorListScreen> createState() => _GetCourseAiTutorListScreenState();
+  State<GetCourseAiTutorListScreen> createState() =>
+      _GetCourseAiTutorListScreenState();
 }
 
-class _GetCourseAiTutorListScreenState extends State<GetCourseAiTutorListScreen> {
+class _GetCourseAiTutorListScreenState
+    extends State<GetCourseAiTutorListScreen> {
   late Future<List<GetCoursesDataModel>> _fetchCoursesFuture;
 
   @override
   void initState() {
     super.initState();
-    _fetchCoursesFuture = Provider.of<GetCoursesAiTutorProvider>(context, listen: false)
-        .fetchAiTutorCourses(widget.userId, widget.classId);
+    _fetchCoursesFuture =
+        Provider.of<GetCoursesAiTutorProvider>(context, listen: false)
+            .fetchAiTutorCourses(widget.userId, widget.classId);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AI Tutor Courses', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text('AI Tutor Courses',
+            style: TextStyle(fontWeight: FontWeight.bold)),
         centerTitle: true,
         elevation: 0,
       ),
@@ -188,12 +192,13 @@ class _GetCourseAiTutorListScreenState extends State<GetCourseAiTutorListScreen>
                     Text(
                       'Loading Your Courses...',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: Colors.grey[600],
-                      ),
+                            color: Colors.grey[600],
+                          ),
                     ),
                     const SizedBox(height: 10),
                     const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(TColors.primaryColor),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(TColors.primaryColor),
                     ),
                   ],
                 ),
@@ -223,19 +228,23 @@ class _GetCourseAiTutorListScreenState extends State<GetCourseAiTutorListScreen>
                       style: ElevatedButton.styleFrom(
                         backgroundColor: TColors.error,
                         shape: RoundedRectangleBorder(
-
                           borderRadius: BorderRadius.circular(12),
                           side: BorderSide(color: TColors.error),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 24, vertical: 12),
                       ),
                       onPressed: () {
                         setState(() {
-                          _fetchCoursesFuture = Provider.of<GetCoursesAiTutorProvider>(context, listen: false)
-                              .fetchAiTutorCourses(widget.userId, widget.classId);
+                          _fetchCoursesFuture =
+                              Provider.of<GetCoursesAiTutorProvider>(context,
+                                      listen: false)
+                                  .fetchAiTutorCourses(
+                                      widget.userId, widget.classId);
                         });
                       },
-                      child: const Text('Try Again', style: TextStyle(color: Colors.white)),
+                      child: const Text('Try Again',
+                          style: TextStyle(color: Colors.white)),
                     ),
                   ],
                 ),
@@ -267,12 +276,14 @@ class _GetCourseAiTutorListScreenState extends State<GetCourseAiTutorListScreen>
             // Success State
             final courses = snapshot.data!;
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 10.0),
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
               child: ListView.separated(
                 itemCount: courses.length,
                 separatorBuilder: (context, index) => const SizedBox(height: 6),
                 itemBuilder: (context, index) {
                   final course = courses[index];
+
                   return _buildCourseCard(course, context);
                 },
               ),
@@ -293,6 +304,8 @@ class _GetCourseAiTutorListScreenState extends State<GetCourseAiTutorListScreen>
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () {
+          print(
+              "userid - ${widget.userId} , classid - ${widget.classId}, courseId- ${course.subjectId}");
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -301,6 +314,7 @@ class _GetCourseAiTutorListScreenState extends State<GetCourseAiTutorListScreen>
                 subjectId: course.subjectId.toString(),
                 courseName: course.subjectName,
                 pdfUrl: course.coursePDFLink,
+                userId: widget.userId,
               ),
             ),
           );
@@ -362,7 +376,8 @@ class _GetCourseAiTutorListScreenState extends State<GetCourseAiTutorListScreen>
                         await launchUrl(url);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Cannot open PDF in browser')),
+                          const SnackBar(
+                              content: Text('Cannot open PDF in browser')),
                         );
                       }
                     },
@@ -379,57 +394,58 @@ class _GetCourseAiTutorListScreenState extends State<GetCourseAiTutorListScreen>
 
   Widget _buildLoadingShimmer() {
     return Column(
-      children: List.generate(3, (index) =>
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Card(
-              elevation: 0,
-              color: Colors.white,
-              child: Container(
-                height: 80,
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+      children: List.generate(
+        3,
+        (index) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          child: Card(
+            elevation: 0,
+            color: Colors.white,
+            child: Container(
+              height: 80,
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                children: [
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 150,
-                            height: 16,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(4),
-                            ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 150,
+                          height: 16,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(4),
                           ),
-                          const SizedBox(height: 8),
-                          Container(
-                            width: 100,
-                            height: 12,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(4),
-                            ),
+                        ),
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 100,
+                          height: 12,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(4),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
+        ),
       ),
     );
   }

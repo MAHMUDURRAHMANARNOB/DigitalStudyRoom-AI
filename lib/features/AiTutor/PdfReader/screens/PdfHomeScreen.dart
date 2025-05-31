@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:digital_study_room/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:pdfx/pdfx.dart';
 import 'package:http/http.dart' as http;
@@ -10,16 +12,24 @@ import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:image/image.dart' as img;
 
+import '../../screens/MCQViewScreen.dart';
+
 class PdfViewerScreen extends StatefulWidget {
   final String pdfUrl;
   final String subjectName;
   final int startPage;
+  final String userId;
+  final String courseId;
+  final String chapterId;
 
   const PdfViewerScreen({
     Key? key,
     required this.pdfUrl,
     required this.subjectName,
     required this.startPage,
+    required this.userId,
+    required this.courseId,
+    required this.chapterId,
   }) : super(key: key);
 
   @override
@@ -37,6 +47,7 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool _isRecording = false;
   bool _isSelectingArea = false;
+
   // First, update the state variables
   Offset? _selectionStart;
   Rect? _selectedArea;
@@ -85,7 +96,7 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
     });
   }
 
- /* Future<void> _captureSelectedArea() async {
+  /* Future<void> _captureSelectedArea() async {
     if (_selectedArea == null) return;
 
     try {
@@ -147,7 +158,8 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
         );
         return;
       }
-      print('Captured image size: ${decodedImage.width}x${decodedImage.height}');
+      print(
+          'Captured image size: ${decodedImage.width}x${decodedImage.height}');
 
       // Adjust the selected area coordinates for the pixel ratio
       final double pixelRatio = MediaQuery.of(context).devicePixelRatio;
@@ -163,13 +175,15 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
 
       if (croppedImage != null) {
         final directory = await getTemporaryDirectory();
-        final imagePath = '${directory.path}/screenshot_${DateTime.now().millisecondsSinceEpoch}.png';
+        final imagePath =
+            '${directory.path}/screenshot_${DateTime.now().millisecondsSinceEpoch}.png';
         final File imageFile = File(imagePath);
         await imageFile.writeAsBytes(croppedImage);
 
         // Log the cropped image size
         final img.Image? croppedDecoded = img.decodeImage(croppedImage);
-        print('Cropped image size: ${croppedDecoded?.width}x${croppedDecoded?.height}');
+        print(
+            'Cropped image size: ${croppedDecoded?.width}x${croppedDecoded?.height}');
 
         setState(() {
           _selectedImage = XFile(imagePath);
@@ -180,7 +194,7 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
         });
 
         // Optionally share the screenshot
-        await Share.shareFiles([imagePath], text: 'PDF screenshot');
+        // await Share.shareFiles([imagePath], text: 'PDF screenshot');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Error cropping screenshot')),
@@ -212,10 +226,12 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
       final int x = region.left.toInt().clamp(0, decodedImage.width);
       final int y = region.top.toInt().clamp(0, decodedImage.height);
       final int width = region.width.toInt().clamp(0, decodedImage.width - x);
-      final int height = region.height.toInt().clamp(0, decodedImage.height - y);
+      final int height =
+          region.height.toInt().clamp(0, decodedImage.height - y);
 
       print('Crop dimensions: x=$x, y=$y, width=$width, height=$height');
-      print('Image dimensions: width=${decodedImage.width}, height=${decodedImage.height}');
+      print(
+          'Image dimensions: width=${decodedImage.width}, height=${decodedImage.height}');
 
       // Ensure the crop dimensions are valid
       if (width <= 0 || height <= 0) {
@@ -244,6 +260,76 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
       print('Error cropping image: $e');
       return null;
     }
+  }
+
+  Future<File?> _captureFullPageScreenshot() async {
+    try {
+      final Uint8List? fullImage = await _screenshotController.capture(
+        pixelRatio: MediaQuery.of(context).devicePixelRatio,
+      );
+
+      if (fullImage == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to capture page screenshot')),
+        );
+        return null;
+      }
+
+      final img.Image? decodedImage = img.decodeImage(fullImage);
+      if (decodedImage == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to decode screenshot')),
+        );
+        return null;
+      }
+
+      final Uint8List? encodedImage = img.encodePng(decodedImage);
+      if (encodedImage == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to encode screenshot')),
+        );
+        return null;
+      }
+
+      final directory = await getTemporaryDirectory();
+      final imagePath =
+          '${directory.path}/fullpage_screenshot_${DateTime.now().millisecondsSinceEpoch}.png';
+      final File imageFile = File(imagePath);
+      await imageFile.writeAsBytes(encodedImage);
+
+      return imageFile;
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error capturing page screenshot: $e')),
+      );
+      return null;
+    }
+  }
+
+  Future<void> _startMcqExam() async {
+    final pageImage = await _captureFullPageScreenshot();
+    if (pageImage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to capture page screenshot')),
+      );
+      return;
+    }
+
+    print(
+        "userid: ${widget.userId}\n courseId: ${widget.courseId}\n chapterId: ${widget.chapterId}\n pageId:${_pdfController?.page ?? widget.startPage}\n pageimage ${pageImage.path}");
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => McqView(
+          userId: widget.userId,
+          courseId: widget.courseId,
+          chapterId: widget.chapterId,
+          pageId: (_pdfController?.page ?? widget.startPage).toString(),
+          isFullExam: "N",
+          pageImage: pageImage, // Pass the base64-encoded screenshot
+        ),
+      ),
+    );
   }
 
   Future<void> _pickImage() async {
@@ -337,27 +423,27 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
   Widget _buildPdfViewer() {
     return _error != null
         ? Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(_error!),
-          ElevatedButton(
-            onPressed: _loadPdf,
-            child: const Text('Retry'),
-          ),
-        ],
-      ),
-    )
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(_error!),
+                ElevatedButton(
+                  onPressed: _loadPdf,
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
+          )
         : _pdfController == null
-        ? const Center(child: CircularProgressIndicator())
-        : PdfView(
-      controller: _pdfController!,
-      onDocumentError: (error) {
-        setState(() {
-          _error = 'Error rendering PDF: $error';
-        });
-      },
-    );
+            ? const Center(child: CircularProgressIndicator(color: TColors.primaryColor,))
+            : PdfView(
+                controller: _pdfController!,
+                onDocumentError: (error) {
+                  setState(() {
+                    _error = 'Error rendering PDF: $error';
+                  });
+                },
+              );
   }
 
   Widget _buildRightDrawer() {
@@ -395,6 +481,11 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
             ),
           ),
           const Divider(),
+          ListTile(
+            leading: const Icon(Icons.quiz),
+            title: const Text('Give MCQ Exam'),
+            onTap: _startMcqExam,
+          ),
           ListTile(
             leading: const Icon(Icons.audiotrack),
             title: const Text('Audio Explanation'),
@@ -451,7 +542,6 @@ class _PdfViewerScreenState extends State<PdfViewerScreen> {
       ),
     );
   }
-
 
   // Then modify the area selection handlers
   Widget _buildAreaSelectionOverlay() {

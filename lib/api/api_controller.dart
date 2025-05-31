@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../features/AiTutor/datamodels/getChaptersDataModel.dart';
+import '../features/AiTutor/datamodels/mcqDataModels.dart';
 import '../features/ToolsContent/datamodel/studyToolsDataModel.dart';
 import '../features/Tutor/datamodels/TutorChapterListDataModel.dart';
 import '../features/Tutor/datamodels/TutorDataModel.dart';
@@ -25,9 +26,9 @@ class ApiController {
       String username, String password) async {
     const apiUrl = '$baseUrl/loginuser/';
 
-    *//*for query type url*//*
+    */ /*for query type url*/ /*
     final Uri uri = Uri.parse('$apiUrl?userid=$username&password=$password');
-    *//*Query type url*//*
+    */ /*Query type url*/ /*
     final response = await http.post(
       uri,
       headers: {'Content-Type': 'application/json'},
@@ -186,7 +187,7 @@ class ApiController {
 
   /*GET OTP*/
   static Future<Map<String, dynamic>> getOTP(
-      String emailAddress,String phoneNo) async {
+      String emailAddress, String phoneNo) async {
     const apiUrl = '$baseUrl/getOTP/';
     final Uri uri = Uri.parse(apiUrl);
 
@@ -705,6 +706,7 @@ class ApiController {
       throw ("Failed getImageToolsResponse ${response.statusCode}");
     }
   }
+
   Future<Map<String, dynamic>> getPackagesList(int userid) async {
     final url = '$baseUrl/getPackageList/';
     // print("Posting in api service $url, $userid");
@@ -728,6 +730,7 @@ class ApiController {
       throw Exception("Failed getPackagesList $e");
     }
   }
+
   Future<Map<String, dynamic>> getCouponDiscount({
     required String couponcode,
     required double amount,
@@ -756,14 +759,14 @@ class ApiController {
   }
 
   static Future<void> initiatePayment(
-      int userId,
-      int subscriptionid,
-      String transactionid,
-      double amount,
-      double mainAmout,
-      double couponDiscountAmt,
-      int? CouponPartnerID,
-      ) async {
+    int userId,
+    int subscriptionid,
+    String transactionid,
+    double amount,
+    double mainAmout,
+    double couponDiscountAmt,
+    int? CouponPartnerID,
+  ) async {
     final url = '$baseUrl/initiatepayment';
     // print("Posting in api service $url");
     try {
@@ -812,21 +815,21 @@ class ApiController {
   }
 
   static Future<void> receivePayment(
-      int userId,
-      int subscriptionid,
-      String transactionid,
-      String transStatus,
-      double amount,
-      String storeamount,
-      String cardno,
-      String banktran_id,
-      String currency,
-      String card_issuer,
-      String card_brand,
-      String card_issuer_country,
-      String risk_level,
-      String risk_title,
-      ) async {
+    int userId,
+    int subscriptionid,
+    String transactionid,
+    String transStatus,
+    double amount,
+    String storeamount,
+    String cardno,
+    String banktran_id,
+    String currency,
+    String card_issuer,
+    String card_brand,
+    String card_issuer_country,
+    String risk_level,
+    String risk_title,
+  ) async {
     final url = '$baseUrl/receivepayment';
     // print("Posting in api service $url");
     try {
@@ -863,9 +866,9 @@ class ApiController {
   }
 
   Future<Map<String, dynamic>> getDeleteResponse(
-      int userid,
-      String reason,
-      ) async {
+    int userid,
+    String reason,
+  ) async {
     final url = '$baseUrl/deleteuser/';
     // print("Posting in api service $url");
     // print("$userid , $reason");
@@ -890,9 +893,9 @@ class ApiController {
     }
   }
 
-
 //   AI TUTOR
-  Future<List<GetCoursesDataModel>> getCoursesAiTutor(String userId, String classId) async {
+  Future<List<GetCoursesDataModel>> getCoursesAiTutor(
+      String userId, String classId) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/getCourses/'),
@@ -907,7 +910,9 @@ class ApiController {
         final jsonData = jsonDecode(response.body);
         if (jsonData['errorcode'] == 200) {
           final List<dynamic> coursesJson = jsonData['classes'];
-          return coursesJson.map((json) => GetCoursesDataModel.fromJson(json)).toList();
+          return coursesJson
+              .map((json) => GetCoursesDataModel.fromJson(json))
+              .toList();
         } else {
           throw Exception(jsonData['message'] ?? 'Failed to fetch courses');
         }
@@ -933,9 +938,45 @@ class ApiController {
     );
     // print(jsonDecode(response.body));
     if (response.statusCode == 200) {
-      return GetAiTutorChapterResponseDataModel.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
+      return GetAiTutorChapterResponseDataModel.fromJson(
+          jsonDecode(utf8.decode(response.bodyBytes)));
     } else {
       throw Exception('Failed to load chapters');
+    }
+  }
+
+  Future<McqResponse> fetchMcqQuestion(McqRequest request) async {
+    try {
+      var requestBody =
+          http.MultipartRequest('POST', Uri.parse("$baseUrl/mcqsExam"));
+
+      // Add form fields
+      request.toFormData().forEach((key, value) {
+        requestBody.fields[key] = value;
+      });
+
+      // Add image file if provided
+      if (request.pageImage != null) {
+        requestBody.files.add(
+          await http.MultipartFile.fromPath(
+              'pageImage', request.pageImage!.path),
+        );
+        print("QUESTIONIMAGEPATH: ${request.pageImage!.path}");
+
+      }
+
+      final response = await requestBody.send();
+      final responseData = await response.stream.bytesToString();
+      final jsonData = jsonDecode(responseData);
+
+      print(jsonDecode(responseData));
+      if (response.statusCode == 200) {
+        return McqResponse.fromJson(jsonData);
+      } else {
+        throw Exception('Failed to load question: ${jsonData['message']}');
+      }
+    } catch (e) {
+      throw Exception('Error fetching question: $e');
     }
   }
 }

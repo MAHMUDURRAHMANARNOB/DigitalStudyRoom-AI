@@ -62,7 +62,7 @@ class THomeAppBar extends StatelessWidget {
                         );
                       },
                       child: Container(
-                        padding: EdgeInsets.all(5.0),
+                        padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                         decoration: BoxDecoration(
                           color: TColors.secondaryColor.withOpacity(1),
                           borderRadius: BorderRadius.circular(6.0),
@@ -77,15 +77,19 @@ class THomeAppBar extends StatelessWidget {
                       ),
                     )
                   : Container(
-                      padding: EdgeInsets.all(5.0),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                       decoration: BoxDecoration(
-                        // color: TColors.primaryColor.withOpacity(1),
-                        borderRadius: BorderRadius.circular(3.0),
-                        border: Border.all(color: TColors.primaryColor),
+                        color: TColors.primaryColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: TColors.white),
                       ),
                       child: Text(
                         "Class $className",
-                        style: Theme.of(context).textTheme.bodyLarge!.apply(color: TColors.primaryColor),
+                        style: TextStyle(
+                          color: TColors.primaryColor,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
             ],

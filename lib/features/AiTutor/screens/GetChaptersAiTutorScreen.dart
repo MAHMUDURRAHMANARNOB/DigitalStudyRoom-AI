@@ -107,13 +107,14 @@ class GetChaptersAiTutorListScreen extends StatefulWidget {
   final String classId;
   final String subjectId;
   final String pdfUrl;
+  final String userId;
 
   const GetChaptersAiTutorListScreen({
     super.key,
     required this.classId,
     required this.subjectId,
     required this.courseName,
-    required this.pdfUrl,
+    required this.pdfUrl, required this.userId,
   });
 
   @override
@@ -388,13 +389,14 @@ class _GetChaptersAiTutorListScreenState
             child: InkWell(
               borderRadius: BorderRadius.circular(12),
               onTap: () {
+                print("chapter id - ${chapter.id}, chapter Page - ${chapter.chapStartPage}");
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => PdfViewerScreen(
                       pdfUrl: widget.pdfUrl,
                       subjectName: chapter.chapterName,
-                      startPage: chapter.chapStartPage,
+                      startPage: chapter.chapStartPage, userId: widget.userId, courseId: widget.subjectId.toString(), chapterId: chapter.id.toString(),
                     ),
                   ),
                 );
